@@ -426,6 +426,7 @@ export class SPHERExSectorDiscoveryEngine {
 
     try {
       // Configure single-threaded WASM SIMD so COOP/COEP headers are never required
+      ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/";
       ort.env.wasm.numThreads = 1;
       ort.env.wasm.simd = true;
 
