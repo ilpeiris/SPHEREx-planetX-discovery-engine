@@ -476,8 +476,9 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   const aladinContainerRef = useRef<HTMLDivElement | null>(null);
   const aladinInstanceRef = useRef<any>(null);
   const footprintOverlayRef = useRef<any>(null);
-  const [aladinSurvey, setAladinSurvey] =
-    useState<AladinSurveyOptionId>("P/allWISE/color");
+  const [aladinSurvey, setAladinSurvey] = useState<AladinSurveyOptionId>(
+    "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1"
+  );
   const [showGaiaVectors, setShowGaiaVectors] = useState<boolean>(true);
   const [aladinReady, setAladinReady] = useState<boolean>(false);
 
@@ -557,14 +558,13 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     return { shareUrl: fullUrl, embedIframeSnippet: iframeCode };
   }, [raDeg, decDeg, fovArcmin, renderMode, channel, activeTarget]);
 
-  // Initialize Aladin Lite v3 via official CDS Strasbourg global bundle (WASM-safe in Next.js 14)
+  // Initialize Aladin Lite v3 with explicit HTTPS CDS HiPS URL (never fetches relative /P/... on localhost)
   useEffect(() => {
     let isMounted = true;
 
     async function initAladinSkyAtlas() {
       if (typeof window === "undefined" || !aladinContainerRef.current) return;
       try {
-        // Wait briefly if the CDS script is still finishing evaluation
         let A = (window as any).A;
         for (let retry = 0; retry < 25 && !A; retry++) {
           await new Promise((r) => setTimeout(r, 150));
@@ -580,7 +580,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         if (!isMounted || !aladinContainerRef.current) return;
 
         const instance = A.aladin(aladinContainerRef.current, {
-          survey: "P/allWISE/color",
           fov: Math.max(0.15, (fovArcmin / 60.0) * 2.5),
           target: `${raDeg} ${decDeg}`,
           cooFrame: "equatorial",
@@ -591,6 +590,16 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           showLayersControl: false,
           showGotoControl: false,
         });
+
+        const baseSurvey = instance.createImageSurvey(
+          "AllWISE_Color",
+          "AllWISE Color",
+          "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1",
+          "equatorial",
+          8,
+          { imgFormat: "jpeg" }
+        );
+        instance.setBaseImageLayer(baseSurvey);
 
         const overlay = A.graphicOverlay({
           name: "SPHEREx Cutout & Tracklets",
@@ -614,7 +623,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update Aladin Lite v3 pointing, survey layer, SPHEREx cutout footprint box, and proper-motion vectors
+  // Update Aladin Lite v3 pointing, full-URL HiPS survey layer, and SPHEREx footprint box
   useEffect(() => {
     const aladin = aladinInstanceRef.current;
     const fp = footprintOverlayRef.current;
@@ -624,25 +633,22 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       aladin.gotoRaDec(raDeg, decDeg);
       aladin.setFoV(Math.max(0.08, (fovArcmin / 60.0) * 2.4));
     } catch {
-      // Ignore transient slew errors during rapid slider scrubs
+      // Ignore transient slew errors
     }
 
     try {
-      if (aladinSurvey === "CDS/P/SPHEREx/QR2/D1") {
-        const spherexHips = fp.A.createImageSurvey(
-          "SPHEREx_QR2_D1",
-          "SPHEREx QR2 Band 1 (0.75-1.09 um)",
-          "https://alasky.cds.unistra.fr/SPHEREx/QR2/D1",
-          "equatorial",
-          7,
-          { imgFormat: "png" }
-        );
-        aladin.setImageSurvey(spherexHips);
-      } else {
-        aladin.setImageSurvey(aladinSurvey);
-      }
+      const isPng = aladinSurvey.includes("SPHEREx");
+      const customLayer = aladin.createImageSurvey(
+        aladinSurvey,
+        aladinSurvey,
+        aladinSurvey,
+        "equatorial",
+        isPng ? 7 : 9,
+        { imgFormat: isPng ? "png" : "jpeg" }
+      );
+      aladin.setBaseImageLayer(customLayer);
     } catch {
-      // Fallback if custom HiPS node is unreachable
+      // Ignore transient HiPS switch errors
     }
 
     try {
@@ -652,7 +658,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       const cosDec = Math.max(0.08, Math.cos((decDeg * Math.PI) / 180.0));
       const halfRa = halfDeg / cosDec;
 
-      // Active SPHEREx Cutout Polygon Footprint
       overlay.addFootprints([
         A.polygon([
           [raDeg - halfRa, decDeg - halfDeg],
@@ -662,7 +667,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         ]),
       ]);
 
-      // Overlay 16-year proper-motion vector if target has a J2000 / 2010 WISE discovery coordinate
       if (
         showGaiaVectors &&
         activeTarget?.raRefDeg !== undefined &&
@@ -682,7 +686,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       // Ignore overlay drawing errors
     }
   }, [raDeg, decDeg, fovArcmin, aladinSurvey, showGaiaVectors, activeTarget, aladinReady]);
-
+  
   // Fetch 6-Slice Binary Cutout Cube from FastAPI Backend (with instant client physics fallback)
   useEffect(() => {
     let cancelled = false;

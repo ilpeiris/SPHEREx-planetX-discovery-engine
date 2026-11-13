@@ -9,8 +9,8 @@
 
 # backend/app/irsa_client.py
 """
-Zero-Delay Caltech/IPAC IRSA ADQL TAP Discovery Client and High-Concurrency
-aiohttp / ThreadPoolExecutor IBE Cutout Streamer.
+Zero-Delay Caltech/IPAC IRSA SIAv2 & ADQL TAP Discovery Client and
+High-Concurrency aiohttp / ThreadPoolExecutor IBE Cutout Streamer.
 """
 
 from __future__ import annotations
@@ -26,13 +26,27 @@ import pandas as pd
 import requests
 from astropy.io.votable import parse_single_table
 
-from app.config import SPHEREX_DETECTORS, settings
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
 
+def _normalize_spherex_bandpass(bandpass: Optional[str]) -> Optional[str]:
+    """
+    Normalize bandpass string to the exact indexed IRSA CAOM convention
+    ('SPHEREx-D1' .. 'SPHEREx-D6') so PostgreSQL uses its B-tree index without UPPER().
+    """
+    if not bandpass:
+        return None
+    s = str(bandpass).strip().upper().replace("_", "-")
+    for k in range(1, 7):
+        if s.endswith(f"D{k}"):
+            return f"SPHEREx-D{k}"
+    return str(bandpass).strip()
+
+
 # ============================================================================
-# 1. CONSOLIDATED ZERO-DELAY ADQL TAP QUERY BUILDER & EXECUTOR
+# 1. CONSOLIDATED ZERO-DELAY ADQL TAP QUERY BUILDER & SIAv2 FAST DISCOVERY
 # ============================================================================
 def build_spherex_tap_adql(
     ra_deg: float,
@@ -41,12 +55,12 @@ def build_spherex_tap_adql(
     bandpass: Optional[str] = None,
     mjd_min: Optional[float] = None,
     mjd_max: Optional[float] = None,
-    max_rows: int = 240,
+    max_rows: int = 120,
 ) -> str:
     """
     Construct a single consolidated ADQL query against IRSA's CAOM tables
     (`spherex.artifact` joined with `spherex.plane`) matching the exact
-    Caltech-IPAC `spherex_cutouts` tutorial schema.
+    Caltech-IPAC `spherex_cutouts` tutorial schema and preserving index usage.
     """
     ra = float(ra_deg)
     dec = float(dec_deg)
@@ -56,11 +70,13 @@ def build_spherex_tap_adql(
         f"1 = CONTAINS(POINT('ICRS', {ra:.7f}, {dec:.7f}), p.poly)",
     ]
 
-    if bandpass:
-        bp_upper = str(bandpass).strip().upper()
-        bp_hyphen = bp_upper.replace("_", "-")
-        bp_under = bp_upper.replace("-", "_")
-        where_clauses.append(f"UPPER(p.energy_bandpassname) IN ('{bp_hyphen}', '{bp_under}')")
+    exact_bp = _normalize_spherex_bandpass(bandpass)
+    if exact_bp:
+        where_clauses.append(f"p.energy_bandpassname = '{exact_bp}'")
+    else:
+        where_clauses.append(
+            "p.energy_bandpassname IN ('SPHEREx-D1', 'SPHEREx-D2', 'SPHEREx-D3', 'SPHEREx-D4', 'SPHEREx-D5', 'SPHEREx-D6')"
+        )
 
     if mjd_min is not None:
         where_clauses.append(f"p.time_bounds_lower >= {float(mjd_min):.5f}")
@@ -84,25 +100,93 @@ def build_spherex_tap_adql(
     return adql
 
 
+def _query_irsa_siav2_fast(
+    ra_deg: float,
+    dec_deg: float,
+    size_deg: float = 0.1,
+    bandpass: Optional[str] = None,
+    collection: str = "spherex_qr2",
+    timeout_sec: int = 10,
+) -> List[Dict[str, Any]]:
+    """
+    Fast pre-indexed IVOA SIAv2 query (`https://irsa.ipac.caltech.edu/SIA`).
+    """
+    ra = float(ra_deg)
+    dec = float(dec_deg)
+    cutout_deg = max(0.01, min(1.0, float(size_deg)))
+    exact_bp = _normalize_spherex_bandpass(bandpass)
+
+    params = {
+        "COLLECTION": collection,
+        "POS": f"circle {ra:.6f} {dec:.6f} 0.01",
+        "RESPONSEFORMAT": "VOTABLE",
+    }
+    try:
+        resp = requests.get(settings.IRSA_SIA_URL, params=params, timeout=timeout_sec)
+        if resp.status_code != 200 or b"<TABLEDATA" not in resp.content.upper():
+            return []
+
+        vot_table = parse_single_table(io.BytesIO(resp.content)).to_table()
+        results: List[Dict[str, Any]] = []
+        for row in vot_table:
+            access_url = str(row["access_url"]) if "access_url" in vot_table.colnames else ""
+            if not access_url.startswith("http"):
+                continue
+            bp = str(row["energy_bandpassname"]) if "energy_bandpassname" in vot_table.colnames else "SPHEREx-D4"
+            if exact_bp and _normalize_spherex_bandpass(bp) != exact_bp:
+                continue
+            mjd_val = float(row["time_bounds_lower"]) if "time_bounds_lower" in vot_table.colnames else 60900.0
+
+            cutout_uri = (
+                access_url
+                if "?center=" in access_url
+                else f"{access_url}?center={ra:.7f},{dec:.7f}d&size={cutout_deg:.4f}"
+            )
+            results.append(
+                {
+                    "cutout_uri": cutout_uri,
+                    "full_mef_uri": access_url,
+                    "bandpass": bp,
+                    "mjd_obs": mjd_val,
+                }
+            )
+        results.sort(key=lambda r: float(r.get("mjd_obs", 0.0)))
+        return results
+    except Exception:
+        return []
+
+
 def query_spherex_tap_cutouts(
     ra_deg: float,
     dec_deg: float,
     size_deg: float = 0.1,
     bandpass: Optional[str] = None,
-    collection: str = "spherex_qr3",
+    collection: str = "spherex_qr2",
     mjd_min: Optional[float] = None,
     mjd_max: Optional[float] = None,
-    max_rows: int = 240,
-    timeout_sec: int = 35,
+    max_rows: int = 120,
+    timeout_sec: int = 12,
 ) -> List[Dict[str, Any]]:
     """
     Locked Contract #3 Function:
-    Query Caltech/IPAC IRSA TAP (`https://irsa.ipac.caltech.edu/TAP/sync`) for
-    all SPHEREx Level 2 exposures overlapping (ra_deg, dec_deg) and return a list
-    of metadata dicts containing `cutout_uri`, `full_mef_uri`, `bandpass`,
-    `mjd_obs`, and `version`. Automatically falls back to IRSA SIAv2 if TAP is
-    temporarily unreachable.
+    1. Queries IRSA's pre-indexed SIAv2 service (`spherex_qr2` / `spherex_qr3`) first
+       for ~1s spatial cone lookup.
+    2. Queries IRSA's indexed ADQL TAP service (`/TAP/sync`) if SIAv2 returns 0 rows.
     """
+    # Step 1: Fast pre-indexed SIAv2 cone search
+    for coll in (collection, "spherex_qr3", "spherex_qr2_deep", "spherex_qr3_deep"):
+        rows = _query_irsa_siav2_fast(
+            ra_deg=ra_deg,
+            dec_deg=dec_deg,
+            size_deg=size_deg,
+            bandpass=bandpass,
+            collection=coll,
+            timeout_sec=8,
+        )
+        if rows:
+            return rows[:max_rows]
+
+    # Step 2: Indexed ADQL TAP query (no UPPER() function on energy_bandpassname)
     adql = build_spherex_tap_adql(
         ra_deg=ra_deg,
         dec_deg=dec_deg,
@@ -112,7 +196,6 @@ def query_spherex_tap_cutouts(
         mjd_max=mjd_max,
         max_rows=max_rows,
     )
-
     tap_sync_url = f"{settings.IRSA_TAP_URL.rstrip('/')}/sync"
     try:
         resp = requests.post(
@@ -128,80 +211,11 @@ def query_spherex_tap_cutouts(
         if resp.status_code == 200 and "cutout_uri" in resp.text[:512]:
             df = pd.read_csv(io.StringIO(resp.text))
             if not df.empty:
-                records: List[Dict[str, Any]] = df.to_dict(orient="records")
-                return records
+                return df.to_dict(orient="records")
     except Exception as exc:
-        logger.warning("IRSA TAP query warning for (%f, %f): %s; trying SIAv2 fallback.", ra_deg, dec_deg, exc)
+        logger.debug("IRSA TAP lookup note for (%.4f, %.4f): %s", ra_deg, dec_deg, exc)
 
-    # Fallback: Query IRSA SIAv2 endpoint across QR3 and QR2 collections
-    for coll in (collection, "spherex_qr2", "spherex_qr3_deep", "spherex_qr2_deep"):
-        rows = _query_irsa_siav2_fallback(
-            ra_deg=ra_deg,
-            dec_deg=dec_deg,
-            size_deg=size_deg,
-            bandpass=bandpass,
-            collection=coll,
-            timeout_sec=timeout_sec,
-        )
-        if rows:
-            return rows
     return []
-
-
-def _query_irsa_siav2_fallback(
-    ra_deg: float,
-    dec_deg: float,
-    size_deg: float = 0.1,
-    bandpass: Optional[str] = None,
-    collection: str = "spherex_qr3",
-    timeout_sec: int = 30,
-) -> List[Dict[str, Any]]:
-    """
-    Fallback IVOA SIAv2 query (`https://irsa.ipac.caltech.edu/SIA`) across
-    `spherex_qr3`, `spherex_qr3_deep`, `spherex_qr2`, or `spherex_qr2_deep`.
-    """
-    ra = float(ra_deg)
-    dec = float(dec_deg)
-    cutout_deg = max(0.01, min(1.0, float(size_deg)))
-    params = {
-        "COLLECTION": collection,
-        "POS": f"circle {ra:.6f} {dec:.6f} {0.01:.4f}",
-        "RESPONSEFORMAT": "VOTABLE",
-    }
-    try:
-        resp = requests.get(settings.IRSA_SIA_URL, params=params, timeout=timeout_sec)
-        if resp.status_code != 200 or b"<TABLEDATA" not in resp.content:
-            return []
-
-        vot_table = parse_single_table(io.BytesIO(resp.content)).to_table()
-        results: List[Dict[str, Any]] = []
-        for row in vot_table:
-            access_url = str(row["access_url"]) if "access_url" in vot_table.colnames else ""
-            if not access_url.startswith("http"):
-                continue
-            bp = str(row["energy_bandpassname"]) if "energy_bandpassname" in vot_table.colnames else "SPHEREX-D4"
-            if bandpass and bp.upper().replace("_", "-") != bandpass.upper().replace("_", "-"):
-                continue
-            mjd_val = float(row["time_bounds_lower"]) if "time_bounds_lower" in vot_table.colnames else 60900.0
-            ver = str(row["provenance_version"]) if "provenance_version" in vot_table.colnames else "7.0.0"
-
-            cutout_uri = f"{access_url}?center={ra:.7f},{dec:.7f}d&size={cutout_deg:.4f}"
-            results.append(
-                {
-                    "cutout_uri": cutout_uri,
-                    "full_mef_uri": access_url,
-                    "bandpass": bp,
-                    "mjd_obs": mjd_val,
-                    "mjd_end": mjd_val + 0.0013,
-                    "version": ver,
-                    "calib_level": 2,
-                }
-            )
-        results.sort(key=lambda r: float(r.get("mjd_obs", 0.0)))
-        return results
-    except Exception as exc:
-        logger.error("IRSA SIAv2 fallback failed for (%f, %f): %s", ra_deg, dec_deg, exc)
-        return []
 
 
 # ============================================================================
@@ -214,10 +228,6 @@ async def _fetch_single_fits_cutout(
     max_retries: int = 3,
     timeout_sec: int = 40,
 ) -> Optional[bytes]:
-    """
-    Fault-tolerant async HTTP GET fetcher for a single IRSA IBE FITS cutout
-    with optional byte-range slicing and exponential backoff retry logic.
-    """
     headers: Dict[str, str] = {"User-Agent": "SPHEREx-PlanetX-DiscoveryEngine/2026.1"}
     if byte_range is not None and byte_range[1] > byte_range[0]:
         headers["Range"] = f"bytes={int(byte_range[0])}-{int(byte_range[1])}"
@@ -228,17 +238,14 @@ async def _fetch_single_fits_cutout(
             async with session.get(url, headers=headers, timeout=client_timeout) as resp:
                 if resp.status in (200, 206):
                     payload = await resp.read()
-                    # Valid FITS files begin with 'SIMPLE  ='
                     if len(payload) >= 2880 and payload[:6] == b"SIMPLE":
                         return payload
                 elif resp.status in (429, 502, 503, 504):
                     await asyncio.sleep(0.6 * (attempt + 1))
                 else:
                     return None
-        except Exception as exc:
-            if attempt == max_retries - 1:
-                logger.debug("Cutout download failed after %d attempts (%s): %s", max_retries, url, exc)
-            else:
+        except Exception:
+            if attempt < max_retries - 1:
                 await asyncio.sleep(0.5 * (attempt + 1))
     return None
 
@@ -248,11 +255,6 @@ async def fetch_cutouts_parallel_async(
     cutout_urls: Sequence[str],
     byte_ranges: Optional[Sequence[Optional[Tuple[int, int]]]] = None,
 ) -> List[Optional[bytes]]:
-    """
-    Locked Contract #3 Function:
-    Download multiple SPHEREx IBE cutouts concurrently over a shared aiohttp
-    ClientSession (up to 64 simultaneous connections), preserving input order.
-    """
     if not cutout_urls:
         return []
 
@@ -288,16 +290,11 @@ def fetch_cutouts_threaded_sync(
     max_workers: int = 10,
     timeout_sec: int = 40,
 ) -> List[Optional[bytes]]:
-    """
-    Synchronous multi-threaded cutout downloader using ThreadPoolExecutor(max_workers=10)
-    as benchmarked in the official `spherex_cutouts` tutorial (completing 84 cutouts
-    in ~0.10 minutes vs ~1.4 minutes serially). Used by offline Phase 1 scripts.
-    """
     if not cutout_urls:
         return []
 
     def _download_one(url: str) -> Optional[bytes]:
-        for attempt in range(3):
+        for _ in range(3):
             try:
                 r = requests.get(url, timeout=timeout_sec)
                 if r.status_code == 200 and len(r.content) >= 2880 and r.content[:6] == b"SIMPLE":
@@ -310,22 +307,13 @@ def fetch_cutouts_threaded_sync(
         return list(pool.map(_download_one, cutout_urls))
 
 
-# ============================================================================
-# 3. DEDICATED INTERSTELLAR COMET 3I/ATLAS VOTABLE EPHEMERIS RESOLVER
-# ============================================================================
 def query_3i_atlas_cutouts(
     campaign: str = "all",
     size_deg: float = 0.105,
 ) -> List[Dict[str, Any]]:
-    """
-    Fetch and parse the official IRSA Comet 3I/ATLAS VO Table (`obscore_3I_Atlas.vot`),
-    extracting per-exposure `comet_ra`, `comet_dec`, MJD, detector bandpass, and
-    ephemeris-centered 6.3x6.3 arcmin (0.105 deg) cutout URLs for the August 2025
-    (pre-perihelion) and December 2025 (post-perihelion) campaigns.
-    """
     try:
-        resp = requests.get(settings.IRSA_3I_ATLAS_VOT_URL, timeout=30)
-        if resp.status_code == 200 and b"<TABLEDATA" in resp.content:
+        resp = requests.get(settings.IRSA_3I_ATLAS_VOT_URL, timeout=15)
+        if resp.status_code == 200 and b"<TABLEDATA" in resp.content.upper():
             vot = parse_single_table(io.BytesIO(resp.content)).to_table()
             records: List[Dict[str, Any]] = []
             for row in vot:
@@ -347,14 +335,13 @@ def query_3i_atlas_cutouts(
                         "comet_ra": ra_c,
                         "comet_dec": dec_c,
                         "mjd_obs": mjd_c,
-                        "bandpass": str(row["em_ucd"]) if "em_ucd" in vot.colnames else "SPHEREX-D5",
+                        "bandpass": str(row["em_ucd"]) if "em_ucd" in vot.colnames else "SPHEREx-D5",
                     }
                 )
             return records
-    except Exception as exc:
-        logger.debug("Live 3I/ATLAS VOTable fetch fell back to ephemeris anchors: %s", exc)
+    except Exception:
+        pass
 
-    # Fallback: query IRSA TAP at the exact published August & December 2025 midpoint ephemerides
     aug_records = query_spherex_tap_cutouts(246.3667, -16.7420, size_deg=size_deg)
     dec_records = query_spherex_tap_cutouts(170.1887, +4.1001, size_deg=size_deg)
     if campaign == "aug2025":

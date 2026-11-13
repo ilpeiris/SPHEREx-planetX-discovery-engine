@@ -32,11 +32,11 @@ import {
 } from "../lib/goldenCatalog";
 
 export type AladinSurveyOptionId =
-  | "P/allWISE/color"
-  | "CDS/P/SPHEREx/QR2/D1"
-  | "P/PanSTARRS/DR1/color-z-zg-g"
-  | "P/DSS2/color"
-  | "P/2MASS/color";
+  | "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1"
+  | "https://alasky.cds.unistra.fr/SPHEREx/QR2/D1"
+  | "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g"
+  | "https://alasky.cds.unistra.fr/DSS/DSSColor"
+  | "https://alasky.cds.unistra.fr/2MASS/Color";
 
 export const MULTI_MISSION_SURVEYS: Array<{
   id: AladinSurveyOptionId;
@@ -44,27 +44,27 @@ export const MULTI_MISSION_SURVEYS: Array<{
   missionBadge: string;
 }> = [
   {
-    id: "P/allWISE/color",
+    id: "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1",
     label: "AllWISE / NEOWISE Mid-IR (3.4 & 4.6 µm)",
     missionBadge: "WISE IR",
   },
   {
-    id: "CDS/P/SPHEREx/QR2/D1",
+    id: "https://alasky.cds.unistra.fr/SPHEREx/QR2/D1",
     label: "SPHEREx QR2 Band 1 HiPS (0.75–1.09 µm)",
     missionBadge: "SPHEREx HiPS",
   },
   {
-    id: "P/PanSTARRS/DR1/color-z-zg-g",
+    id: "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g",
     label: "Pan-STARRS DR1 Optical (Disambiguation)",
     missionBadge: "Optical Check",
   },
   {
-    id: "P/DSS2/color",
+    id: "https://alasky.cds.unistra.fr/DSS/DSSColor",
     label: "DSS2 Optical Reference Survey",
     missionBadge: "DSS2 Optical",
   },
   {
-    id: "P/2MASS/color",
+    id: "https://alasky.cds.unistra.fr/2MASS/Color",
     label: "2MASS Near-IR (J, H, Ks)",
     missionBadge: "2MASS NIR",
   },
