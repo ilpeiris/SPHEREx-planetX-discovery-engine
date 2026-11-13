@@ -3,7 +3,12 @@
   "version": "2026.1.0",
   "private": true,
   "description": "60-FPS WebGL2 Float32 Multi-Epoch Sky Blinker, 102-Band SED Inspector & ONNX Anomaly Discovery Engine for NASA SPHEREx & CSA NEOSSat",
-
+  "author": "M.D.Isuru Lakmal Peiris (@ilpeiris)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine"
+  },
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",

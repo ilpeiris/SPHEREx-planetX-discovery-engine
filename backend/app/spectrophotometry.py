@@ -436,6 +436,26 @@ def extract_102band_point_source_sed(
         )
 
     raw_measurements.sort(key=lambda m: (float(m["mjd"]), int(m["global_channel"])))
+
+    # Assign epoch_id = 1 (earlier survey pass) vs epoch_id = 2 (later survey pass)
+    # from real observation MJDs so SpectralCurveInspector plots both epochs cleanly
+    if raw_measurements:
+        mjds = np.array([float(m["mjd"]) for m in raw_measurements], dtype=np.float64)
+        unique_mjds = np.unique(mjds)
+        if unique_mjds.size >= 2:
+            gaps = np.diff(unique_mjds)
+            max_gap_idx = int(np.argmax(gaps))
+            split_mjd = (
+                0.5 * (unique_mjds[max_gap_idx] + unique_mjds[max_gap_idx + 1])
+                if gaps[max_gap_idx] >= 10.0
+                else float(np.median(mjds))
+            )
+            for m in raw_measurements:
+                m["epoch_id"] = 1 if float(m["mjd"]) <= split_mjd else 2
+        else:
+            for m in raw_measurements:
+                m["epoch_id"] = 1
+
     molecular_indices = compute_102band_molecular_indices(raw_measurements)
 
     return {

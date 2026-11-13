@@ -843,10 +843,11 @@ async def get_multi_epoch_cutout_cube(
         src_tag = "physics-synthesized-golden"
 
     binary_payload = pack_6slice_binary_cube(float_cube, uint16_cube)
-    try:
-        local_cache_file.write_bytes(binary_payload)
-    except Exception:
-        pass
+    if src_tag == "irsa-live-zogy":
+        try:
+            local_cache_file.write_bytes(binary_payload)
+        except Exception:
+            pass
 
     return Response(
         content=binary_payload,

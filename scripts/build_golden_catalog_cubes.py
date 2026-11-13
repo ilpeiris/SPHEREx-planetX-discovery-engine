@@ -162,11 +162,11 @@ def build_all_golden_target_cubes(
                 dec_deg=dec_deg,
                 size_deg=size_deg,
                 bandpass=det_spec.name,
-                timeout_sec=12,
-            )
+                timeout_sec=35,
+         )
             if tap_rows:
                 urls = [str(r["cutout_uri"]) for r in tap_rows[:10] if r.get("cutout_uri")]
-                downloaded = fetch_cutouts_threaded_sync(urls, max_workers=10, timeout_sec=20)
+                downloaded = fetch_cutouts_threaded_sync(urls, max_workers=10, timeout_sec=35)
                 fits_payloads = [b for b in downloaded if b is not None]
 
         if fits_payloads:
