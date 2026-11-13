@@ -7,7 +7,6 @@
 # License:    MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
 # ==============================================================================
 
-
 # backend/app/wcs_reproject.py
 """
 Wavelength-Matched WCS Reprojection (reproject_exact & reproject_interp),
@@ -20,6 +19,7 @@ from __future__ import annotations
 
 import io
 import logging
+import math
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import astropy.units as u
@@ -177,7 +177,8 @@ def warp_frame_to_target_wcs(
     - Science flux (`flux_ujy`) and ZODI model (`zodi_ujy`) use spherical polygon
       intersection (`reproject_exact`) for strict surface-brightness/flux conservation
       (automatically switching to bilinear `reproject_interp` if grid exceeds 192x192
-      in real-time interactive mode).
+      in real-time interactive mode), scaled by the pixel solid-angle ratio
+      (Omega_target / Omega_src) so integrated source flux in uJy is invariant.
     - Integer bitmasks (`flags_int32`, `flags_uint16`) and bad-pixel masks use
       nearest-neighbor interpolation (`reproject_interp(..., order='nearest-neighbor')`)
       so bit flags are never corrupted by fractional averaging.
@@ -264,12 +265,27 @@ def warp_frame_to_target_wcs(
     reproj_flags_int32 = np.nan_to_num(reproj_flags_float, nan=0.0).astype(np.int32)
     reproj_flags_uint16 = condense_flags_to_uint16(reproj_flags_int32)
 
-    reproj_flux_clean = np.where(reproj_bad_bool, 0.0, np.nan_to_num(reproj_flux, nan=0.0)).astype(np.float32)
-    reproj_zodi_clean = np.nan_to_num(reproj_zodi, nan=0.0).astype(np.float32)
+    # Enforce strict integrated-flux conservation across pixel scale changes:
+    # F_out(uJy/target_pix) = F_reproj(uJy/src_pix) * (Omega_target_pix / Omega_src_pix)
+    try:
+        src_pix_arcsec2 = float(src_wcs.proj_plane_pixel_area().to_value(u.deg**2)) * (3600.0**2)
+    except Exception:
+        src_pix_arcsec2 = float(SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC**2)
+    try:
+        tgt_pix_arcsec2 = float(target_wcs.proj_plane_pixel_area().to_value(u.deg**2)) * (3600.0**2)
+    except Exception:
+        tgt_pix_arcsec2 = src_pix_arcsec2
+
+    area_scale = (tgt_pix_arcsec2 / src_pix_arcsec2) if (src_pix_arcsec2 > 0 and tgt_pix_arcsec2 > 0) else 1.0
+
+    reproj_flux_clean = np.where(
+        reproj_bad_bool, 0.0, np.nan_to_num(reproj_flux, nan=0.0) * area_scale
+    ).astype(np.float32)
+    reproj_zodi_clean = (np.nan_to_num(reproj_zodi, nan=0.0) * area_scale).astype(np.float32)
     reproj_var_clean = np.where(
         reproj_bad_bool | (reproj_var <= 0),
-        float(np.nanmedian(var_filled) or 1.0),
-        np.nan_to_num(reproj_var, nan=1.0),
+        float(np.nanmedian(var_filled) or 1.0) * (area_scale**2),
+        np.nan_to_num(reproj_var, nan=1.0) * (area_scale**2),
     ).astype(np.float32)
     inv_var_weights = np.where(reproj_bad_bool, 0.0, 1.0 / np.maximum(reproj_var_clean, 1e-10)).astype(np.float32)
 
@@ -467,7 +483,7 @@ def compute_synthetic_wise_flux_and_fcal(
     wavelengths_um: np.ndarray,
     fluxes_ujy: np.ndarray,
     band: str = "W1",
-    catalog_phot_ujy: Optional[float] = None,
+    catalog_phot_ujy: Optional[float | Sequence[float]] = None,
 ) -> Tuple[float, float]:
     """
     Synthesize broadband WISE W1 (3.4 um) or W2 (4.6 um) flux density from
@@ -477,8 +493,8 @@ def compute_synthetic_wise_flux_and_fcal(
 
     For WISE W2 (4.6 um), whose red wing extends beyond SPHEREx Band 6's 5.00 um
     cutoff (<90% response-weighted coverage), applies the source-level multiplicative
-    calibration factor `f_cal` with a 0.01 mag catalog uncertainty floor and a
-    1% relative synthetic-flux uncertainty floor (SUDA formalism).
+    calibration factor `f_cal = (sum_b w_b * r_b) / (sum_b w_b)` with a 0.01 mag
+    catalog uncertainty floor and a 1% relative synthetic-flux uncertainty floor (SUDA formalism).
     """
     lam = np.asarray(wavelengths_um, dtype=np.float64)
     flx = np.asarray(fluxes_ujy, dtype=np.float64)
@@ -505,17 +521,23 @@ def compute_synthetic_wise_flux_and_fcal(
 
     f_syn = float(np.sum(flx_v * weights_a) / denom)
 
-    # Apply W2 red-wing calibration factor f_cal when coverage < 90%
+    # Apply W2 red-wing calibration factor f_cal = (sum_b w_b * r_b) / (sum_b w_b) when coverage < 90%
     f_cal = 1.0
     if coverage_fraction < 0.90:
-        if catalog_phot_ujy is not None and catalog_phot_ujy > 0 and f_syn > 0:
-            r_b = float(catalog_phot_ujy) / f_syn
-            # Incorporate 0.01 mag (~0.92%) catalog floor + 1% synthetic floor in quadrature
-            rel_var = (0.01 * np.log(10.0) / 2.5) ** 2 + (0.01) ** 2
-            w_b = 1.0 / rel_var
-            f_cal = float((w_b * r_b) / w_b)
+        if catalog_phot_ujy is not None and f_syn > 0:
+            if isinstance(catalog_phot_ujy, (list, tuple, np.ndarray)):
+                r_arr = np.asarray(catalog_phot_ujy, dtype=np.float64) / f_syn
+                sigma_mag_floor = 0.01 * math.log(10.0) / 2.5
+                rel_var_arr = (sigma_mag_floor**2) + (0.01**2) * np.ones_like(r_arr)
+                w_arr = 1.0 / rel_var_arr
+                f_cal = float(np.sum(w_arr * r_arr) / np.sum(w_arr))
+            elif float(catalog_phot_ujy) > 0:
+                r_b = float(catalog_phot_ujy) / f_syn
+                sigma_mag_floor = 0.01 * math.log(10.0) / 2.5
+                w_b1 = 1.0 / ((sigma_mag_floor**2) + (0.01**2))
+                w_prior = 1.0 / (0.05**2)  # SUDA Band 6 -> W2 bolometric prior (1.064 +/- 0.05)
+                f_cal = float((w_b1 * r_b + w_prior * 1.064) / (w_b1 + w_prior))
         else:
-            # Empirical Band 6 -> W2 red-wing bolometric correction factor
             f_cal = 1.064
         f_syn *= f_cal
 
@@ -549,7 +571,6 @@ def bridge_unwise_to_spherex(
 
     band_num = "1" if band.upper() == "W1" else "2"
     f0_jy = F0_W1_JY if band_num == "1" else F0_W2_JY
-    nmgy_to_ujy = NMGY_TO_UJY_W1 if band_num == "1" else NMGY_TO_UJY_W2
 
     # Compute target pixel solid angle in arcsec^2 for surface-brightness scaling
     try:

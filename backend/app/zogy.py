@@ -7,8 +7,6 @@
 # License:    MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
 # ==============================================================================
 
-
-
 # backend/app/zogy.py
 """
 Zackay, Ofek, & Gal-Yam (2016) (ZOGY) Proper Image Subtraction,
@@ -21,11 +19,12 @@ from __future__ import annotations
 
 import logging
 import math
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import BarycentricTrueEcliptic, SkyCoord
+from astropy.coordinates import BarycentricTrueEcliptic, SkyCoord, get_sun
+from astropy.time import Time
 from astropy.wcs import WCS
 from scipy.ndimage import convolve
 from scipy.spatial import cKDTree
@@ -279,12 +278,10 @@ def compute_planet_x_kinematics_score(
 ) -> Tuple[float, float, float]:
     """
     Evaluate the bounded, differentiable Planet X / Outer Solar System Kinematics
-    & Spectral Score `P_PX in [0, 1]` (Section 4.2):
-        P_PX = W_beta(beta) * W_d(d_hat) * W_vec(Delta_theta_obs, d_hat)
-               * sigma_log(1.2*C_CH4 + 0.9*C_{H2O,NIR} + 1.1*tau_{H2O,3.0} + 0.8*C_{W1/K} - 0.6)
-
-    Returns:
-      `(P_PX, implied_distance_au, ecliptic_latitude_deg)`
+    & Spectral Score `P_PX in [0, 1]` using exact solar ecliptic longitude
+    ephemerides lambda_sun(t1), lambda_sun(t2) and reflex parallax vector projection:
+        d_hat = ||Delta_theta_par(1 AU)|| / max(Delta_theta_obs . u_hat_par, epsilon_theta)
+        r_orb = Delta_theta_obs - (1 / d_hat) * Delta_theta_par(1 AU)
     """
     c1 = SkyCoord(ra=ra_t1_deg * u.deg, dec=dec_t1_deg * u.deg, frame="icrs")
     c2 = SkyCoord(ra=ra_t2_deg * u.deg, dec=dec_t2_deg * u.deg, frame="icrs")
@@ -292,25 +289,48 @@ def compute_planet_x_kinematics_score(
     ecl1 = c1.transform_to(BarycentricTrueEcliptic())
     ecl2 = c2.transform_to(BarycentricTrueEcliptic())
 
+    lam_rad = float(ecl1.lon.rad)
+    beta_rad = float(ecl1.lat.rad)
     beta_deg = float(ecl1.lat.deg)
-    d_lon_arcsec = float((ecl2.lon - ecl1.lon).wrap_at(180 * u.deg).arcsec) * math.cos(math.radians(beta_deg))
-    d_lat_arcsec = float((ecl2.lat - ecl1.lat).arcsec)
-    sep_arcsec = math.hypot(d_lon_arcsec, d_lat_arcsec)
+
+    # Observed displacement vector Delta_theta_obs = (Delta_lambda * cos(beta), Delta_beta) in arcsec
+    d_lon_obs_arcsec = float((ecl2.lon - ecl1.lon).wrap_at(180 * u.deg).arcsec) * math.cos(beta_rad)
+    d_lat_obs_arcsec = float((ecl2.lat - ecl1.lat).arcsec)
+    sep_arcsec = math.hypot(d_lon_obs_arcsec, d_lat_obs_arcsec)
 
     dt_days = max(0.5, abs(float(mjd_t2) - float(mjd_t1)))
     dt_yr = dt_days / 365.25
 
-    # Dual-regime implied heliocentric distance d_hat (AU):
-    # - 6-month baseline (dt > 45 days): Delta_theta_par ≈ 412,529.6'' / d(AU)
-    # - Multi-day intra-pass baseline (dt <= 45 days): pi_g ≈ 5.91'' * (600/d) * tan|beta| * (dt_days / 3.5)
-    if dt_days >= 45.0:
-        baseline_1au_arcsec = 412529.6 * min(1.0, dt_days / 182.625)
-    else:
-        tan_b = max(0.20, abs(math.tan(math.radians(max(-80.0, min(80.0, beta_deg))))))
-        baseline_1au_arcsec = 5.91 * 600.0 * tan_b * (dt_days / 3.5)
+    # Exact unit-distance (1 AU) solar reflex parallax displacement vector in arcsec:
+    # Delta_lambda_par * cos(beta) = [sin(lam - lam_sun(t2)) - sin(lam - lam_sun(t1))] * 206264.8''
+    # Delta_beta_par = sin(beta) * [cos(lam - lam_sun(t2)) - cos(lam - lam_sun(t1))] * 206264.8''
+    t1_obj = Time(float(mjd_t1), format="mjd", scale="utc")
+    t2_obj = Time(float(mjd_t2), format="mjd", scale="utc")
+    sun_lon_t1 = float(get_sun(t1_obj).transform_to(BarycentricTrueEcliptic()).lon.rad)
+    sun_lon_t2 = float(get_sun(t2_obj).transform_to(BarycentricTrueEcliptic()).lon.rad)
 
-    d_hat_au = baseline_1au_arcsec / max(sep_arcsec, 0.25)
-    d_hat_au = max(10.0, min(5000.0, d_hat_au))
+    rad_to_arcsec = 206264.806247
+    par_1au_lon = (math.sin(lam_rad - sun_lon_t2) - math.sin(lam_rad - sun_lon_t1)) * rad_to_arcsec
+    par_1au_lat = math.sin(beta_rad) * (math.cos(lam_rad - sun_lon_t2) - math.cos(lam_rad - sun_lon_t1)) * rad_to_arcsec
+    par_1au_norm = math.hypot(par_1au_lon, par_1au_lat)
+
+    if par_1au_norm > 1.0:
+        u_par_lon = par_1au_lon / par_1au_norm
+        u_par_lat = par_1au_lat / par_1au_norm
+    else:
+        u_par_lon, u_par_lat = 1.0, 0.0
+        par_1au_norm = 412529.6 * min(1.0, dt_days / 182.625)
+
+    # Project Delta_theta_obs onto u_hat_par to solve implied heliocentric distance d_hat (AU)
+    proj_dot = d_lon_obs_arcsec * u_par_lon + d_lat_obs_arcsec * u_par_lat
+    proj_mag = abs(proj_dot) if abs(proj_dot) > 0.25 else max(sep_arcsec, 0.25)
+    d_hat_au = max(10.0, min(5000.0, par_1au_norm / proj_mag))
+
+    # Residual Keplerian orbital motion vector r_orb = Delta_theta_obs - (1 / d_hat) * Delta_theta_par(1 AU)
+    sign_par = 1.0 if proj_dot >= 0.0 else -1.0
+    r_orb_lon = d_lon_obs_arcsec - sign_par * (par_1au_lon / d_hat_au)
+    r_orb_lat = d_lat_obs_arcsec - sign_par * (par_1au_lat / d_hat_au)
+    mu_res_arcsec_yr = math.hypot(r_orb_lon, r_orb_lat) / max(dt_yr, 0.01)
 
     # 1. Ecliptic latitude prior W_beta(beta) (centered on |beta| <= 25 deg)
     excess_beta = max(0.0, abs(beta_deg) - 25.0)
@@ -320,13 +340,10 @@ def compute_planet_x_kinematics_score(
     w_d = math.exp(-((math.log(d_hat_au) - math.log(600.0)) ** 2) / (2.0 * (0.55**2)))
 
     # 3. Keplerian bound orbital consistency W_vec
-    # Bound orbital angular speed mu_max(d) ≈ 1,296,000'' * sqrt(2) / d^(3/2) arcsec/yr
     mu_max_arcsec_yr = (1296000.0 * math.sqrt(2.0)) / (d_hat_au**1.5)
-    # Residual proper motion after reflex parallax subtraction
-    mu_res_arcsec_yr = (0.12 * sep_arcsec) / max(dt_yr, 0.01)
     sigma_mu = (math.sqrt(2.0) * 0.5) / max(dt_yr, 0.01)
     excess_mu = max(0.0, mu_res_arcsec_yr - mu_max_arcsec_yr)
-    align_cos = abs(d_lon_arcsec) / max(sep_arcsec, 1e-6)
+    align_cos = abs(proj_dot) / max(sep_arcsec, 1e-6)
     w_vec = math.exp(-(excess_mu**2) / (2.0 * (sigma_mu**2) + (0.3 * mu_max_arcsec_yr) ** 2)) * (
         max(0.35, align_cos) ** 2
     )
@@ -513,10 +530,11 @@ def extract_and_link_candidates(
 
     Executes:
       1. Dual-pass extraction on `+D` (Epoch t2 excesses) and `-D` (Epoch t1 excesses).
-      2. Field-star median dipole registration drift subtraction.
-      3. Tier 1 Local KD-tree dipole pairing (`R_max^local = 8.0 pixels = 49.2''`,
+      2. Field-star median dipole registration drift subtraction & Gould (2013)
+         two-dipole neighbor cross-talk deblending.
+      3. Tier 1 Local KD-tree dipole pairing (`R_max^local = 49.2''`,
          flux conservation `0.4 <= F+/F- <= 2.5`, `BIT_SOURCE` unset).
-      4. Tier 2 Wide-Sector 6-month parallax pairing (`R_max^sector = 250 pixels = 1537.5''`)
+      4. Tier 2 Wide-Sector 6-month parallax pairing (`R_max^sector = 1537.5''`)
          for unassociated single-epoch monopoles.
       5. Physics-informed priority scoring (`P_PX` and `P_Trans`).
     """
@@ -556,6 +574,18 @@ def extract_and_link_candidates(
     used_pos: set[int] = set()
     used_neg: set[int] = set()
 
+    # Derive true pixel scale (arcsec/px) from target WCS so 49.2'' (Tier 1) and 1537.5'' (Tier 2)
+    # search radii and dipole separations are exact across all FoV settings
+    try:
+        wcs_pixscale_arcsec = float(math.sqrt(wcs.proj_plane_pixel_area().to_value(u.deg**2)) * 3600.0)
+        if not (0.1 <= wcs_pixscale_arcsec <= 60.0):
+            wcs_pixscale_arcsec = SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC
+    except Exception:
+        wcs_pixscale_arcsec = SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC
+
+    r_local_px = max(3.0, 49.2 / wcs_pixscale_arcsec)                   # 49.2'' (8 native SPHEREx pixels)
+    r_sector_px = max(r_local_px + 5.0, 1537.5 / wcs_pixscale_arcsec)   # 1537.5'' (250 native SPHEREx pixels)
+
     if pos_peaks and neg_peaks:
         pos_xy = np.array([[p["x"], p["y"]] for p in pos_peaks], dtype=np.float64)
         neg_xy = np.array([[n["x"], n["y"]] for n in neg_peaks], dtype=np.float64)
@@ -564,7 +594,7 @@ def extract_and_link_candidates(
         # Estimate median field-star registration dipole drift on known sources (BIT_SOURCE set)
         drift_dx_list: List[float] = []
         drift_dy_list: List[float] = []
-        dists_local, idxs_local = tree_neg.query(pos_xy, distance_upper_bound=8.0)
+        dists_local, idxs_local = tree_neg.query(pos_xy, distance_upper_bound=r_local_px)
 
         for i_p, (dist_px, j_n) in enumerate(zip(dists_local, idxs_local)):
             if not np.isfinite(dist_px) or int(j_n) >= len(neg_peaks):
@@ -578,7 +608,18 @@ def extract_and_link_candidates(
         med_drift_dx = float(np.median(drift_dx_list)) if drift_dx_list else 0.0
         med_drift_dy = float(np.median(drift_dy_list)) if drift_dy_list else 0.0
 
-        # --- Tier 1: Local Moving Dipole Pairing (R_max^local = 8.0 pixels = 49.2'') ---
+        # Precompute field-star dipole orientations for Gould (2013) two-dipole neighbor deblending
+        field_dipoles: List[Tuple[float, float, float]] = []
+        for i_p, (dist_px, j_n_raw) in enumerate(zip(dists_local, idxs_local)):
+            j_n = int(j_n_raw)
+            if np.isfinite(dist_px) and j_n < len(neg_peaks) and pos_peaks[i_p]["is_known_source"]:
+                phi_f = math.atan2(
+                    pos_peaks[i_p]["y"] - neg_peaks[j_n]["y"],
+                    pos_peaks[i_p]["x"] - neg_peaks[j_n]["x"],
+                )
+                field_dipoles.append((pos_peaks[i_p]["x"], pos_peaks[i_p]["y"], phi_f))
+
+        # --- Tier 1: Local Moving Dipole Pairing (R_max^local = 49.2'') ---
         for i_p, (dist_px, j_n_raw) in enumerate(zip(dists_local, idxs_local)):
             j_n = int(j_n_raw)
             if not np.isfinite(dist_px) or j_n >= len(neg_peaks) or j_n in used_neg:
@@ -594,7 +635,18 @@ def extract_and_link_candidates(
 
                 dx_corr_px = (p_obj["x"] - n_obj["x"]) - med_drift_dx
                 dy_corr_px = (p_obj["y"] - n_obj["y"]) - med_drift_dy
-                sep_arcsec = float(math.hypot(dx_corr_px, dy_corr_px) * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC)
+
+                # Deblend orientation cross-talk from any crowded neighbor within 4 * sigma_PSF
+                phi_cand = math.atan2(dy_corr_px, dx_corr_px)
+                sigma_psf_px = max(1.0, SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC / wcs_pixscale_arcsec)
+                for fx, fy, phi_neighbor in field_dipoles:
+                    neighbor_sep_px = math.hypot(p_obj["x"] - fx, p_obj["y"] - fy)
+                    if 0.5 < neighbor_sep_px <= 4.0 * sigma_psf_px:
+                        xtalk = two_dipole_crosstalk_ratio(neighbor_sep_px, sigma_psf_px, phi_cand, phi_neighbor)
+                        dx_corr_px -= xtalk * math.cos(phi_neighbor)
+                        dy_corr_px -= xtalk * math.sin(phi_neighbor)
+
+                sep_arcsec = float(math.hypot(dx_corr_px, dy_corr_px) * wcs_pixscale_arcsec)
 
                 # If sub-PSF dipole (sep < 6.15''), refine displacement via analytical Gould (2013) relation
                 if sep_arcsec < SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC:
@@ -626,8 +678,8 @@ def extract_and_link_candidates(
                         "snr": snr_dip,
                         "ellipticity": 0.5 * (p_obj["ellipticity"] + n_obj["ellipticity"]),
                         "dipole_sep_arcsec": sep_arcsec,
-                        "dx_arcsec": float(dx_corr_px * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC),
-                        "dy_arcsec": float(dy_corr_px * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC),
+                        "dx_arcsec": float(dx_corr_px * wcs_pixscale_arcsec),
+                        "dy_arcsec": float(dy_corr_px * wcs_pixscale_arcsec),
                         "fit_ql": 0.5 * (p_obj["fit_ql"] + n_obj["fit_ql"]),
                         "eta_sharp": 0.5 * (p_obj["eta_sharp"] + n_obj["eta_sharp"]),
                         "is_known_source": False,
@@ -638,11 +690,11 @@ def extract_and_link_candidates(
                     }
                 )
 
-        # --- Tier 2: Wide-Sector 6-Month Parallax Linker (R_max^sector = 250 pixels = 1537.5'') ---
-        dists_wide, idxs_wide = tree_neg.query(pos_xy, distance_upper_bound=250.0)
+        # --- Tier 2: Wide-Sector 6-Month Parallax Linker (R_max^sector = 1537.5'') ---
+        dists_wide, idxs_wide = tree_neg.query(pos_xy, distance_upper_bound=r_sector_px)
         for i_p, (dist_px, j_n_raw) in enumerate(zip(dists_wide, idxs_wide)):
             j_n = int(j_n_raw)
-            if i_p in used_pos or not np.isfinite(dist_px) or dist_px <= 8.0 or j_n >= len(neg_peaks) or j_n in used_neg:
+            if i_p in used_pos or not np.isfinite(dist_px) or dist_px <= r_local_px or j_n >= len(neg_peaks) or j_n in used_neg:
                 continue
 
             p_obj = pos_peaks[i_p]
@@ -657,7 +709,7 @@ def extract_and_link_candidates(
                 p_px, d_hat_au, beta_deg = compute_planet_x_kinematics_score(
                     ra1, dec1, ra2, dec2, mjd_t1, mjd_t2
                 )
-                sep_arcsec = float(dist_px * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC)
+                sep_arcsec = float(dist_px * wcs_pixscale_arcsec)
                 snr_dip = float(math.hypot(p_obj["snr"], n_obj["snr"]))
 
                 candidates.append(
@@ -673,8 +725,8 @@ def extract_and_link_candidates(
                         "snr": snr_dip,
                         "ellipticity": 0.5 * (p_obj["ellipticity"] + n_obj["ellipticity"]),
                         "dipole_sep_arcsec": sep_arcsec,
-                        "dx_arcsec": float((p_obj["x"] - n_obj["x"]) * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC),
-                        "dy_arcsec": float((p_obj["y"] - n_obj["y"]) * SPHEREX_NATIVE_PIXEL_SCALE_ARCSEC),
+                        "dx_arcsec": float((p_obj["x"] - n_obj["x"]) * wcs_pixscale_arcsec),
+                        "dy_arcsec": float((p_obj["y"] - n_obj["y"]) * wcs_pixscale_arcsec),
                         "fit_ql": 0.5 * (p_obj["fit_ql"] + n_obj["fit_ql"]),
                         "eta_sharp": 0.5 * (p_obj["eta_sharp"] + n_obj["eta_sharp"]),
                         "is_known_source": False,

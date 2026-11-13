@@ -7,8 +7,6 @@
 # License:    MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
 # ==============================================================================
 
-
-
 # backend/app/crossmatch_cascade.py
 """
 5-Stage Live Known-Object Cross-Matching Cascade & 4-Tier STScI MAST + ESA
@@ -27,7 +25,7 @@ from __future__ import annotations
 
 import io
 import logging
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import astropy.units as u
 import numpy as np
@@ -472,6 +470,57 @@ def _query_jpl_sb_ident(
     return []
 
 
+def _format_mpc_obs80_and_query_cnd(
+    ra_deg: float,
+    dec_deg: float,
+    t_obs: Time,
+    match_tol_arcsec: float = 6.0,
+    timeout_sec: int = 10,
+) -> List[Dict[str, Any]]:
+    """
+    Stage 5: Format a standard 80-column MPC1992 optical/IR astrometric record
+    (obs80) from `(ra_deg, dec_deg, t_obs)` and query the Minor Planet Center
+    Check Near-Duplicates (CND) REST API (`https://data.minorplanetcenter.net/api/cnd`).
+    """
+    coord = SkyCoord(ra=float(ra_deg) * u.deg, dec=float(dec_deg) * u.deg, frame="icrs")
+    dt = t_obs.to_datetime()
+    day_frac = dt.day + (dt.hour + dt.minute / 60.0 + (dt.second + dt.microsecond * 1e-6) / 3600.0) / 24.0
+    date_str = f"C{dt.year:04d} {dt.month:02d} {day_frac:08.5f}"
+
+    ra_hms = coord.ra.hms
+    ra_mpc = f"{int(ra_hms.h):02d} {int(ra_hms.m):02d} {float(ra_hms.s):05.2f}"
+    dec_dms = coord.dec.signed_dms
+    sign_c = "-" if dec_dms.sign < 0 else "+"
+    dec_mpc = f"{sign_c}{abs(int(dec_dms.d)):02d} {abs(int(dec_dms.m)):02d} {abs(float(dec_dms.s)):04.1f}"
+
+    # Construct exact 80-character MPC1992 observation string (Observatory Code 500 Geocentric)
+    obs80 = f"     SPX0001*{date_str}{ra_mpc} {dec_mpc}          19.5 R      500"
+    obs80 = obs80[:80].ljust(80)
+
+    payload = {
+        "obs": [obs80],
+        "time_separation_s": 60.0,
+        "angle_separation_arcsec": min(10.0, max(1.0, float(match_tol_arcsec))),
+        "omit_separation": False,
+    }
+    try:
+        resp = requests.get(
+            settings.MPC_CND_API_URL,
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=timeout_sec,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            if isinstance(data, list):
+                return data
+            if isinstance(data, dict):
+                return data.get("matches", data.get("results", []))
+    except Exception as exc:
+        logger.debug("Stage 5 MPC CND query note: %s", exc)
+    return []
+
+
 def _query_splices_ice_catalog(ra_deg: float, dec_deg: float, timeout_sec: int = 10) -> List[Dict[str, Any]]:
     """
     Cross-match coordinates against IRSA's SPHEREx Target List of Ice Sources
@@ -566,16 +615,20 @@ def crossmatch_candidate_all_apis(
         jd_obs=jd_obs,
         spacecraft_xobs_km_kms=spacecraft_xobs_km_kms,
     )
+    mpc_cnd_matches = _format_mpc_obs80_and_query_cnd(
+        ra_deg=ra_deg,
+        dec_deg=dec_deg,
+        t_obs=t_obs,
+        match_tol_arcsec=match_tol_arcsec,
+    )
     splices_matches = _query_splices_ice_catalog(ra_deg=ra_deg, dec_deg=dec_deg)
     neossat_matches = _query_cadc_neossat_check(ra_deg=ra_deg, dec_deg=dec_deg)
 
-    # Stage 5 MPC Near-Duplicates summary status
-    mpc_cnd_matches: List[Dict[str, Any]] = []
-
-    # 4-Criterion Uncatalogued Discovery Verification Protocol:
+    # 5-Criterion Uncatalogued Discovery Verification Protocol:
     # 1. Zero Gaia DR3 stellar/galaxy matches within match_tol_arcsec at propagated epoch
     # 2. Zero SIMBAD matches within match_tol_arcsec
     # 3. Zero SkyBoT and JPL sb_ident moving solar system body matches
+    # 4. Zero Minor Planet Center (MPC CND) near-duplicate observations
     close_simbad = [m for m in simbad_matches if float(m.get("sep_arcsec", 999.0)) <= float(match_tol_arcsec)]
     close_skybot = [m for m in skybot_matches if float(m.get("center_dist_arcsec", 999.0)) <= float(match_tol_arcsec) * 2.0]
 
@@ -584,6 +637,7 @@ def crossmatch_candidate_all_apis(
         and len(close_simbad) == 0
         and len(close_skybot) == 0
         and len(jpl_matches) == 0
+        and len(mpc_cnd_matches) == 0
     )
 
     return {
