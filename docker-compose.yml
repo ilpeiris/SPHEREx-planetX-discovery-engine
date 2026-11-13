@@ -1,0 +1,48 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: spherex-planetx-backend
+    ports:
+      - "7860:7860"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID:-0123456789abcdef0123456789abcdef}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID:-}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY:-}
+      - R2_BUCKET=${R2_BUCKET:-spherex-sky-lake}
+      - R2_PUBLIC_CDN_URL=${R2_PUBLIC_CDN_URL:-https://pub-spherex.r2.dev}
+      - SPHEREX_CACHE_DIR=/tmp/spherex_cache
+    volumes:
+      - spherex_cutout_cache:/tmp/spherex_cache
+      - ./backend/cache:/home/user/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    image: node:20-alpine
+    container_name: spherex-planetx-frontend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:7860
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  spherex_cutout_cache:
