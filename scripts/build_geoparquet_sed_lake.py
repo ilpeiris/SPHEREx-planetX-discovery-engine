@@ -7,7 +7,6 @@
 # License:    MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
 # ==============================================================================
 
-
 #!/usr/bin/env python3
 # scripts/build_geoparquet_sed_lake.py
 """
@@ -24,8 +23,9 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
+import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -33,13 +33,18 @@ BACKEND_DIR = REPO_ROOT / "backend"
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
+from app.calibration import calibrate_spherex_mef_bytes  # noqa: E402
 from app.config import settings  # noqa: E402
+from app.irsa_client import fetch_cutouts_threaded_sync, query_spherex_tap_cutouts  # noqa: E402
 from app.main import (  # noqa: E402
     GOLDEN_TARGETS_CATALOG,
     build_physics_fallback_102band_sed,
     init_duckdb_connection,
 )
-from app.spectrophotometry import NOMINAL_102_CHANNELS  # noqa: E402
+from app.spectrophotometry import (  # noqa: E402
+    NOMINAL_102_CHANNELS,
+    extract_102band_point_source_sed,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -60,17 +65,21 @@ def compute_healpix_partition(ra_deg: float, dec_deg: float) -> int:
 def build_geoparquet_sed_and_exposure_lake(
     output_dir: Path,
     push_to_r2: bool = False,
+    live_irsa: bool = True,
 ) -> Dict[str, int]:
     """
     Assemble the 102-band dual-epoch forced photometry records and exposure
     bounding footprints for all Golden Targets (including J2000 and 2010 WISE
-    coordinate aliases) and write Hive-partitioned GeoParquet files via DuckDB.
+    coordinate aliases) from real NASA IRSA SPHEREx Level-2 FITS cutouts and
+    write Hive-partitioned GeoParquet files via DuckDB.
     """
     sed_records: List[Dict[str, Any]] = []
     exposure_records: List[Dict[str, Any]] = []
+    sapm_cache: Dict[int, np.ndarray] = {}
 
-    for target in GOLDEN_TARGETS_CATALOG:
+    for idx, target in enumerate(GOLDEN_TARGETS_CATALOG, start=1):
         t_id = str(target["id"])
+        t_name = str(target["name"])
         ra_primary = float(target["ra_deg"])
         dec_primary = float(target["dec_deg"])
 
@@ -80,25 +89,80 @@ def build_geoparquet_sed_and_exposure_lake(
         if "ra_j2000_deg" in target and "dec_j2000_deg" in target:
             coord_aliases.append((float(target["ra_j2000_deg"]), float(target["dec_j2000_deg"])))
 
-        sed_bundle = build_physics_fallback_102band_sed(
-            ra_deg=ra_primary,
-            dec_deg=dec_primary,
-            apply_quality_filter=False,
-        )
+        # 1. Query real NASA IRSA TAP & extract 102-band SED from real Level-2 FITS cutouts
+        sed_bundle: Optional[Dict[str, Any]] = None
+        if live_irsa:
+            logger.info(
+                "[%02d/%02d] Querying live NASA IRSA TAP 102-band cutouts for %s (%.5f, %.5f)",
+                idx,
+                len(GOLDEN_TARGETS_CATALOG),
+                t_name,
+                ra_primary,
+                dec_primary,
+            )
+            tap_rows = query_spherex_tap_cutouts(
+                ra_deg=ra_primary,
+                dec_deg=dec_primary,
+                size_deg=0.05,
+                bandpass=None,  # Query across all 6 SPHEREx detectors (D1..D6)
+                max_rows=60,
+                timeout_sec=25,
+            )
+            if tap_rows:
+                urls = [str(r["cutout_uri"]) for r in tap_rows[:36] if r.get("cutout_uri")]
+                raw_fits_list = fetch_cutouts_threaded_sync(urls, max_workers=10, timeout_sec=25)
+                calibrated_cutouts = []
+                for b_data in raw_fits_list:
+                    if b_data is not None:
+                        try:
+                            calibrated_cutouts.append(
+                                calibrate_spherex_mef_bytes(b_data, sapm_cache=sapm_cache)
+                            )
+                        except Exception as exc:
+                            logger.debug("Skipping corrupt MEF cutout for %s: %s", t_id, exc)
+                if calibrated_cutouts:
+                    live_sed = extract_102band_point_source_sed(
+                        cutout_list=calibrated_cutouts,
+                        ra_deg=ra_primary,
+                        dec_deg=dec_primary,
+                        apply_quality_filter=False,
+                    )
+                    if live_sed.get("count", 0) > 0:
+                        sed_bundle = live_sed
+                        logger.info(
+                            "  -> Extracted %d real SPHEREx Level-2 spectral measurements for %s",
+                            live_sed["count"],
+                            t_id,
+                        )
+
+        # 2. Only if IRSA is unreachable or --offline-only is set, use physics fallback
+        if sed_bundle is None or not sed_bundle.get("measurements"):
+            logger.warning("  -> Using offline physics fallback SED for %s", t_id)
+            sed_bundle = build_physics_fallback_102band_sed(
+                ra_deg=ra_primary,
+                dec_deg=dec_primary,
+                apply_quality_filter=False,
+            )
+
+        measurements = sed_bundle["measurements"]
+        mjds_all = [float(pt.get("mjd", 60900.0)) for pt in measurements]
+        median_mjd = float(np.median(mjds_all)) if mjds_all else 60950.0
 
         for alias_idx, (ra_c, dec_c) in enumerate(coord_aliases):
             hpx_part = compute_healpix_partition(ra_c, dec_c)
             src_label = t_id if alias_idx == 0 else f"{t_id}_alias{alias_idx}"
 
-            for pt in sed_bundle["measurements"]:
+            for pt in measurements:
+                mjd_val = float(pt.get("mjd", 60900.0))
+                ep_id = int(pt.get("epoch_id", 1 if mjd_val <= median_mjd else 2))
                 sed_records.append(
                     {
                         "source_id": src_label,
                         "ra": float(ra_c),
                         "dec": float(dec_c),
                         "hpx": int(hpx_part),
-                        "epoch_id": int(pt["epoch_id"]),
-                        "mjd": float(pt["mjd"]),
+                        "epoch_id": ep_id,
+                        "mjd": mjd_val,
                         "global_channel": int(pt["global_channel"]),
                         "band_id": int(pt["band_id"]),
                         "cwave_um": float(pt["cwave_um"]),
@@ -232,6 +296,11 @@ def main() -> None:
         help="Output root directory for Hive-partitioned GeoParquet tables",
     )
     parser.add_argument(
+        "--offline-only",
+        action="store_true",
+        help="Skip live NASA IRSA TAP network queries and use offline physics fallback",
+    )
+    parser.add_argument(
         "--push-to-r2",
         action="store_true",
         help="Push partitioned GeoParquet datasets directly to Cloudflare R2 via DuckDB httpfs",
@@ -241,6 +310,7 @@ def main() -> None:
     build_geoparquet_sed_and_exposure_lake(
         output_dir=args.output_dir,
         push_to_r2=args.push_to_r2,
+        live_irsa=not args.offline_only,
     )
 
 

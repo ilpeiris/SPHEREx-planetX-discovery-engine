@@ -77,8 +77,8 @@ cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --host 0.0.0.0 --port 7860 --reload
 
-# 2. (Optional) Pre-compute Golden Catalog .bin/.zarr cubes, GeoParquet SED lake & INT8 ONNX models
-python ../scripts/build_golden_catalog_cubes.py --offline-only
+# 2. Pre-compute Golden Catalog .bin/.zarr cubes, GeoParquet SED lake & INT8 ONNX models from live NASA IRSA
+python ../scripts/build_golden_catalog_cubes.py
 python ../scripts/build_geoparquet_sed_lake.py
 python ../scripts/train_export_onnx_models.py
 

@@ -306,9 +306,9 @@ function synthesizeClientFallbackSed(
             0.84 * Math.exp(-Math.pow((lam - 2.28) / 0.12, 2)) +
             0.89 * Math.exp(-Math.pow((lam - 3.32) / 0.16, 2));
           const h2o =
-            0.66 * Math.exp(-Math.pow((lam - 1.42) / 0.07, 2)) +
-            0.72 * Math.exp(-Math.pow((lam - 1.9, 2)) / 0.09) +
-            0.78 * Math.exp(-Math.pow((lam - 2.75) / 0.15, 2));
+          0.66 * Math.exp(-Math.pow((lam - 1.42) / 0.07, 2)) +
+          0.72 * Math.exp(-Math.pow((lam - 1.90) / 0.09, 2)) +
+          0.78 * Math.exp(-Math.pow((lam - 2.75) / 0.15, 2));
           const co2 = 0.46 * Math.exp(-Math.pow((lam - 4.26) / 0.05, 2));
           fluxVal = Math.max(2.5, cont * (1.0 - Math.max(ch4, h2o, co2)) * ep.scale);
         } else if (tType === "EXTENDED_COMET") {

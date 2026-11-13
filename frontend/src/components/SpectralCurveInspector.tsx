@@ -189,33 +189,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         });
       });
 
-    // Add synthetic historical NEOWISE / unWISE baseline points when only 1-2 SPHEREx epochs exist
-    if (lcList.length > 0 && lcList.length <= 3) {
-      const f0 = lcList[0].fluxUjy;
-      const isEruptive =
-        activeTarget?.targetType === "ERUPTIVE_YSO_FUOR" ||
-        activeTarget?.targetType === "VARIABLE_YSO";
-      lcList.unshift(
-        {
-          mjd: 55350.0,
-          fluxUjy: Number((isEruptive ? f0 * 0.12 : f0 * 0.96).toFixed(2)),
-          fluxErrUjy: Number((f0 * 0.05).toFixed(2)),
-          label: "AllWISE 2010.5 Baseline",
-        },
-        {
-          mjd: 58400.0,
-          fluxUjy: Number((isEruptive ? f0 * 0.45 : f0 * 1.02).toFixed(2)),
-          fluxErrUjy: Number((f0 * 0.05).toFixed(2)),
-          label: "NEOWISE 2018.8 Pass",
-        },
-        {
-          mjd: 60100.0,
-          fluxUjy: Number((isEruptive ? f0 * 0.88 : f0 * 0.99).toFixed(2)),
-          fluxErrUjy: Number((f0 * 0.04).toFixed(2)),
-          label: "NEOWISE 2023.4 Pass",
-        }
-      );
-    }
+    
 
     return {
       epoch1Points: finalEp1,
@@ -431,7 +405,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           gridIndex: 1,
           type: "value",
           scale: true,
-          name: "Observation Epoch (Modified Julian Date — 16-Yr unWISE + SPHEREx Baseline)",
+          name: "Observation Epoch (Modified Julian Date — SPHEREx Multi-Epoch Survey)",
           nameLocation: "middle",
           nameGap: 22,
           nameTextStyle: { color: "#9ca3af", fontSize: 10 },

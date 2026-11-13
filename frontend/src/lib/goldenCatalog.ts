@@ -1156,8 +1156,7 @@ export function formatSexagesimal(raDeg: number, decDeg: number): { raHms: strin
     raHms: `${pad2(raH)}h ${pad2(raM)}m ${raS.toFixed(2).padStart(5, "0")}s`,
     decDms: `${sign}${pad2(decD)}° ${pad2(decM)}' ${decS.toFixed(1).padStart(4, "0")}"`,
   };
-
-
+}
 
 // ============================================================================
 // 8. 102-CHANNEL LVF METADATA LOOKUP TABLE (CHANNELS 1..102)
@@ -1199,6 +1198,5 @@ export function getChannelMeta(globalChannel: number): SpectralChannelMeta {
   return NOMINAL_102_CHANNELS[idx];
 }
 
-}
 
 
