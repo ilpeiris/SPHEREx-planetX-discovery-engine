@@ -1,0 +1,44 @@
+/*!
+ * ============================================================================
+ * author:      M.D.Isuru Lakmal Peiris (@ilpeiris) 
+ * project:     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
+ * repository:  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
+ * linkedin:    https://www.linkedin.com/in/ilpeiris
+ * Github:     https://github.com/ilpeiris/
+ * license:     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
+ * ============================================================================
+ */
+
+/* frontend/src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #05060a;
+  color: #f3f4f6;
+  overflow-x: hidden;
+}
+
+/* Custom sleek scrollbars for dark astrophysics drawers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0c14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #242c44;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #12b5cb;
+}
