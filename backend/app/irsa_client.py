@@ -1,12 +1,11 @@
 # ==============================================================================
-# Author:     M.D.Isuru Lakmal Peiris (@ilpeiris) 
+# Author:     M.D.Isuru Lakmal Peiris (@ilpeiris)
 # Project:    SPHEREx x Planet X (2026 NASA International Space Apps Challenge)
 # Repository: https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
 # LinkedIn:   https://www.linkedin.com/in/ilpeiris
 # Github:     https://github.com/ilpeiris/
 # License:    MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
 # ==============================================================================
-
 
 # backend/app/irsa_client.py
 """
@@ -60,12 +59,14 @@ def build_spherex_tap_adql(
         f"1 = CONTAINS(POINT('ICRS', {ra:.7f}, {dec:.7f}), p.poly)",
     ]
 
+    # Case-insensitive bandpass filter matching both 'SPHEREX-D4' and 'SPHEREX_D4' in IRSA TAP
     if bandpass:
-        bp_clean = str(bandpass).strip().replace("_", "-")
-        where_clauses.append(f"p.energy_bandpassname = '{bp_clean}'")
+        bp_upper = str(bandpass).strip().upper()
+        bp_hyphen = bp_upper.replace("_", "-")
+        bp_under = bp_upper.replace("-", "_")
+        where_clauses.append(f"UPPER(p.energy_bandpassname) IN ('{bp_hyphen}', '{bp_under}')")
     else:
-        valid_bps = ", ".join(f"'{spec.name}'" for spec in SPHEREX_DETECTORS.values())
-        where_clauses.append(f"p.energy_bandpassname IN ({valid_bps})")
+        where_clauses.append("UPPER(p.energy_bandpassname) LIKE 'SPHEREX%D%'")
 
     if mjd_min is not None:
         where_clauses.append(f"p.time_bounds_lower >= {float(mjd_min):.5f}")
@@ -100,6 +101,7 @@ def query_spherex_tap_cutouts(
     collection: str = "spherex_qr3",
     mjd_min: Optional[float] = None,
     mjd_max: Optional[float] = None,
+    max_rows: int = 240,
     timeout_sec: int = 35,
 ) -> List[Dict[str, Any]]:
     """
@@ -117,6 +119,7 @@ def query_spherex_tap_cutouts(
         bandpass=bandpass,
         mjd_min=mjd_min,
         mjd_max=mjd_max,
+        max_rows=max_rows,
     )
 
     tap_sync_url = f"{settings.IRSA_TAP_URL.rstrip('/')}/sync"
@@ -139,15 +142,19 @@ def query_spherex_tap_cutouts(
     except Exception as exc:
         logger.warning("IRSA TAP query warning for (%f, %f): %s; trying SIAv2 fallback.", ra_deg, dec_deg, exc)
 
-    # Fallback: Query IRSA SIAv2 endpoint
-    return _query_irsa_siav2_fallback(
-        ra_deg=ra_deg,
-        dec_deg=dec_deg,
-        size_deg=size_deg,
-        bandpass=bandpass,
-        collection=collection,
-        timeout_sec=timeout_sec,
-    )
+    # Fallback: Query IRSA SIAv2 endpoint across QR3 and QR2 collections
+    for coll in (collection, "spherex_qr2", "spherex_qr3_deep", "spherex_qr2_deep"):
+        rows = _query_irsa_siav2_fallback(
+            ra_deg=ra_deg,
+            dec_deg=dec_deg,
+            size_deg=size_deg,
+            bandpass=bandpass,
+            collection=coll,
+            timeout_sec=timeout_sec,
+        )
+        if rows:
+            return rows
+    return []
 
 
 def _query_irsa_siav2_fallback(
@@ -181,8 +188,8 @@ def _query_irsa_siav2_fallback(
             access_url = str(row["access_url"]) if "access_url" in vot_table.colnames else ""
             if not access_url.startswith("http"):
                 continue
-            bp = str(row["energy_bandpassname"]) if "energy_bandpassname" in vot_table.colnames else "SPHEREx-D4"
-            if bandpass and bp.replace("_", "-") != bandpass.replace("_", "-"):
+            bp = str(row["energy_bandpassname"]) if "energy_bandpassname" in vot_table.colnames else "SPHEREX-D4"
+            if bandpass and bp.upper().replace("_", "-") != bandpass.upper().replace("_", "-"):
                 continue
             mjd_val = float(row["time_bounds_lower"]) if "time_bounds_lower" in vot_table.colnames else 60900.0
             ver = str(row["provenance_version"]) if "provenance_version" in vot_table.colnames else "7.0.0"
@@ -349,7 +356,7 @@ def query_3i_atlas_cutouts(
                         "comet_ra": ra_c,
                         "comet_dec": dec_c,
                         "mjd_obs": mjd_c,
-                        "bandpass": str(row["em_ucd"]) if "em_ucd" in vot.colnames else "SPHEREx-D5",
+                        "bandpass": str(row["em_ucd"]) if "em_ucd" in vot.colnames else "SPHEREX-D5",
                     }
                 )
             return records
