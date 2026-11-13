@@ -45,11 +45,8 @@ def build_spherex_tap_adql(
 ) -> str:
     """
     Construct a single consolidated ADQL query against IRSA's CAOM tables
-    (`spherex.artifact` joined with `spherex.plane`) returning on-the-fly
-    server-side IBE cutout URLs (`?center={ra},{dec}d&size={size_deg}`).
-
-    Executing one consolidated query prevents IRSA TAP PostgreSQL connection
-    pool exhaustion (Caltech-IPAC/irsa-tutorials Issue #386).
+    (`spherex.artifact` joined with `spherex.plane`) matching the exact
+    Caltech-IPAC `spherex_cutouts` tutorial schema.
     """
     ra = float(ra_deg)
     dec = float(dec_deg)
@@ -59,19 +56,16 @@ def build_spherex_tap_adql(
         f"1 = CONTAINS(POINT('ICRS', {ra:.7f}, {dec:.7f}), p.poly)",
     ]
 
-    # Case-insensitive bandpass filter matching both 'SPHEREX-D4' and 'SPHEREX_D4' in IRSA TAP
     if bandpass:
         bp_upper = str(bandpass).strip().upper()
         bp_hyphen = bp_upper.replace("_", "-")
         bp_under = bp_upper.replace("-", "_")
         where_clauses.append(f"UPPER(p.energy_bandpassname) IN ('{bp_hyphen}', '{bp_under}')")
-    else:
-        where_clauses.append("UPPER(p.energy_bandpassname) LIKE 'SPHEREX%D%'")
 
     if mjd_min is not None:
         where_clauses.append(f"p.time_bounds_lower >= {float(mjd_min):.5f}")
     if mjd_max is not None:
-        where_clauses.append(f"p.time_bounds_upper <= {float(mjd_max):.5f}")
+        where_clauses.append(f"p.time_bounds_lower <= {float(mjd_max):.5f}")
 
     where_sql = " AND ".join(where_clauses)
 
@@ -80,14 +74,11 @@ def build_spherex_tap_adql(
         'https://irsa.ipac.caltech.edu/' || a.uri || '?center={ra:.7f},{dec:.7f}d&size={cutout_deg:.4f}' AS cutout_uri,
         'https://irsa.ipac.caltech.edu/' || a.uri AS full_mef_uri,
         p.energy_bandpassname AS bandpass,
-        p.time_bounds_lower AS mjd_obs,
-        p.time_bounds_upper AS mjd_end,
-        p.provenance_version AS version,
-        p.calib_level AS calib_level
+        p.time_bounds_lower AS mjd_obs
     FROM spherex.artifact a
     JOIN spherex.plane p ON a.planeid = p.planeid
     WHERE {where_sql}
-    ORDER BY p.time_bounds_lower ASC, p.energy_bandpassname ASC
+    ORDER BY p.time_bounds_lower ASC
     """.strip()
 
     return adql

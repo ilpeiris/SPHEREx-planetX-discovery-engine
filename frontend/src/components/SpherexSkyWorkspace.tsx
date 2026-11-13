@@ -557,15 +557,23 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     return { shareUrl: fullUrl, embedIframeSnippet: iframeCode };
   }, [raDeg, decDeg, fovArcmin, renderMode, channel, activeTarget]);
 
-  // Initialize Aladin Lite v3 via dynamic import (Next.js SSR safe)
+  // Initialize Aladin Lite v3 via official CDS Strasbourg global bundle (WASM-safe in Next.js 14)
   useEffect(() => {
     let isMounted = true;
 
     async function initAladinSkyAtlas() {
       if (typeof window === "undefined" || !aladinContainerRef.current) return;
       try {
-        const aladinModule = await import("aladin-lite");
-        const A = aladinModule.default || aladinModule;
+        // Wait briefly if the CDS script is still finishing evaluation
+        let A = (window as any).A;
+        for (let retry = 0; retry < 25 && !A; retry++) {
+          await new Promise((r) => setTimeout(r, 150));
+          A = (window as any).A;
+        }
+        if (!A) {
+          const aladinModule = await import("aladin-lite");
+          A = aladinModule.default || aladinModule;
+        }
         if (A.init) {
           await A.init;
         }

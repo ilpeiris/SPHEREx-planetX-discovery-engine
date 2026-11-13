@@ -214,7 +214,7 @@ class Settings(BaseSettings):
     DUCKDB_MEMORY_LIMIT: str = "3GB"
     DUCKDB_THREADS: int = 2
     AIOHTTP_MAX_CONNECTIONS: int = 64
-    HTTP_TIMEOUT_SECONDS: int = 45
+    HTTP_TIMEOUT_SECONDS: int = 120
     PROCESS_POOL_WORKERS: int = 2
 
     # --- Bitmask Constant ---

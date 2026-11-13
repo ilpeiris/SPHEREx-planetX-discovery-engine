@@ -11,6 +11,7 @@
 
 // frontend/src/app/layout.tsx
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,10 +35,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Aladin Lite v3 official stylesheet from CDS Strasbourg CDN */}
+        {/* Aladin Lite v3 official stylesheet & WASM loader from CDS Strasbourg CDN */}
         <link
           rel="stylesheet"
           href="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.min.css"
+        />
+        <Script
+          src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"
+          strategy="beforeInteractive"
         />
       </head>
       <body className="bg-cosmos-950 text-neutral-100 antialiased selection:bg-spherex-cyan selection:text-cosmos-950">
