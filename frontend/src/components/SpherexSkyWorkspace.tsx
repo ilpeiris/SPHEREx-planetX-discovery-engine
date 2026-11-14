@@ -1179,19 +1179,20 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
                 isLightMode ? "border-slate-300 shadow-sm" : "border-[#1E2433]"
               }`}
             >
-              <div ref={aladinContainerRef} className="w-full flex-1" />
-
-              <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none z-10">
-                <div className="bg-black/80 border border-white/15 px-2.5 py-1 rounded text-[11px] font-mono text-slate-100 flex items-center gap-1.5">
-                  <Crosshair className="w-3.5 h-3.5 text-spherex-cyan" />
+              {/* Dedicated Non-Overlapping Header Bar Above Aladin Canvas */}
+              <div className="bg-[#0B0E14] border-b border-[#1E2433] px-3 py-1.5 flex items-center justify-between z-10">
+                <div className="text-[11px] font-medium text-slate-200 flex items-center gap-1.5">
+                  <Crosshair className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
                   <span>
-                    Aladin Lite v3 • {centerSexagesimal.raHms} {centerSexagesimal.decDms}
+                    Aladin Lite v3 HiPS • {centerSexagesimal.raHms} {centerSexagesimal.decDms}
                   </span>
                 </div>
-                <span className="bg-black/80 border border-spherex-cyan/40 text-spherex-cyan px-2 py-0.5 rounded text-[10px] font-mono">
-                  FoV: {fovArcmin}'×{fovArcmin}'
+                <span className="bg-[#141924] border border-spherex-cyan/40 text-spherex-cyan px-2 py-0.5 rounded text-[10px] font-semibold">
+                  FoV Box: {fovArcmin}'×{fovArcmin}'
                 </span>
               </div>
+
+              <div ref={aladinContainerRef} className="w-full flex-1 relative" />
 
               <div className="bg-[#080A0F] border-t border-[#1E2433] px-3 py-1 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-slate-400">
                 <span>

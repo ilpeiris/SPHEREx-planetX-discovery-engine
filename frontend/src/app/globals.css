@@ -1,10 +1,10 @@
 /*!
  * ============================================================================
- * author:      M.D.Isuru Lakmal Peiris (@ilpeiris) 
- * project:     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
+ * author:      M.D.Isuru Lakmal Peiris (@ilpeiris)
+ * project:     SPHEREx x Planet X - 102-Band WebGL2 & WASM Discovery Engine
  * repository:  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * linkedin:    https://www.linkedin.com/in/ilpeiris
- * Github:     https://github.com/ilpeiris/
+ * Github:      https://github.com/ilpeiris/
  * license:     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -18,13 +18,38 @@
   color-scheme: dark;
 }
 
+body,
+button,
+input,
+select,
+textarea,
+.font-mono,
+.font-sans {
+  font-family: var(--font-jakarta), var(--font-inter), "Google Sans", -apple-system,
+    BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto,
+    sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" on, "cv05" on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
 body {
   background-color: #05060a;
   color: #f3f4f6;
   overflow-x: hidden;
 }
 
-/* Custom sleek scrollbars for dark astrophysics drawers */
+/* Clean iOS/Google glass styling for Aladin Lite v3 internal controls */
+.aladin-container .aladin-location,
+.aladin-container .aladin-fov {
+  font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 11px !important;
+  border-radius: 6px !important;
+}
+
+/* Custom sleek scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
