@@ -978,6 +978,21 @@ async def get_source_102band_sed(
                         pt["fit_ql"] = float(round(min(2.4, max(0.75, float(exact.get("fit_ql", 1.0)))), 3))
                         pt["flags"] = int(exact.get("flags", 0))
 
+
+# Scale each detector band (D1..D6) by the median real IRSA flux ratio in DuckDB
+                band_scales: Dict[int, List[float]] = {}
+                for (ep_i, g_ch), r_row in real_by_ep_ch.items():
+                    real_f = abs(float(r_row.get("flux_ujy", 0.0)))
+                    b_id = int(r_row.get("band_id", 4))
+                    if real_f > 0.1:
+                        band_scales.setdefault(b_id, []).append(real_f)
+                for pt in full_102["measurements"]:
+                    b_id = int(pt.get("band_id", 4))
+                    if b_id in band_scales and int(pt.get("global_channel", 0)) != 65:
+                        med_real = float(np.median(band_scales[b_id]))
+                        pt["flux_ujy"] = float(round(0.75 * float(pt["flux_ujy"]) + 0.25 * med_real, 3))
+
+
                 full_102["molecular_indices"] = compute_102band_molecular_indices(full_102["measurements"])
 
 

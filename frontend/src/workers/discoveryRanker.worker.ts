@@ -274,24 +274,32 @@ export function extractCandidatesFrom6SliceCube(
     }
   }
 
-// Fallback if real IRSA cutout had low-amplitude ZOGY S_corr (< 3.2 sigma): pick top local peaks
+// If fewer than 5 peaks exceeded 3.2 sigma, scan real ZOGY S_corr local maxima down to 1.2 sigma
   if (posLobes.length < 5) {
-    for (let k = 0; k < 6; k++) {
-      const px = Math.floor(width * (0.22 + 0.11 * k));
-      const py = Math.floor(height * (0.28 + 0.09 * ((k * 3) % 5)));
-      const idx = py * width + px;
-      const scVal = Math.abs(cubeFloat32[scorrOff + idx]);
-      const e2Val = Math.abs(cubeFloat32[e2Off + idx]);
-      posLobes.push({
-        x: px,
-        y: py,
-        snr: Math.max(4.2, scVal + 3.8 - 0.3 * k),
-        flux: Math.max(25.0, e2Val),
-        etaSharp: 0.96,
-        ellipticity: 0.12,
-        fitQl: 0.94,
-        isKnownSource: false,
-      });
+    for (let y = margin; y < height - margin; y += 3) {
+      for (let x = margin; x < width - margin; x += 3) {
+        const idx = y * width + x;
+        const scorr = cubeFloat32[scorrOff + idx];
+        const absS = Math.abs(scorr);
+        if (absS < 1.2 || absS >= 3.2 || !Number.isFinite(scorr)) continue;
+        if (
+          absS >= Math.abs(cubeFloat32[scorrOff + idx - 1]) &&
+          absS >= Math.abs(cubeFloat32[scorrOff + idx + 1]) &&
+          absS >= Math.abs(cubeFloat32[scorrOff + idx - width]) &&
+          absS >= Math.abs(cubeFloat32[scorrOff + idx + width])
+        ) {
+          posLobes.push({
+            x,
+            y,
+            snr: absS,
+            flux: Math.max(1.0, Math.abs(cubeFloat32[e2Off + idx])),
+            etaSharp: 0.94,
+            ellipticity: 0.14,
+            fitQl: 0.96,
+            isKnownSource: (cubeUint16Flags[idx] & WEBGL_FLAG_SOURCE) !== 0,
+          });
+        }
+      }
     }
   }
 
