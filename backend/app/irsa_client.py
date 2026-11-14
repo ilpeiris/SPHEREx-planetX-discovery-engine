@@ -155,7 +155,7 @@ def query_spherex_tap_cutouts(
     mjd_min: Optional[float] = None,
     mjd_max: Optional[float] = None,
     max_rows: int = 120,
-    timeout_sec: int = 45,
+    timeout_sec: int = 300,
 ) -> List[Dict[str, Any]]:
     """
     Query IRSA's `/TAP/sync` endpoint using the fast spatial-only predicate,
@@ -172,7 +172,7 @@ def query_spherex_tap_cutouts(
     exact_bp = _normalize_spherex_bandpass(bandpass)
     partner_bp = _get_dichroic_partner_bandpass(exact_bp)
 
-    for attempt in range(1, 4):
+    for attempt in range(1, 7):
         try:
             resp = requests.post(
                 tap_sync_url,
@@ -182,7 +182,7 @@ def query_spherex_tap_cutouts(
                     "FORMAT": "csv",
                     "QUERY": adql,
                 },
-                timeout=max(30, int(timeout_sec)),
+                timeout=max(300, int(timeout_sec)),
             )
             if resp.status_code == 200 and "cutout_uri" in resp.text[:512]:
                 df = pd.read_csv(io.StringIO(resp.text))
@@ -238,7 +238,7 @@ def query_spherex_tap_cutouts(
                 dec_deg,
                 exc,
             )
-            time.sleep(1.0 * attempt)
+            time.sleep(3.0 * attempt)
 
     return []
 
@@ -310,23 +310,23 @@ async def fetch_cutouts_parallel_async(
 def fetch_cutouts_threaded_sync(
     cutout_urls: Sequence[str],
     max_workers: int = 2,
-    timeout_sec: int = 90,
+    timeout_sec: int = 300,
 ) -> List[Optional[bytes]]:
     if not cutout_urls:
         return []
 
     total = len(cutout_urls)
-    workers = max(1, min(3, int(max_workers)))
+    workers = max(1, min(2, int(max_workers)))
 
     def _download_one(idx_and_url: Tuple[int, str]) -> Optional[bytes]:
         idx, url = idx_and_url
         short_name = url.split("/")[-1].split("?")[0]
-        for attempt in range(1, 4):
+        for attempt in range(1, 10):
             try:
                 r = requests.get(
                     url,
                     headers={"User-Agent": "SPHEREx-PlanetX-DiscoveryEngine/2026.1"},
-                    timeout=max(60, int(timeout_sec)),
+                    timeout=max(300, int(timeout_sec)),
                 )
                 if r.status_code == 200 and len(r.content) >= 2880 and r.content[:6] == b"SIMPLE":
                     logger.info(
@@ -338,23 +338,24 @@ def fetch_cutouts_threaded_sync(
                     )
                     return r.content
                 logger.warning(
-                    "    [Cutout %d/%d] HTTP %d on attempt %d for %s",
+                    "    [Cutout %d/%d] HTTP %d on attempt %d/6 for %s — waiting %ds...",
                     idx + 1,
                     total,
                     r.status_code,
                     attempt,
                     short_name,
+                    2 * attempt,
                 )
             except Exception as exc:
                 logger.warning(
-                    "    [Cutout %d/%d] Attempt %d/3 failed for %s: %s",
+                    "    [Cutout %d/%d] Attempt %d/6 failed for %s: %s",
                     idx + 1,
                     total,
                     attempt,
                     short_name,
                     exc,
                 )
-            time.sleep(0.8 * attempt)
+            time.sleep(2.0 * attempt)
         return None
 
     with ThreadPoolExecutor(max_workers=workers) as pool:

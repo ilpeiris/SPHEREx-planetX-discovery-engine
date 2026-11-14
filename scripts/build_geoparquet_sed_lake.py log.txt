@@ -1,39 +1,398 @@
 (.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python scripts\build_geoparquet_sed_lake.py
-2026-11-14 05:08:29,389 | INFO    | [01/18] Querying live NASA IRSA TAP 102-band cutouts for Barnard's Star (GJ 699) (269.44632, 4.76748)
-2026-11-14 05:09:00,813 | WARNING |   -> Using offline physics fallback SED for barnards_star
-2026-11-14 05:09:00,821 | INFO    | [02/18] Querying live NASA IRSA TAP 102-band cutouts for WISE 0855-0714 (>=Y4 Brown Dwarf, ~250 K) (133.75985, -7.24225)
-2026-11-14 05:09:31,182 | WARNING |   -> Using offline physics fallback SED for wise_0855
-2026-11-14 05:09:31,183 | INFO    | [03/18] Querying live NASA IRSA TAP 102-band cutouts for Epsilon Indi Ba/Bb (T1 + T6 Binary) (331.09627, -56.80052)
-2026-11-14 05:10:02,097 | WARNING |   -> Using offline physics fallback SED for epsilon_indi_b
-2026-11-14 05:10:02,101 | INFO    | [04/18] Querying live NASA IRSA TAP 102-band cutouts for RW Aurigae (Eruptive / Dipping T Tauri Binary) (76.95607, 30.40133)
-2026-11-14 05:10:33,659 | WARNING |   -> Using offline physics fallback SED for rw_aurigae
-2026-11-14 05:10:33,663 | INFO    | [05/18] Querying live NASA IRSA TAP 102-band cutouts for R Draconis (Mira Variable on NEP Deep Field Border) (248.16833, 66.75419)
-2026-11-14 05:11:10,125 | WARNING |   -> Using offline physics fallback SED for r_draconis
-2026-11-14 05:11:10,125 | INFO    | [06/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Aug 2025 Pre-Perihelion (246.36670, -16.74200)
-2026-11-14 05:11:41,469 | WARNING |   -> Using offline physics fallback SED for comet_3i_atlas_pre
-2026-11-14 05:11:41,476 | INFO    | [07/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Dec 2025 Post-Perihelion (170.18870, 4.10010)
-2026-11-14 05:12:12,545 | WARNING |   -> Using offline physics fallback SED for comet_3i_atlas_post
-2026-11-14 05:12:12,547 | INFO    | [08/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx North Deep Field (NEP Core & Cat's Eye NGC 6543) (270.00000, 66.56071)
-2026-11-14 05:13:22,025 | WARNING |   -> Using offline physics fallback SED for spherex_nep_deep
-2026-11-14 05:13:22,025 | INFO    | [09/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx Offset South Deep Field (SDF) (72.00006, -71.36290)
-2026-11-14 05:13:53,436 | WARNING |   -> Using offline physics fallback SED for spherex_sdf_deep
-2026-11-14 05:13:53,442 | INFO    | [10/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J183309.77+675144.8 (NEP Persistence Artifact Test) (278.29071, 67.86244)
-2026-11-14 05:14:46,909 | WARNING |   -> Using offline physics fallback SED for nep_spurious_persist
-2026-11-14 05:14:46,909 | INFO    | [11/18] Querying live NASA IRSA TAP 102-band cutouts for Luhman 16AB (Closest L7.5 + T0.5 Brown Dwarf Binary) (162.29547, -53.31689)
-2026-11-14 05:15:19,305 | WARNING |   -> Using offline physics fallback SED for luhman_16ab
-2026-11-14 05:15:19,307 | INFO    | [12/18] Querying live NASA IRSA TAP 102-band cutouts for 2MASS J0355+1133 (L5gamma) & WISE J1828+2650 (Y2) (58.84737, 11.56214)
-2026-11-14 05:15:58,894 | WARNING |   -> Using offline physics fallback SED for suda_benchmarks
-2026-11-14 05:15:58,894 | INFO    | [13/18] Querying live NASA IRSA TAP 102-band cutouts for 134340 Pluto & 136472 Makemake (Outer Solar System Ices) (306.07083, -23.70667)
-2026-11-14 05:16:30,719 | WARNING |   -> Using offline physics fallback SED for pluto_makemake_tno
-2026-11-14 05:16:30,725 | INFO    | [14/18] Querying live NASA IRSA TAP 102-band cutouts for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (113.62083, 23.78472)
-2026-11-14 05:17:01,076 | WARNING |   -> Using offline physics fallback SED for asteroid_171_ophelia
-2026-11-14 05:17:01,076 | INFO    | [15/18] Querying live NASA IRSA TAP 102-band cutouts for WTP16aakapb & WTP15aaavof (Obscured FUOr Outbursts) (344.65620, 58.77080)
-2026-11-14 05:17:32,728 | WARNING |   -> Using offline physics fallback SED for fuor_wtp16aakapb
-2026-11-14 05:17:32,728 | INFO    | [16/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J0929+2001 (z=3.901 Heavily Reddened Quasar) (142.46728, 20.01860)
-2026-11-14 05:18:03,552 | WARNING |   -> Using offline physics fallback SED for quasar_wise_j0929
-2026-11-14 05:18:03,552 | INFO    | [17/18] Querying live NASA IRSA TAP 102-band cutouts for COSMOS Red Source #65 (Official IRSA SDT Tutorial) (150.78179, 3.35022)
-2026-11-14 05:18:34,269 | WARNING |   -> Using offline physics fallback SED for cosmos_sdt_65
-2026-11-14 05:18:34,269 | INFO    | [18/18] Querying live NASA IRSA TAP 102-band cutouts for 99942 Apophis & 101955 Bennu (CSA NEOSSat + SPHEREx) (185.79550, -61.83130)
-2026-11-14 05:19:06,183 | WARNING |   -> Using offline physics fallback SED for neossat_apophis_bennu
-2026-11-14 05:19:06,617 | INFO    | Wrote 4284 forced-photometry SED rows and 4284 exposure index rows into C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\cache\r2_staging
+2026-11-14 08:24:46,329 | INFO    | [01/18] Querying live NASA IRSA TAP 102-band cutouts for Barnard's Star (GJ 699) (269.44632, 4.76748)
+2026-11-14 08:24:56,066 | INFO    |   -> Matched 60 IRSA exposures for barnards_star; downloading 12 multi-band cutouts...
+2026-11-14 08:24:57,239 | WARNING |     [Cutout 2/12] HTTP 503 on attempt 1/6 for level2_2025W34_2B_0090_4D2_spx_l2b-v27-2026-229.fits — waiting 2s...
+2026-11-14 08:25:35,166 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W34_2B_0090_4D2_spx_l2b-v27-2026-229.fits)
+2026-11-14 08:25:40,975 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W35_1A_0432_4D1_spx_l2b-v27-2026-230.fits)
+2026-11-14 08:25:51,125 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W33_2C_0321_1D3_spx_l2b-v27-2026-228.fits)
+2026-11-14 08:26:06,448 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W35_1A_0432_4D4_spx_l2b-v27-2026-230.fits)
+2026-11-14 08:26:27,325 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W34_2B_0090_4D5_spx_l2b-v27-2026-229.fits)
+2026-11-14 08:26:28,538 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2026W11_1A_0430_2D1_spx_l2b-v27-2026-232.fits — waiting 2s...
+2026-11-14 08:26:36,661 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W33_2C_0321_1D6_spx_l2b-v27-2026-228.fits)
+2026-11-14 08:26:37,928 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W35_2A_0418_1D2_spx_l2b-v27-2026-231.fits — waiting 2s...
+2026-11-14 08:26:41,329 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 2/6 for level2_2025W35_2A_0418_1D2_spx_l2b-v27-2026-231.fits — waiting 4s...
+2026-11-14 08:26:54,455 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2026W11_1A_0430_2D1_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:26:55,392 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2025W35_1A_0484_2D3_spx_l2b-v27-2026-230.fits — waiting 2s...
+2026-11-14 08:26:58,962 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 2/6 for level2_2025W35_1A_0484_2D3_spx_l2b-v27-2026-230.fits — waiting 4s...
+2026-11-14 08:27:26,002 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W35_2A_0418_1D2_spx_l2b-v27-2026-231.fits)
+2026-11-14 08:27:47,393 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W35_1A_0484_2D3_spx_l2b-v27-2026-230.fits)
+2026-11-14 08:27:50,901 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2026W11_1A_0430_2D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:28:31,915 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W35_1A_0484_2D6_spx_l2b-v27-2026-230.fits)
+2026-11-14 08:28:39,972 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W35_2A_0418_1D5_spx_l2b-v27-2026-231.fits)
+2026-11-14 08:29:06,835 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for barnards_star
+2026-11-14 08:29:06,835 | INFO    | [02/18] Querying live NASA IRSA TAP 102-band cutouts for WISE 0855-0714 (>=Y4 Brown Dwarf, ~250 K) (133.75985, -7.24225)
+2026-11-14 08:29:26,306 | INFO    |   -> Matched 60 IRSA exposures for wise_0855; downloading 12 multi-band cutouts...
+2026-11-14 08:29:57,926 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W19_1B_0241_1D1_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:09,797 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W19_1B_0181_1D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:20,381 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W19_1B_0116_1D3_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:36,626 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W19_1B_0241_1D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:48,551 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W19_1B_0181_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:50,218 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W19_1B_0116_1D6_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:30:51,625 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W46_1A_0108_1D2_spx_l2b-v27-2026-206.fits — waiting 2s...
+2026-11-14 08:30:54,655 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 2/6 for level2_2025W46_1A_0108_1D2_spx_l2b-v27-2026-206.fits — waiting 4s...
+2026-11-14 08:31:13,811 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W45_1A_0153_1D1_spx_l2b-v27-2026-247.fits)
+2026-11-14 08:31:14,774 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2025W46_2A_0214_4D3_spx_l2b-v27-2026-207.fits — waiting 2s...
+2026-11-14 08:31:24,061 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W46_1A_0108_1D2_spx_l2b-v27-2026-206.fits)
+2026-11-14 08:31:42,666 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W45_1A_0153_1D4_spx_l2b-v27-2026-247.fits)
+2026-11-14 08:31:50,280 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W46_2A_0214_4D3_spx_l2b-v27-2026-207.fits)
+2026-11-14 08:31:51,226 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 1/6 for level2_2025W46_2A_0214_4D6_spx_l2b-v27-2026-207.fits — waiting 2s...
+2026-11-14 08:32:21,027 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W45_2A_0292_3D5_spx_l2b-v27-2026-247.fits)
+2026-11-14 08:32:28,809 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W46_2A_0214_4D6_spx_l2b-v27-2026-207.fits)
+2026-11-14 08:32:29,560 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for wise_0855
+2026-11-14 08:32:29,560 | INFO    | [03/18] Querying live NASA IRSA TAP 102-band cutouts for Epsilon Indi Ba/Bb (T1 + T6 Binary) (331.09627, -56.80052)
+2026-11-14 08:33:15,270 | WARNING | IRSA TAP attempt 1/3 note for (331.0963, -56.8005): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 08:34:02,313 | WARNING | IRSA TAP attempt 2/3 note for (331.0963, -56.8005): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 08:34:51,130 | WARNING | IRSA TAP attempt 3/3 note for (331.0963, -56.8005): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 08:34:54,131 | WARNING |   -> Using offline physics fallback SED for epsilon_indi_b
+2026-11-14 08:34:54,141 | INFO    | [04/18] Querying live NASA IRSA TAP 102-band cutouts for RW Aurigae (Eruptive / Dipping T Tauri Binary) (76.95607, 30.40133)
+2026-11-14 08:35:36,843 | INFO    |   -> Matched 60 IRSA exposures for rw_aurigae; downloading 12 multi-band cutouts...
+2026-11-14 08:35:37,951 | WARNING |     [Cutout 2/12] HTTP 503 on attempt 1/6 for level2_2025W37_1A_0068_1D2_spx_l2b-v27-2026-235.fits — waiting 2s...
+2026-11-14 08:35:41,137 | WARNING |     [Cutout 2/12] HTTP 503 on attempt 2/6 for level2_2025W37_1A_0068_1D2_spx_l2b-v27-2026-235.fits — waiting 4s...
+2026-11-14 08:35:46,285 | WARNING |     [Cutout 2/12] HTTP 503 on attempt 3/6 for level2_2025W37_1A_0068_1D2_spx_l2b-v27-2026-235.fits — waiting 6s...
+2026-11-14 08:36:20,577 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W36_1A_0095_1D1_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:36:35,309 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W37_1A_0068_1D2_spx_l2b-v27-2026-235.fits)
+2026-11-14 08:36:56,643 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W37_2A_0051_1D3_spx_l2b-v27-2026-236.fits)
+2026-11-14 08:36:57,621 | WARNING |     [Cutout 5/12] HTTP 503 on attempt 1/6 for level2_2025W37_1A_0068_1D5_spx_l2b-v27-2026-235.fits — waiting 2s...
+2026-11-14 08:37:05,232 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W36_1A_0095_1D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:37:32,520 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W37_1A_0068_1D5_spx_l2b-v27-2026-235.fits)
+2026-11-14 08:37:33,428 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W37_2A_0051_1D6_spx_l2b-v27-2026-236.fits)
+2026-11-14 08:37:33,710 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W36_1A_0677_2D1_spx_l2b-v27-2026-232.fits — waiting 2s...
+2026-11-14 08:38:07,950 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W37_1A_0553_1D2_spx_l2b-v27-2026-235.fits)
+2026-11-14 08:38:09,667 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2026W08_2A_0233_4D3_spx_l2b-v27-2026-227.fits — waiting 2s...
+2026-11-14 08:38:22,353 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W36_1A_0677_2D1_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:38:42,305 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2026W08_2A_0233_4D3_spx_l2b-v27-2026-227.fits)
+2026-11-14 08:38:43,572 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W37_1A_0553_1D5_spx_l2b-v27-2026-235.fits — waiting 2s...
+2026-11-14 08:38:54,761 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W36_1A_0677_2D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 08:38:56,020 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 1/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 2s...
+2026-11-14 08:38:59,647 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 2/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 4s...
+2026-11-14 08:39:05,690 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 3/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 6s...
+2026-11-14 08:39:12,649 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 4/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 8s...
+2026-11-14 08:39:21,653 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 5/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 10s...
+2026-11-14 08:39:32,818 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W37_1A_0553_1D5_spx_l2b-v27-2026-235.fits)
+2026-11-14 08:39:32,884 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 6/6 for level2_2026W08_2A_0233_4D6_spx_l2b-v27-2026-227.fits — waiting 12s...
+2026-11-14 08:39:45,578 | INFO    |   -> Extracted 11 real SPHEREx Level-2 spectral measurements for rw_aurigae
+2026-11-14 08:39:45,578 | INFO    | [05/18] Querying live NASA IRSA TAP 102-band cutouts for R Draconis (Mira Variable on NEP Deep Field Border) (248.16833, 66.75419)
+2026-11-14 08:39:55,706 | INFO    |   -> Matched 60 IRSA exposures for r_draconis; downloading 12 multi-band cutouts...
+2026-11-14 08:40:28,533 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W23_2B_0696_2D2_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:40:29,518 | WARNING |     [Cutout 3/12] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0021_1D3_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 08:40:35,591 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W23_2B_0206_1D1_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:41:03,023 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W17_4B_0021_1D3_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:41:12,145 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W23_2B_0696_2D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:41:39,063 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W17_4B_0021_1D6_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:41:59,481 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W24_1A_0358_1D2_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:42:11,381 | INFO    |     [Cutout 7/12] Downloaded 3.86 MB (level2_2025W23_2B_0130_1D3_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:42:12,582 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2025W23_2B_0130_1D6_spx_l2b-v27-2026-201.fits — waiting 2s...
+2026-11-14 08:42:29,808 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W24_1A_0358_1D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:42:50,395 | INFO    |     [Cutout 9/12] Downloaded 3.78 MB (level2_2025W23_2B_0130_1D6_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:43:09,876 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W23_2B_0696_4D2_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:43:22,107 | INFO    |     [Cutout 11/12] Downloaded 3.86 MB (level2_2025W17_4B_0021_2D3_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:43:34,852 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W17_4B_0021_2D6_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:43:35,645 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for r_draconis
+2026-11-14 08:43:35,645 | INFO    | [06/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Aug 2025 Pre-Perihelion (246.36670, -16.74200)
+2026-11-14 08:43:56,460 | INFO    |   -> Matched 60 IRSA exposures for comet_3i_atlas_pre; downloading 12 multi-band cutouts...
+2026-11-14 08:44:23,615 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W31_2A_0083_1D2_spx_l2b-v27-2026-225.fits)
+2026-11-14 08:44:28,803 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W31_2A_0156_1D1_spx_l2b-v27-2026-225.fits)
+2026-11-14 08:44:53,706 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W31_2A_0156_1D4_spx_l2b-v27-2026-225.fits)
+2026-11-14 08:44:56,840 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W31_1A_0423_1D3_spx_l2b-v27-2026-222.fits)
+2026-11-14 08:45:26,451 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W31_1A_0423_1D6_spx_l2b-v27-2026-222.fits)
+2026-11-14 08:45:35,414 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W31_2A_0108_4D5_spx_l2b-v27-2026-225.fits)
+2026-11-14 08:46:08,319 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W32_2D_0355_3D1_spx_l2b-v27-2026-226.fits)
+2026-11-14 08:46:10,933 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W33_1B_0599_1D2_spx_l2b-v27-2026-227.fits)
+2026-11-14 08:46:30,700 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W32_2D_0355_3D4_spx_l2b-v27-2026-226.fits)
+2026-11-14 08:46:31,874 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W33_1B_0599_1D5_spx_l2b-v27-2026-227.fits — waiting 2s...
+2026-11-14 08:46:44,108 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W32_1A_0623_2D3_spx_l2b-v27-2026-226.fits)
+2026-11-14 08:46:53,940 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W33_1B_0599_1D5_spx_l2b-v27-2026-227.fits)
+2026-11-14 08:47:15,315 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W32_1A_0623_2D6_spx_l2b-v27-2026-226.fits)
+2026-11-14 08:47:16,069 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for comet_3i_atlas_pre
+2026-11-14 08:47:16,071 | INFO    | [07/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Dec 2025 Post-Perihelion (170.18870, 4.10010)
+2026-11-14 08:47:56,637 | INFO    |   -> Matched 60 IRSA exposures for comet_3i_atlas_post; downloading 12 multi-band cutouts...
+2026-11-14 08:48:31,409 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W19_2B_0303_1D2_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:48:33,413 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W20_1C_0075_1D1_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:49:13,283 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W19_2B_0227_1D3_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:49:21,664 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W20_1C_0075_1D4_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:49:22,608 | WARNING |     [Cutout 6/12] HTTP 503 on attempt 1/6 for level2_2025W19_2B_0227_1D6_spx_l2b-v27-2026-198.fits — waiting 2s...
+2026-11-14 08:49:25,828 | WARNING |     [Cutout 6/12] HTTP 503 on attempt 2/6 for level2_2025W19_2B_0227_1D6_spx_l2b-v27-2026-198.fits — waiting 4s...
+2026-11-14 08:49:31,430 | WARNING |     [Cutout 6/12] HTTP 503 on attempt 3/6 for level2_2025W19_2B_0227_1D6_spx_l2b-v27-2026-198.fits — waiting 6s...
+2026-11-14 08:49:38,514 | WARNING |     [Cutout 6/12] HTTP 503 on attempt 4/6 for level2_2025W19_2B_0227_1D6_spx_l2b-v27-2026-198.fits — waiting 8s...
+2026-11-14 08:49:43,519 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W19_2B_0303_1D5_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:49:44,540 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W22_1B_0574_3D1_spx_l2b-v27-2026-199.fits — waiting 2s...
+2026-11-14 08:50:15,740 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W22_1B_0574_3D1_spx_l2b-v27-2026-199.fits)
+2026-11-14 08:50:18,527 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W19_2B_0227_1D6_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:50:41,601 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W51_1A_0723_1D2_spx_l2b-v27-2026-210.fits)
+2026-11-14 08:50:46,047 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W23_2B_0371_2D3_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:51:12,707 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W22_1B_0574_3D4_spx_l2b-v27-2026-199.fits)
+2026-11-14 08:51:21,659 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W51_1A_0510_3D5_spx_l2b-v27-2026-210.fits)
+2026-11-14 08:51:48,865 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W23_2B_0371_2D6_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:51:49,640 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for comet_3i_atlas_post
+2026-11-14 08:51:49,640 | INFO    | [08/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx North Deep Field (NEP Core & Cat's Eye NGC 6543) (270.00000, 66.56071)
+2026-11-14 08:52:23,586 | INFO    |   -> Matched 60 IRSA exposures for spherex_nep_deep; downloading 12 multi-band cutouts...
+2026-11-14 08:52:24,652 | WARNING |     [Cutout 1/12] HTTP 503 on attempt 1/6 for level2_2025W18_2B_0108_4D1_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:52:49,702 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W17_4B_0175_4D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:52:55,111 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W18_2B_0108_4D1_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:53:17,018 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W17_4B_0266_4D3_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:53:30,730 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W18_1B_0387_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:53:55,498 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W17_4B_0175_4D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:53:59,886 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W17_4B_0266_4D6_spx_l2b-v27-2026-196.fits)
+2026-11-14 08:54:00,900 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W18_2B_0244_3D2_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:54:18,079 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W18_2B_0416_1D1_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:54:38,534 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W18_2B_0244_3D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:54:40,001 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 1/6 for level2_2025W19_1B_0470_4D4_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:54:42,968 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 2/6 for level2_2025W19_1B_0470_4D4_spx_l2b-v27-2026-197.fits — waiting 4s...
+2026-11-14 08:54:57,386 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W19_1B_0378_1D3_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:55:08,257 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W19_1B_0470_4D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:55:09,238 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 1/6 for level2_2025W18_2B_0365_3D6_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:55:12,219 | WARNING |     [Cutout 12/12] HTTP 503 on attempt 2/6 for level2_2025W18_2B_0365_3D6_spx_l2b-v27-2026-197.fits — waiting 4s...
+2026-11-14 08:55:27,518 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W18_2B_0244_4D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:56:01,505 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W18_2B_0365_3D6_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:56:02,273 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for spherex_nep_deep
+2026-11-14 08:56:02,273 | INFO    | [09/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx Offset South Deep Field (SDF) (72.00006, -71.36290)
+2026-11-14 08:56:22,311 | INFO    |   -> Matched 60 IRSA exposures for spherex_sdf_deep; downloading 12 multi-band cutouts...
+2026-11-14 08:56:23,404 | WARNING |     [Cutout 1/12] HTTP 503 on attempt 1/6 for level2_2025W19_1B_0455_1D2_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:56:49,391 | INFO    |     [Cutout 2/12] Downloaded 3.86 MB (level2_2025W19_2B_0014_1D3_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:56:50,400 | WARNING |     [Cutout 3/12] HTTP 503 on attempt 1/6 for level2_2025W19_1B_0455_1D5_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 08:56:54,242 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W19_1B_0455_1D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:56:55,450 | WARNING |     [Cutout 4/12] HTTP 503 on attempt 1/6 for level2_2025W19_2B_0014_1D6_spx_l2b-v27-2026-198.fits — waiting 2s...
+2026-11-14 08:56:59,003 | WARNING |     [Cutout 4/12] HTTP 503 on attempt 2/6 for level2_2025W19_2B_0014_1D6_spx_l2b-v27-2026-198.fits — waiting 4s...
+2026-11-14 08:57:04,792 | INFO    |     [Cutout 3/12] Downloaded 3.78 MB (level2_2025W19_1B_0455_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:57:26,507 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W19_2B_0014_1D6_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:57:27,520 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W24_1A_0295_1D2_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:57:29,067 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W24_1A_0295_1D5_spx_l2b-v27-2026-201.fits — waiting 2s...
+2026-11-14 08:57:45,380 | INFO    |     [Cutout 6/12] Downloaded 3.86 MB (level2_2025W27_2A_0149_2D3_spx_l2b-v27-2026-215.fits)
+2026-11-14 08:57:46,352 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W27_2A_0149_2D6_spx_l2b-v27-2026-215.fits — waiting 2s...
+2026-11-14 08:57:47,941 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W24_1A_0295_1D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 08:58:21,739 | INFO    |     [Cutout 9/12] Downloaded 3.78 MB (level2_2025W19_1B_0455_2D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:58:22,569 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W27_2A_0149_2D6_spx_l2b-v27-2026-215.fits)
+2026-11-14 08:59:06,475 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W19_1B_0455_2D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 08:59:12,964 | INFO    |     [Cutout 10/12] Downloaded 3.86 MB (level2_2025W19_2B_0014_3D3_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:59:24,242 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W19_2B_0014_3D6_spx_l2b-v27-2026-198.fits)
+2026-11-14 08:59:24,989 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for spherex_sdf_deep
+2026-11-14 08:59:25,000 | INFO    | [10/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J183309.77+675144.8 (NEP Persistence Artifact Test) (278.29071, 67.86244)
+2026-11-14 08:59:49,517 | INFO    |   -> Matched 60 IRSA exposures for nep_spurious_persist; downloading 12 multi-band cutouts...
+2026-11-14 09:00:34,214 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W17_4B_0112_1D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:00:35,388 | WARNING |     [Cutout 3/12] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0112_1D4_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 09:00:39,522 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W17_4B_0287_3D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:01:04,611 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W17_4B_0287_3D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:01:16,641 | INFO    |     [Cutout 3/12] Downloaded 3.78 MB (level2_2025W17_4B_0112_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:01:29,433 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W19_1B_0318_2D1_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:01:31,033 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W19_1B_0318_2D4_spx_l2b-v27-2026-197.fits — waiting 2s...
+2026-11-14 09:01:57,778 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W19_1B_0398_1D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:02:09,087 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W19_1B_0318_2D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:02:31,824 | INFO    |     [Cutout 9/12] Downloaded 3.78 MB (level2_2025W17_4B_0165_1D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:02:35,035 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W19_1B_0398_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:02:36,935 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0165_1D4_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 09:02:59,527 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W17_4B_0287_4D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:03:08,803 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W17_4B_0165_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:03:39,884 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W17_4B_0287_4D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:03:40,634 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for nep_spurious_persist
+2026-11-14 09:03:40,634 | INFO    | [11/18] Querying live NASA IRSA TAP 102-band cutouts for Luhman 16AB (Closest L7.5 + T0.5 Brown Dwarf Binary) (162.29547, -53.31689)
+2026-11-14 09:03:54,560 | INFO    |   -> Matched 60 IRSA exposures for luhman_16ab; downloading 12 multi-band cutouts...
+2026-11-14 09:04:19,560 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W26_1A_0232_1D1_spx_l2b-v27-2026-213.fits)
+2026-11-14 09:04:26,898 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W23_1C_0537_3D2_spx_l2b-v27-2026-200.fits)
+2026-11-14 09:04:45,757 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W22_2B_0132_1D3_spx_l2b-v27-2026-200.fits)
+2026-11-14 09:04:59,207 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W26_1A_0232_1D4_spx_l2b-v27-2026-213.fits)
+2026-11-14 09:05:27,778 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W23_1C_0537_3D5_spx_l2b-v27-2026-200.fits)
+2026-11-14 09:05:32,516 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W22_2B_0132_1D6_spx_l2b-v27-2026-200.fits)
+2026-11-14 09:05:33,820 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W26_2A_0161_1D2_spx_l2b-v27-2026-214.fits — waiting 2s...
+2026-11-14 09:05:36,971 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 2/6 for level2_2025W26_2A_0161_1D2_spx_l2b-v27-2026-214.fits — waiting 4s...
+2026-11-14 09:05:42,240 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 3/6 for level2_2025W26_2A_0161_1D2_spx_l2b-v27-2026-214.fits — waiting 6s...
+2026-11-14 09:05:56,682 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W26_2A_0525_1D1_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:05:57,639 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2025W27_1A_0002_1D3_spx_l2b-v27-2026-214.fits — waiting 2s...
+2026-11-14 09:06:01,155 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 2/6 for level2_2025W27_1A_0002_1D3_spx_l2b-v27-2026-214.fits — waiting 4s...
+2026-11-14 09:06:06,595 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 3/6 for level2_2025W27_1A_0002_1D3_spx_l2b-v27-2026-214.fits — waiting 6s...
+2026-11-14 09:06:10,761 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W26_2A_0161_1D2_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:06:39,244 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W26_2A_0525_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:06:40,497 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W26_2A_0161_1D5_spx_l2b-v27-2026-214.fits — waiting 2s...
+2026-11-14 09:06:53,969 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W27_1A_0002_1D3_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:07:05,508 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W26_2A_0161_1D5_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:07:37,348 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W27_1A_0002_1D6_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:07:38,090 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for luhman_16ab
+2026-11-14 09:07:38,092 | INFO    | [12/18] Querying live NASA IRSA TAP 102-band cutouts for 2MASS J0355+1133 (L5gamma) & WISE J1828+2650 (Y2) (58.84737, 11.56214)
+2026-11-14 09:07:49,634 | INFO    |   -> Matched 60 IRSA exposures for suda_benchmarks; downloading 12 multi-band cutouts...
+2026-11-14 09:08:06,342 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W34_1B_0158_2D1_spx_l2b-v27-2026-228.fits)
+2026-11-14 09:08:14,557 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W34_1B_0438_3D2_spx_l2b-v27-2026-228.fits)
+2026-11-14 09:08:35,878 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W34_2B_0303_1D3_spx_l2b-v27-2026-229.fits)
+2026-11-14 09:08:55,558 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W34_1B_0158_2D4_spx_l2b-v27-2026-228.fits)
+2026-11-14 09:09:02,481 | INFO    |     [Cutout 5/12] Downloaded 3.77 MB (level2_2025W34_1B_0438_2D5_spx_l2b-v27-2026-228.fits)
+2026-11-14 09:09:23,422 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W36_1A_0050_1D1_spx_l2b-v27-2026-232.fits)
+2026-11-14 09:09:35,266 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W34_2B_0303_1D6_spx_l2b-v27-2026-229.fits)
+2026-11-14 09:10:00,214 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2026W07_1A_0060_2D3_spx_l2b-v27-2026-225.fits)
+2026-11-14 09:10:00,275 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W34_2B_0193_1D2_spx_l2b-v27-2026-229.fits)
+2026-11-14 09:10:01,180 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W34_2B_0193_1D5_spx_l2b-v27-2026-229.fits — waiting 2s...
+2026-11-14 09:10:34,466 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W34_2B_0193_1D5_spx_l2b-v27-2026-229.fits)
+2026-11-14 09:10:36,381 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W36_1A_0050_1D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 09:10:54,942 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2026W07_1A_0060_2D6_spx_l2b-v27-2026-225.fits)
+2026-11-14 09:10:55,682 | INFO    |   -> Extracted 11 real SPHEREx Level-2 spectral measurements for suda_benchmarks
+2026-11-14 09:10:55,682 | INFO    | [13/18] Querying live NASA IRSA TAP 102-band cutouts for 134340 Pluto & 136472 Makemake (Outer Solar System Ices) (306.07083, -23.70667)
+2026-11-14 09:11:41,858 | WARNING | IRSA TAP attempt 1/3 note for (306.0708, -23.7067): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:12:08,641 | INFO    |   -> Matched 60 IRSA exposures for pluto_makemake_tno; downloading 12 multi-band cutouts...
+2026-11-14 09:12:46,828 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W41_1A_0756_1D1_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:12:51,029 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W18_1B_0436_4D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:13:20,798 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W17_4B_0058_1D3_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:13:30,002 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W41_1A_0756_1D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:13:50,276 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W18_1B_0436_4D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:14:09,382 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W17_4B_0058_1D6_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:14:10,411 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W41_2B_0636_3D2_spx_l2b-v27-2026-242.fits — waiting 2s...
+2026-11-14 09:14:29,931 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W42_2A_0364_1D1_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:14:44,363 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W41_2B_0636_3D2_spx_l2b-v27-2026-242.fits)
+2026-11-14 09:15:18,976 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W41_2B_0241_1D3_spx_l2b-v27-2026-242.fits)
+2026-11-14 09:15:19,909 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W41_2B_0636_3D5_spx_l2b-v27-2026-242.fits — waiting 2s...
+2026-11-14 09:15:32,254 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W42_2A_0364_1D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:16:01,257 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W41_2B_0636_3D5_spx_l2b-v27-2026-242.fits)
+2026-11-14 09:16:06,710 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W41_2B_0241_1D6_spx_l2b-v27-2026-242.fits)
+2026-11-14 09:16:07,446 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for pluto_makemake_tno
+2026-11-14 09:16:07,446 | INFO    | [14/18] Querying live NASA IRSA TAP 102-band cutouts for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (113.62083, 23.78472)
+2026-11-14 09:16:53,155 | WARNING | IRSA TAP attempt 1/3 note for (113.6208, 23.7847): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:16:56,037 | WARNING | IRSA TAP attempt 2/3 note for (113.6208, 23.7847): ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-11-14 09:17:43,720 | WARNING | IRSA TAP attempt 3/3 note for (113.6208, 23.7847): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:17:46,721 | WARNING |   -> Using offline physics fallback SED for asteroid_171_ophelia
+2026-11-14 09:17:46,721 | INFO    | [15/18] Querying live NASA IRSA TAP 102-band cutouts for WTP16aakapb & WTP15aaavof (Obscured FUOr Outbursts) (344.65620, 58.77080)
+2026-11-14 09:17:51,071 | WARNING | IRSA TAP attempt 1/3 note for (344.6562, 58.7708): ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-11-14 09:18:24,099 | INFO    |   -> Matched 60 IRSA exposures for fuor_wtp16aakapb; downloading 12 multi-band cutouts...
+2026-11-14 09:18:25,057 | WARNING |     [Cutout 2/12] HTTP 503 on attempt 1/6 for level2_2025W27_2A_0376_1D2_spx_l2b-v27-2026-215.fits — waiting 2s...
+2026-11-14 09:18:54,652 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W27_2A_0376_1D2_spx_l2b-v27-2026-215.fits)
+2026-11-14 09:19:00,605 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W27_1A_0026_1D1_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:19:02,495 | WARNING |     [Cutout 4/12] HTTP 503 on attempt 1/6 for level2_2025W27_1A_0026_1D4_spx_l2b-v27-2026-214.fits — waiting 2s...
+2026-11-14 09:19:30,238 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W27_1A_0026_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:19:30,892 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W28_2A_0227_1D3_spx_l2b-v27-2026-216.fits)
+2026-11-14 09:19:31,225 | WARNING |     [Cutout 5/12] HTTP 503 on attempt 1/6 for level2_2025W27_2A_0376_1D5_spx_l2b-v27-2026-215.fits — waiting 2s...
+2026-11-14 09:19:34,426 | WARNING |     [Cutout 5/12] HTTP 503 on attempt 2/6 for level2_2025W27_2A_0376_1D5_spx_l2b-v27-2026-215.fits — waiting 4s...
+2026-11-14 09:19:59,542 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W28_2A_0227_1D6_spx_l2b-v27-2026-216.fits)
+2026-11-14 09:20:10,011 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W27_2A_0376_1D5_spx_l2b-v27-2026-215.fits)
+2026-11-14 09:20:11,066 | WARNING |     [Cutout 8/12] HTTP 503 on attempt 1/6 for level2_2025W28_2A_0043_2D2_spx_l2b-v27-2026-216.fits — waiting 2s...
+2026-11-14 09:20:25,911 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W27_1A_0305_1D1_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:20:27,181 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2025W29_2A_0017_2D3_spx_l2b-v27-2026-219.fits — waiting 2s...
+2026-11-14 09:20:30,713 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 2/6 for level2_2025W29_2A_0017_2D3_spx_l2b-v27-2026-219.fits — waiting 4s...
+2026-11-14 09:20:35,862 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 3/6 for level2_2025W29_2A_0017_2D3_spx_l2b-v27-2026-219.fits — waiting 6s...
+2026-11-14 09:20:38,396 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W28_2A_0043_2D2_spx_l2b-v27-2026-216.fits)
+2026-11-14 09:20:39,343 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 1/6 for level2_2025W27_1A_0305_1D4_spx_l2b-v27-2026-214.fits — waiting 2s...
+2026-11-14 09:20:42,878 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 2/6 for level2_2025W27_1A_0305_1D4_spx_l2b-v27-2026-214.fits — waiting 4s...
+2026-11-14 09:20:48,257 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 3/6 for level2_2025W27_1A_0305_1D4_spx_l2b-v27-2026-214.fits — waiting 6s...
+2026-11-14 09:21:16,208 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W27_1A_0305_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 09:21:21,984 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W29_2A_0017_2D3_spx_l2b-v27-2026-219.fits)
+2026-11-14 09:22:18,980 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W28_2A_0043_2D5_spx_l2b-v27-2026-216.fits)
+2026-11-14 09:22:29,092 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W29_2A_0017_1D6_spx_l2b-v27-2026-219.fits)
+2026-11-14 09:22:29,836 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for fuor_wtp16aakapb
+2026-11-14 09:22:29,836 | INFO    | [16/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J0929+2001 (z=3.901 Heavily Reddened Quasar) (142.46728, 20.01860)
+2026-11-14 09:23:15,545 | WARNING | IRSA TAP attempt 1/3 note for (142.4673, 20.0186): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:24:09,294 | WARNING | IRSA TAP attempt 2/3 note for (142.4673, 20.0186): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:24:57,048 | WARNING | IRSA TAP attempt 3/3 note for (142.4673, 20.0186): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:25:00,049 | WARNING |   -> Using offline physics fallback SED for quasar_wise_j0929
+2026-11-14 09:25:00,056 | INFO    | [17/18] Querying live NASA IRSA TAP 102-band cutouts for COSMOS Red Source #65 (Official IRSA SDT Tutorial) (150.78179, 3.35022)
+2026-11-14 09:25:46,385 | WARNING | IRSA TAP attempt 1/3 note for (150.7818, 3.3502): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:26:33,602 | WARNING | IRSA TAP attempt 2/3 note for (150.7818, 3.3502): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:27:21,699 | WARNING | IRSA TAP attempt 3/3 note for (150.7818, 3.3502): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:27:24,700 | WARNING |   -> Using offline physics fallback SED for cosmos_sdt_65
+2026-11-14 09:27:24,706 | INFO    | [18/18] Querying live NASA IRSA TAP 102-band cutouts for 99942 Apophis & 101955 Bennu (CSA NEOSSat + SPHEREx) (185.79550, -61.83130)
+2026-11-14 09:28:10,317 | WARNING | IRSA TAP attempt 1/3 note for (185.7955, -61.8313): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:28:57,066 | WARNING | IRSA TAP attempt 2/3 note for (185.7955, -61.8313): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:29:44,990 | WARNING | IRSA TAP attempt 3/3 note for (185.7955, -61.8313): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=45)
+2026-11-14 09:29:47,991 | WARNING |   -> Using offline physics fallback SED for neossat_apophis_bennu
+2026-11-14 09:29:49,877 | INFO    | Wrote 1402 forced-photometry SED rows and 4284 exposure index rows into C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\cache\r2_staging
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python -c "import sys; from pathlib import Path; sys.path.insert(0, 'backend'); sys.path.insert(0, 'scripts'); import app.main as m; m.GOLDEN_TARGETS_CATALOG[:] = [t for t in m.GOLDEN_TARGETS_CATALOG if t['id'] in ('epsilon_indi_b', 'asteroid_171_ophelia', 'quasar_wise_j0929', 'cosmos_sdt_65', 'neossat_apophis_bennu')]; from build_geoparquet_sed_lake import build_geoparquet_sed_and_exposure_lake; build_geoparquet_sed_and_exposure_lake(Path('backend/cache/r2_staging'), live_irsa=True)"
+2026-11-14 09:47:38,813 | INFO    | [01/05] Querying live NASA IRSA TAP 102-band cutouts for Epsilon Indi Ba/Bb (T1 + T6 Binary) (331.09627, -56.80052)
+2026-11-14 09:48:09,451 | INFO    |   -> Matched 60 IRSA exposures for epsilon_indi_b; downloading 12 multi-band cutouts...
+2026-11-14 09:48:23,407 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W17_4B_0017_1D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:48:24,659 | WARNING |     [Cutout 3/12] HTTP 503 on attempt 1/6 for level2_2025W18_1B_0081_2D3_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 09:48:25,534 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W17_4B_0077_3D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:48:26,710 | WARNING |     [Cutout 4/12] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 09:48:34,206 | INFO    |     [Cutout 4/12] Downloaded 3.77 MB (level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:48:59,441 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W18_1B_0081_2D3_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:49:02,048 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W17_4B_0017_1D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:49:06,914 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0468_2D1_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 09:49:46,099 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W18_1B_0081_2D6_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:50:04,331 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W17_4B_0468_2D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:50:12,161 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W24_1A_0245_4D3_spx_l2b-v27-2026-201.fits)
+2026-11-14 09:50:14,173 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W40_1A_0603_3D2_spx_l2b-v27-2026-239.fits)
+2026-11-14 09:50:15,188 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W23_2B_0441_4D5_spx_l2b-v27-2026-201.fits — waiting 2s...
+2026-11-14 09:50:31,154 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W23_2B_0441_4D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 09:50:34,073 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W17_4B_0468_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:50:59,978 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W24_1A_0245_4D6_spx_l2b-v27-2026-201.fits)
+2026-11-14 09:51:00,845 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for epsilon_indi_b
+2026-11-14 09:51:00,845 | INFO    | [02/05] Querying live NASA IRSA TAP 102-band cutouts for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (113.62083, 23.78472)
+2026-11-14 09:52:12,255 | INFO    |   -> Matched 60 IRSA exposures for asteroid_171_ophelia; downloading 12 multi-band cutouts...
+2026-11-14 09:52:39,813 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W40_2B_0744_1D1_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:52:45,736 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W41_1A_0681_1D2_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:52:46,360 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W42_2A_0670_1D3_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:52:46,776 | WARNING |     [Cutout 4/12] HTTP 503 on attempt 1/6 for level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits — waiting 2s...
+2026-11-14 09:52:47,778 | WARNING |     [Cutout 5/12] HTTP 503 on attempt 1/6 for level2_2025W41_1A_0681_1D5_spx_l2b-v27-2026-241.fits — waiting 2s...
+2026-11-14 09:53:15,624 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W41_1A_0681_1D5_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:53:16,019 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 09:53:16,564 | WARNING |     [Cutout 6/12] HTTP 503 on attempt 1/6 for level2_2025W42_2A_0670_1D6_spx_l2b-v27-2026-243.fits — waiting 2s...
+2026-11-14 09:53:17,242 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W42_1A_0736_1D1_spx_l2b-v27-2026-243.fits — waiting 2s...
+2026-11-14 09:53:40,560 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W42_2A_0670_1D6_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:53:47,824 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W42_1A_0736_1D1_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:53:48,865 | WARNING |     [Cutout 9/12] HTTP 503 on attempt 1/6 for level2_2026W13_2A_0671_3D3_spx_l2b-v27-2026-237.fits — waiting 2s...
+2026-11-14 09:53:59,867 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W42_2A_0184_4D2_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:54:00,773 | WARNING |     [Cutout 10/12] HTTP 503 on attempt 1/6 for level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits — waiting 2s...
+2026-11-14 09:54:04,826 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2026W13_2A_0671_3D3_spx_l2b-v27-2026-237.fits)
+2026-11-14 09:54:31,347 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W42_2A_0184_4D5_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:54:37,042 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 09:54:51,023 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2026W13_2A_0671_3D6_spx_l2b-v27-2026-237.fits)
+2026-11-14 09:54:51,765 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for asteroid_171_ophelia
+2026-11-14 09:54:51,766 | INFO    | [03/05] Querying live NASA IRSA TAP 102-band cutouts for WISE J0929+2001 (z=3.901 Heavily Reddened Quasar) (142.46728, 20.01860)
+2026-11-14 09:55:46,213 | INFO    |   -> Matched 60 IRSA exposures for quasar_wise_j0929; downloading 12 multi-band cutouts...
+2026-11-14 09:56:04,539 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W18_2B_0007_1D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:56:06,914 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W17_4B_0443_1D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:56:41,353 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W46_2A_0389_1D3_spx_l2b-v27-2026-207.fits)
+2026-11-14 09:56:45,661 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W17_4B_0443_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:57:05,906 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W18_2B_0007_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 09:57:07,015 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W46_2A_0389_1D6_spx_l2b-v27-2026-207.fits)
+2026-11-14 09:57:07,015 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W45_1A_0304_3D1_spx_l2b-v27-2026-247.fits — waiting 2s...
+2026-11-14 09:57:26,689 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W45_1A_0304_3D1_spx_l2b-v27-2026-247.fits)
+2026-11-14 09:57:36,153 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W46_2A_0646_1D2_spx_l2b-v27-2026-207.fits)
+2026-11-14 09:57:43,015 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W45_1A_0304_3D4_spx_l2b-v27-2026-247.fits)
+2026-11-14 09:57:44,522 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W47_1A_0630_1D3_spx_l2b-v27-2026-208.fits)
+2026-11-14 09:58:06,716 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W47_1A_0630_1D6_spx_l2b-v27-2026-208.fits)
+2026-11-14 09:58:09,108 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W46_2A_0646_1D5_spx_l2b-v27-2026-207.fits)
+2026-11-14 09:58:09,838 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for quasar_wise_j0929
+2026-11-14 09:58:09,838 | INFO    | [04/05] Querying live NASA IRSA TAP 102-band cutouts for COSMOS Red Source #65 (Official IRSA SDT Tutorial) (150.78179, 3.35022)
+2026-11-14 09:58:35,046 | INFO    |   -> Matched 60 IRSA exposures for cosmos_sdt_65; downloading 12 multi-band cutouts...
+2026-11-14 09:58:59,530 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W17_4B_0043_1D1_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:59:00,004 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W17_4B_0167_1D2_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:59:17,342 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W48_1A_0420_1D3_spx_l2b-v27-2026-208.fits)
+2026-11-14 09:59:18,945 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W17_4B_0043_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:59:32,533 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W17_4B_0167_1D5_spx_l2b-v27-2026-196.fits)
+2026-11-14 09:59:33,163 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W48_1A_0420_1D6_spx_l2b-v27-2026-208.fits)
+2026-11-14 09:59:33,574 | WARNING |     [Cutout 7/12] HTTP 503 on attempt 1/6 for level2_2025W47_1A_0524_1D1_spx_l2b-v27-2026-208.fits — waiting 2s...
+2026-11-14 09:59:47,710 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W47_1A_0524_1D1_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:03,358 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W48_1A_0033_1D2_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:10,187 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W48_1A_0420_3D3_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:11,294 | WARNING |     [Cutout 11/12] HTTP 503 on attempt 1/6 for level2_2025W48_1A_0033_1D5_spx_l2b-v27-2026-208.fits — waiting 2s...
+2026-11-14 10:00:16,216 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W47_1A_0524_1D4_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:31,088 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W48_1A_0033_1D5_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:35,223 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W48_1A_0420_3D6_spx_l2b-v27-2026-208.fits)
+2026-11-14 10:00:35,943 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for cosmos_sdt_65
+2026-11-14 10:00:35,943 | INFO    | [05/05] Querying live NASA IRSA TAP 102-band cutouts for 99942 Apophis & 101955 Bennu (CSA NEOSSat + SPHEREx) (185.79550, -61.83130)
+2026-11-14 10:00:55,735 | INFO    |   -> Matched 60 IRSA exposures for neossat_apophis_bennu; downloading 12 multi-band cutouts...
+2026-11-14 10:01:37,137 | INFO    |     [Cutout 2/12] Downloaded 3.78 MB (level2_2025W27_2A_0700_4D2_spx_l2b-v27-2026-215.fits)
+2026-11-14 10:01:37,976 | INFO    |     [Cutout 1/12] Downloaded 3.78 MB (level2_2025W28_2A_0514_1D1_spx_l2b-v27-2026-216.fits)
+2026-11-14 10:02:02,757 | INFO    |     [Cutout 3/12] Downloaded 3.86 MB (level2_2025W27_1A_0180_4D3_spx_l2b-v27-2026-214.fits)
+2026-11-14 10:02:03,440 | INFO    |     [Cutout 4/12] Downloaded 3.78 MB (level2_2025W28_2A_0514_1D4_spx_l2b-v27-2026-216.fits)
+2026-11-14 10:02:03,840 | WARNING |     [Cutout 5/12] HTTP 503 on attempt 1/6 for level2_2025W27_2A_0700_4D5_spx_l2b-v27-2026-215.fits — waiting 2s...
+2026-11-14 10:02:30,776 | INFO    |     [Cutout 6/12] Downloaded 3.78 MB (level2_2025W27_1A_0420_1D6_spx_l2b-v27-2026-214.fits)
+2026-11-14 10:02:35,105 | INFO    |     [Cutout 5/12] Downloaded 3.78 MB (level2_2025W27_2A_0700_4D5_spx_l2b-v27-2026-215.fits)
+2026-11-14 10:02:59,081 | INFO    |     [Cutout 7/12] Downloaded 3.78 MB (level2_2025W29_1A_0548_1D1_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:03:00,567 | INFO    |     [Cutout 8/12] Downloaded 3.78 MB (level2_2025W29_1A_0133_2D2_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:03:24,980 | INFO    |     [Cutout 9/12] Downloaded 3.86 MB (level2_2025W29_1A_0020_1D3_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:03:29,355 | INFO    |     [Cutout 10/12] Downloaded 3.78 MB (level2_2025W29_1A_0548_1D4_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:04:00,023 | INFO    |     [Cutout 12/12] Downloaded 3.78 MB (level2_2025W29_1A_0020_1D6_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:04:03,231 | INFO    |     [Cutout 11/12] Downloaded 3.78 MB (level2_2025W29_1A_0133_1D5_spx_l2b-v27-2026-217.fits)
+2026-11-14 10:04:03,912 | INFO    |   -> Extracted 12 real SPHEREx Level-2 spectral measurements for neossat_apophis_bennu
+2026-11-14 10:04:04,234 | INFO    | Wrote 72 forced-photometry SED rows and 1224 exposure index rows into backend\cache\r2_staging
 (.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>

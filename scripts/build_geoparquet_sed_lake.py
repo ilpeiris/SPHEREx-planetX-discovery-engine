@@ -103,10 +103,10 @@ def build_geoparquet_sed_and_exposure_lake(
             tap_rows = query_spherex_tap_cutouts(
                 ra_deg=ra_primary,
                 dec_deg=dec_primary,
-                size_deg=0.02,
+                size_deg=0.05,
                 bandpass=None,  # Query across all 6 SPHEREx detectors (D1..D6)
                 max_rows=60,
-                timeout_sec=45,
+                timeout_sec=300,
             )
             if tap_rows:
                 urls = [str(r["cutout_uri"]) for r in tap_rows[:12] if r.get("cutout_uri")]
@@ -116,7 +116,7 @@ def build_geoparquet_sed_and_exposure_lake(
                     t_id,
                     len(urls),
                 )
-                raw_fits_list = fetch_cutouts_threaded_sync(urls, max_workers=3, timeout_sec=90)
+                raw_fits_list = fetch_cutouts_threaded_sync(urls, max_workers=2, timeout_sec=300)
                 calibrated_cutouts = []
                 for b_data in raw_fits_list:
                     if b_data is not None:
