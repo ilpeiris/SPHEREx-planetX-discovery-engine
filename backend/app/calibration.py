@@ -133,24 +133,26 @@ def load_detector_sapm(
         except Exception as exc:
             logger.warning("Corrupt local SAPM cache %s (%s); re-fetching.", local_path, exc)
 
-    # 2. Try HTTPS S3 mirror download (faster than s3fs for single 16 MB static matrix)
+    # 2. Try HTTPS AWS S3 mirror download (checks DR1 cal-sapm-v3-2026-191 first, then QR2)
     if sapm_array is None:
-        https_url = (
-            f"https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/"
-            f"{data_release}/solid_angle_pixel_map/{coll}/{det}/{filename}"
-        )
-        try:
-            resp = requests.get(https_url, timeout=20)
-            if resp.status_code == 200 and len(resp.content) > 100_000:
-                local_path.parent.mkdir(parents=True, exist_ok=True)
-                local_path.write_bytes(resp.content)
-                with fits.open(io.BytesIO(resp.content), memmap=False) as hdul:
-                    sapm_array = np.asarray(
-                        hdul[0].data if hdul[0].data is not None else hdul[1].data,
-                        dtype=np.float32,
-                    )
-        except Exception as exc:
-            logger.debug("HTTPS SAPM fetch skipped/failed for D%d: %s", det, exc)
+        candidate_urls = [
+            f"https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/solid_angle_pixel_map/cal-sapm-v3-2026-191/{det}/solid_angle_pixel_map_D{det}_spx_cal-sapm-v3-2026-191.fits",
+            f"https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/{data_release}/solid_angle_pixel_map/{coll}/{det}/{filename}",
+        ]
+        for https_url in candidate_urls:
+            try:
+                resp = requests.get(https_url, timeout=20)
+                if resp.status_code == 200 and len(resp.content) > 100_000:
+                    local_path.parent.mkdir(parents=True, exist_ok=True)
+                    local_path.write_bytes(resp.content)
+                    with fits.open(io.BytesIO(resp.content), memmap=False) as hdul:
+                        sapm_array = np.asarray(
+                            hdul[0].data if hdul[0].data is not None else hdul[1].data,
+                            dtype=np.float32,
+                        )
+                    break
+            except Exception as exc:
+                logger.debug("HTTPS SAPM fetch note for D%d (%s): %s", det, https_url, exc)
 
     # 3. Analytical fallback (~6.15'' x 6.15'' = 37.8225 arcsec^2 with radial pin-cushion term)
     if sapm_array is None:

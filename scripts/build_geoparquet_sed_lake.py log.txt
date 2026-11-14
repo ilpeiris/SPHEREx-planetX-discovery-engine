@@ -1,0 +1,39 @@
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python scripts\build_geoparquet_sed_lake.py
+2026-11-14 05:08:29,389 | INFO    | [01/18] Querying live NASA IRSA TAP 102-band cutouts for Barnard's Star (GJ 699) (269.44632, 4.76748)
+2026-11-14 05:09:00,813 | WARNING |   -> Using offline physics fallback SED for barnards_star
+2026-11-14 05:09:00,821 | INFO    | [02/18] Querying live NASA IRSA TAP 102-band cutouts for WISE 0855-0714 (>=Y4 Brown Dwarf, ~250 K) (133.75985, -7.24225)
+2026-11-14 05:09:31,182 | WARNING |   -> Using offline physics fallback SED for wise_0855
+2026-11-14 05:09:31,183 | INFO    | [03/18] Querying live NASA IRSA TAP 102-band cutouts for Epsilon Indi Ba/Bb (T1 + T6 Binary) (331.09627, -56.80052)
+2026-11-14 05:10:02,097 | WARNING |   -> Using offline physics fallback SED for epsilon_indi_b
+2026-11-14 05:10:02,101 | INFO    | [04/18] Querying live NASA IRSA TAP 102-band cutouts for RW Aurigae (Eruptive / Dipping T Tauri Binary) (76.95607, 30.40133)
+2026-11-14 05:10:33,659 | WARNING |   -> Using offline physics fallback SED for rw_aurigae
+2026-11-14 05:10:33,663 | INFO    | [05/18] Querying live NASA IRSA TAP 102-band cutouts for R Draconis (Mira Variable on NEP Deep Field Border) (248.16833, 66.75419)
+2026-11-14 05:11:10,125 | WARNING |   -> Using offline physics fallback SED for r_draconis
+2026-11-14 05:11:10,125 | INFO    | [06/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Aug 2025 Pre-Perihelion (246.36670, -16.74200)
+2026-11-14 05:11:41,469 | WARNING |   -> Using offline physics fallback SED for comet_3i_atlas_pre
+2026-11-14 05:11:41,476 | INFO    | [07/18] Querying live NASA IRSA TAP 102-band cutouts for 3I/ATLAS (C/2025 N1) — Dec 2025 Post-Perihelion (170.18870, 4.10010)
+2026-11-14 05:12:12,545 | WARNING |   -> Using offline physics fallback SED for comet_3i_atlas_post
+2026-11-14 05:12:12,547 | INFO    | [08/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx North Deep Field (NEP Core & Cat's Eye NGC 6543) (270.00000, 66.56071)
+2026-11-14 05:13:22,025 | WARNING |   -> Using offline physics fallback SED for spherex_nep_deep
+2026-11-14 05:13:22,025 | INFO    | [09/18] Querying live NASA IRSA TAP 102-band cutouts for SPHEREx Offset South Deep Field (SDF) (72.00006, -71.36290)
+2026-11-14 05:13:53,436 | WARNING |   -> Using offline physics fallback SED for spherex_sdf_deep
+2026-11-14 05:13:53,442 | INFO    | [10/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J183309.77+675144.8 (NEP Persistence Artifact Test) (278.29071, 67.86244)
+2026-11-14 05:14:46,909 | WARNING |   -> Using offline physics fallback SED for nep_spurious_persist
+2026-11-14 05:14:46,909 | INFO    | [11/18] Querying live NASA IRSA TAP 102-band cutouts for Luhman 16AB (Closest L7.5 + T0.5 Brown Dwarf Binary) (162.29547, -53.31689)
+2026-11-14 05:15:19,305 | WARNING |   -> Using offline physics fallback SED for luhman_16ab
+2026-11-14 05:15:19,307 | INFO    | [12/18] Querying live NASA IRSA TAP 102-band cutouts for 2MASS J0355+1133 (L5gamma) & WISE J1828+2650 (Y2) (58.84737, 11.56214)
+2026-11-14 05:15:58,894 | WARNING |   -> Using offline physics fallback SED for suda_benchmarks
+2026-11-14 05:15:58,894 | INFO    | [13/18] Querying live NASA IRSA TAP 102-band cutouts for 134340 Pluto & 136472 Makemake (Outer Solar System Ices) (306.07083, -23.70667)
+2026-11-14 05:16:30,719 | WARNING |   -> Using offline physics fallback SED for pluto_makemake_tno
+2026-11-14 05:16:30,725 | INFO    | [14/18] Querying live NASA IRSA TAP 102-band cutouts for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (113.62083, 23.78472)
+2026-11-14 05:17:01,076 | WARNING |   -> Using offline physics fallback SED for asteroid_171_ophelia
+2026-11-14 05:17:01,076 | INFO    | [15/18] Querying live NASA IRSA TAP 102-band cutouts for WTP16aakapb & WTP15aaavof (Obscured FUOr Outbursts) (344.65620, 58.77080)
+2026-11-14 05:17:32,728 | WARNING |   -> Using offline physics fallback SED for fuor_wtp16aakapb
+2026-11-14 05:17:32,728 | INFO    | [16/18] Querying live NASA IRSA TAP 102-band cutouts for WISE J0929+2001 (z=3.901 Heavily Reddened Quasar) (142.46728, 20.01860)
+2026-11-14 05:18:03,552 | WARNING |   -> Using offline physics fallback SED for quasar_wise_j0929
+2026-11-14 05:18:03,552 | INFO    | [17/18] Querying live NASA IRSA TAP 102-band cutouts for COSMOS Red Source #65 (Official IRSA SDT Tutorial) (150.78179, 3.35022)
+2026-11-14 05:18:34,269 | WARNING |   -> Using offline physics fallback SED for cosmos_sdt_65
+2026-11-14 05:18:34,269 | INFO    | [18/18] Querying live NASA IRSA TAP 102-band cutouts for 99942 Apophis & 101955 Bennu (CSA NEOSSat + SPHEREx) (185.79550, -61.83130)
+2026-11-14 05:19:06,183 | WARNING |   -> Using offline physics fallback SED for neossat_apophis_bennu
+2026-11-14 05:19:06,617 | INFO    | Wrote 4284 forced-photometry SED rows and 4284 exposure index rows into C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\cache\r2_staging
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>

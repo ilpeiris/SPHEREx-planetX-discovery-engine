@@ -1,0 +1,154 @@
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python -c "import sys; sys.path.insert(0, 'backend'); from app.irsa_client import query_spherex_tap_cutouts; rows = query_spherex_tap_cutouts(269.44632, 4.76748, size_deg=0.1, bandpass='SPHEREx-D4'); print('Barnard Star D4 matched rows:', len(rows)); print('First URI:', rows[0]['cutout_uri'] if rows else 'NONE')"
+Barnard Star D4 matched rows: 24
+First URI: https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/4/level2_2025W35_1A_0432_4D4_spx_l2b-v27-2026-230.fits?center=269.4463200,4.7674800d&size=0.1000
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python scripts\build_golden_catalog_cubes.py
+2026-11-14 07:25:02,677 | INFO    | [01/18] Building 6-slice cube for Barnard's Star (GJ 699) (RA=269.44632, Dec=4.76748, Ch=64, FoV=6.0')
+2026-11-14 07:25:37,090 | INFO    |   -> Matched 24 IRSA exposures for barnards_star; downloading 4 multi-epoch cutouts...
+2026-11-14 07:25:53,255 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W35_1A_0432_4D4_spx_l2b-v27-2026-230.fits)
+2026-11-14 07:26:02,912 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2026W11_1A_0430_2D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:26:16,262 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W35_1A_0658_1D4_spx_l2b-v27-2026-230.fits)
+2026-11-14 07:26:22,624 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W40_1A_0500_1D4_spx_l2b-v27-2026-239.fits)
+2026-11-14 07:26:22,625 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for barnards_star; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:26:29,149 | INFO    | [02/18] Building 6-slice cube for WISE 0855-0714 (>=Y4 Brown Dwarf, ~250 K) (RA=133.75985, Dec=-7.24225, Ch=74, FoV=6.0')
+2026-11-14 07:26:54,201 | INFO    |   -> Matched 21 IRSA exposures for wise_0855; downloading 4 multi-epoch cutouts...
+2026-11-14 07:27:13,244 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W19_1B_0181_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:27:14,757 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 1 for level2_2025W19_1B_0181_2D5_spx_l2b-v27-2026-197.fits
+2026-11-14 07:27:17,419 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W45_2A_0292_3D5_spx_l2b-v27-2026-247.fits)
+2026-11-14 07:27:40,053 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W19_1B_0181_2D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:27:40,367 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W45_2A_0292_2D5_spx_l2b-v27-2026-247.fits)
+2026-11-14 07:27:40,367 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for wise_0855; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:27:45,533 | INFO    | [03/18] Building 6-slice cube for Epsilon Indi Ba/Bb (T1 + T6 Binary) (RA=331.09627, Dec=-56.80052, Ch=60, FoV=6.0')
+2026-11-14 07:27:52,128 | INFO    |   -> Matched 4 IRSA exposures for epsilon_indi_b; downloading 4 multi-epoch cutouts...
+2026-11-14 07:27:53,298 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:27:55,752 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 2 for level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:27:58,580 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 3 for level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:28:12,398 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W17_4B_0468_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:28:30,530 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W17_4B_0077_3D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:28:49,038 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W17_4B_0468_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:28:49,047 | INFO    |   -> Downloaded 3 REAL NASA IRSA Level-2 FITS cutouts for epsilon_indi_b; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:28:55,367 | INFO    | [04/18] Building 6-slice cube for RW Aurigae (Eruptive / Dipping T Tauri Binary) (RA=76.95607, Dec=30.40133, Ch=64, FoV=2.0')
+2026-11-14 07:29:06,871 | INFO    |   -> Matched 19 IRSA exposures for rw_aurigae; downloading 4 multi-epoch cutouts...
+2026-11-14 07:29:29,972 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W36_1A_0677_2D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:29:31,319 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W36_1A_0095_1D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:29:51,058 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W36_1A_0095_2D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:30:00,245 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W36_1A_0677_1D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:30:00,248 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for rw_aurigae; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:30:09,013 | INFO    | [05/18] Building 6-slice cube for R Draconis (Mira Variable on NEP Deep Field Border) (RA=248.16833, Dec=66.75419, Ch=81, FoV=2.0')
+2026-11-14 07:30:36,316 | INFO    |   -> Matched 2 IRSA exposures for r_draconis; downloading 2 multi-epoch cutouts...
+2026-11-14 07:31:15,650 | INFO    |     [Cutout 1/2] Downloaded 3.77 MB (level2_2025W23_2B_0696_2D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 07:31:18,891 | INFO    |     [Cutout 2/2] Downloaded 3.77 MB (level2_2025W24_1A_0358_1D5_spx_l2b-v27-2026-201.fits)
+2026-11-14 07:31:18,891 | INFO    |   -> Downloaded 2 REAL NASA IRSA Level-2 FITS cutouts for r_draconis; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:31:25,494 | INFO    | [06/18] Building 6-slice cube for 3I/ATLAS (C/2025 N1) — Aug 2025 Pre-Perihelion (RA=246.36670, Dec=-16.74200, Ch=81, FoV=6.0')
+2026-11-14 07:31:52,623 | INFO    |   -> Matched 28 IRSA exposures for comet_3i_atlas_pre; downloading 4 multi-epoch cutouts...
+2026-11-14 07:31:53,890 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 1 for level2_2025W33_1B_0599_1D5_spx_l2b-v27-2026-227.fits
+2026-11-14 07:31:53,890 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W31_2A_0108_4D5_spx_l2b-v27-2026-225.fits
+2026-11-14 07:32:16,618 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W33_1B_0599_1D5_spx_l2b-v27-2026-227.fits)
+2026-11-14 07:32:16,952 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W31_2A_0108_4D5_spx_l2b-v27-2026-225.fits)
+2026-11-14 07:32:40,360 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W33_1B_0399_4D5_spx_l2b-v27-2026-227.fits)
+2026-11-14 07:32:49,336 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W32_1A_0612_1D5_spx_l2b-v27-2026-226.fits)
+2026-11-14 07:32:49,336 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for comet_3i_atlas_pre; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:33:00,009 | INFO    | [07/18] Building 6-slice cube for 3I/ATLAS (C/2025 N1) — Dec 2025 Post-Perihelion (RA=170.18870, Dec=4.10010, Ch=81, FoV=6.0')
+2026-11-14 07:33:22,842 | INFO    |   -> Matched 22 IRSA exposures for comet_3i_atlas_post; downloading 4 multi-epoch cutouts...
+2026-11-14 07:33:51,986 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W19_2B_0303_1D5_spx_l2b-v27-2026-198.fits)
+2026-11-14 07:33:58,395 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W51_1A_0510_3D5_spx_l2b-v27-2026-210.fits)
+2026-11-14 07:34:52,753 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W19_2B_0390_1D5_spx_l2b-v27-2026-198.fits)
+2026-11-14 07:35:00,163 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W51_1A_0259_4D5_spx_l2b-v27-2026-210.fits)
+2026-11-14 07:35:00,163 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for comet_3i_atlas_post; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:35:05,678 | INFO    | [08/18] Building 6-slice cube for SPHEREx North Deep Field (NEP Core & Cat's Eye NGC 6543) (RA=270.00000, Dec=66.56071, Ch=64, FoV=15.0')
+2026-11-14 07:35:41,291 | WARNING | IRSA TAP attempt 1/3 note for (270.0000, 66.5607): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=35)
+2026-11-14 07:36:10,817 | INFO    |   -> Matched 7 IRSA exposures for spherex_nep_deep; downloading 4 multi-epoch cutouts...
+2026-11-14 07:36:11,862 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W18_1B_0387_1D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:36:42,513 | INFO    |     [Cutout 2/4] Downloaded 3.99 MB (level2_2025W19_1B_0470_4D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:36:42,854 | INFO    |     [Cutout 1/4] Downloaded 4.09 MB (level2_2025W18_1B_0387_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:37:24,595 | INFO    |     [Cutout 3/4] Downloaded 3.99 MB (level2_2025W18_2B_0108_4D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:37:35,937 | INFO    |     [Cutout 4/4] Downloaded 3.99 MB (level2_2025W19_1B_0123_4D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:37:35,943 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for spherex_nep_deep; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:37:42,473 | INFO    | [09/18] Building 6-slice cube for SPHEREx Offset South Deep Field (SDF) (RA=72.00006, Dec=-71.36290, Ch=64, FoV=15.0')
+2026-11-14 07:38:12,411 | INFO    |   -> Matched 120 IRSA exposures for spherex_sdf_deep; downloading 4 multi-epoch cutouts...
+2026-11-14 07:38:13,393 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W19_1B_0455_1D2_spx_l2b-v27-2026-197.fits
+2026-11-14 07:38:33,287 | INFO    |     [Cutout 2/4] Downloaded 4.17 MB (level2_2025W19_2B_0014_1D3_spx_l2b-v27-2026-198.fits)
+2026-11-14 07:38:37,461 | INFO    |     [Cutout 1/4] Downloaded 4.09 MB (level2_2025W19_1B_0455_1D2_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:39:01,391 | INFO    |     [Cutout 3/4] Downloaded 4.09 MB (level2_2025W19_1B_0455_1D5_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:39:02,690 | INFO    |     [Cutout 4/4] Downloaded 4.09 MB (level2_2025W19_2B_0014_1D6_spx_l2b-v27-2026-198.fits)
+2026-11-14 07:39:02,692 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for spherex_sdf_deep; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:39:45,098 | INFO    | [10/18] Building 6-slice cube for WISE J183309.77+675144.8 (NEP Persistence Artifact Test) (RA=278.29071, Dec=67.86244, Ch=64, FoV=2.0')
+2026-11-14 07:40:04,731 | INFO    |   -> Matched 30 IRSA exposures for nep_spurious_persist; downloading 4 multi-epoch cutouts...
+2026-11-14 07:40:05,784 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 1 for level2_2025W19_1B_0318_2D4_spx_l2b-v27-2026-197.fits
+2026-11-14 07:40:07,926 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 2 for level2_2025W19_1B_0318_2D4_spx_l2b-v27-2026-197.fits
+2026-11-14 07:40:39,931 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W17_4B_0112_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:40:44,748 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W19_1B_0318_2D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:41:03,299 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W17_4B_0165_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:41:07,140 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W19_1B_0268_4D4_spx_l2b-v27-2026-197.fits)
+2026-11-14 07:41:07,142 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for nep_spurious_persist; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:41:17,562 | INFO    | [11/18] Building 6-slice cube for Luhman 16AB (Closest L7.5 + T0.5 Brown Dwarf Binary) (RA=162.29547, Dec=-53.31689, Ch=60, FoV=6.0')
+2026-11-14 07:41:42,662 | INFO    |   -> Matched 18 IRSA exposures for luhman_16ab; downloading 4 multi-epoch cutouts...
+2026-11-14 07:41:43,619 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W26_1A_0232_1D4_spx_l2b-v27-2026-213.fits
+2026-11-14 07:42:07,615 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W26_2A_0525_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:42:08,042 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W26_1A_0232_1D4_spx_l2b-v27-2026-213.fits)
+2026-11-14 07:42:36,732 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W26_2A_0261_4D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:42:46,976 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W26_1A_0232_2D4_spx_l2b-v27-2026-213.fits)
+2026-11-14 07:42:46,976 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for luhman_16ab; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:42:53,891 | INFO    | [12/18] Building 6-slice cube for 2MASS J0355+1133 (L5gamma) & WISE J1828+2650 (Y2) (RA=58.84737, Dec=11.56214, Ch=64, FoV=2.0')
+2026-11-14 07:42:58,491 | INFO    |   -> Matched 19 IRSA exposures for suda_benchmarks; downloading 4 multi-epoch cutouts...
+2026-11-14 07:42:59,554 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W34_1B_0158_2D4_spx_l2b-v27-2026-228.fits
+2026-11-14 07:43:20,608 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W36_1A_0050_1D4_spx_l2b-v27-2026-232.fits)
+2026-11-14 07:43:23,055 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W34_1B_0158_2D4_spx_l2b-v27-2026-228.fits)
+2026-11-14 07:43:38,501 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W34_1B_0158_3D4_spx_l2b-v27-2026-228.fits)
+2026-11-14 07:43:46,184 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W34_1B_0312_4D4_spx_l2b-v27-2026-228.fits)
+2026-11-14 07:43:46,184 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for suda_benchmarks; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:43:51,825 | INFO    | [13/18] Building 6-slice cube for 134340 Pluto & 136472 Makemake (Outer Solar System Ices) (RA=306.07083, Dec=-23.70667, Ch=64, FoV=15.0')
+2026-11-14 07:44:07,324 | INFO    |   -> Matched 18 IRSA exposures for pluto_makemake_tno; downloading 4 multi-epoch cutouts...
+2026-11-14 07:44:22,637 | INFO    |     [Cutout 1/4] Downloaded 4.09 MB (level2_2025W41_1A_0756_1D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 07:44:23,970 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 1 for level2_2025W41_1A_0756_2D4_spx_l2b-v27-2026-241.fits
+2026-11-14 07:44:43,150 | INFO    |     [Cutout 2/4] Downloaded 4.09 MB (level2_2025W42_2A_0364_1D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 07:44:50,423 | INFO    |     [Cutout 3/4] Downloaded 4.09 MB (level2_2025W41_1A_0756_2D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 07:44:52,634 | INFO    |     [Cutout 4/4] Downloaded 4.09 MB (level2_2025W42_1A_0674_4D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 07:44:52,647 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for pluto_makemake_tno; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:45:02,623 | INFO    | [14/18] Building 6-slice cube for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (RA=113.62083, Dec=23.78472, Ch=60, FoV=6.0')
+2026-11-14 07:45:36,838 | INFO    |   -> Matched 21 IRSA exposures for asteroid_171_ophelia; downloading 4 multi-epoch cutouts...
+2026-11-14 07:46:03,436 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 07:46:04,508 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 1 for level2_2025W40_2B_0744_2D4_spx_l2b-v27-2026-241.fits
+2026-11-14 07:46:08,877 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 07:46:09,878 | WARNING |     [Cutout 4/4] HTTP 503 on attempt 1 for level2_2025W41_2B_0042_1D4_spx_l2b-v27-2026-242.fits
+2026-11-14 07:46:28,709 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W40_2B_0744_2D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 07:46:38,639 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W41_2B_0042_1D4_spx_l2b-v27-2026-242.fits)
+2026-11-14 07:46:38,639 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for asteroid_171_ophelia; running ZODI + SAPM + WCS + ZOGY...
+C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\app\wcs_reproject.py:201: RuntimeWarning: All-NaN slice encountered
+  var_filled = np.nan_to_num(var_ujy2, nan=float(np.nanmedian(var_ujy2) or 1.0)).astype(np.float64)
+C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\app\wcs_reproject.py:287: RuntimeWarning: All-NaN slice encountered
+  float(np.nanmedian(var_filled) or 1.0) * (area_scale**2),
+2026-11-14 07:46:46,184 | INFO    | [15/18] Building 6-slice cube for WTP16aakapb & WTP15aaavof (Obscured FUOr Outbursts) (RA=344.65620, Dec=58.77080, Ch=60, FoV=2.0')
+2026-11-14 07:47:06,788 | INFO    |   -> Matched 18 IRSA exposures for fuor_wtp16aakapb; downloading 4 multi-epoch cutouts...
+2026-11-14 07:47:22,792 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W27_1A_0026_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:47:23,754 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W27_1A_0305_1D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:47:49,070 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W27_1A_0280_2D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:47:50,110 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W27_1A_0026_2D4_spx_l2b-v27-2026-214.fits)
+2026-11-14 07:47:50,110 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for fuor_wtp16aakapb; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:47:55,201 | INFO    | [16/18] Building 6-slice cube for WISE J0929+2001 (z=3.901 Heavily Reddened Quasar) (RA=142.46728, Dec=20.01860, Ch=63, FoV=2.0')
+2026-11-14 07:48:30,831 | WARNING | IRSA TAP attempt 1/3 note for (142.4673, 20.0186): HTTPSConnectionPool(host='irsa.ipac.caltech.edu', port=443): Read timed out. (read timeout=35)
+2026-11-14 07:48:52,679 | INFO    |   -> Matched 21 IRSA exposures for quasar_wise_j0929; downloading 4 multi-epoch cutouts...
+2026-11-14 07:49:11,726 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W17_4B_0443_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:49:13,650 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W45_1A_0304_3D4_spx_l2b-v27-2026-247.fits)
+2026-11-14 07:49:37,028 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W17_4B_0443_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:49:40,209 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W45_1A_0304_2D4_spx_l2b-v27-2026-247.fits)
+2026-11-14 07:49:40,209 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for quasar_wise_j0929; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:49:46,519 | INFO    | [17/18] Building 6-slice cube for COSMOS Red Source #65 (Official IRSA SDT Tutorial) (RA=150.78179, Dec=3.35022, Ch=64, FoV=2.0')
+2026-11-14 07:49:56,848 | INFO    |   -> Matched 28 IRSA exposures for cosmos_sdt_65; downloading 4 multi-epoch cutouts...
+2026-11-14 07:49:57,808 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1 for level2_2025W17_4B_0043_1D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:49:57,809 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 1 for level2_2025W47_1A_0524_1D4_spx_l2b-v27-2026-208.fits
+2026-11-14 07:50:26,633 | INFO    |     [Cutout 1/4] Downloaded 3.77 MB (level2_2025W17_4B_0043_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:50:27,553 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 1 for level2_2025W17_4B_0043_2D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:50:28,207 | INFO    |     [Cutout 2/4] Downloaded 3.77 MB (level2_2025W47_1A_0524_1D4_spx_l2b-v27-2026-208.fits)
+2026-11-14 07:50:29,486 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 2 for level2_2025W17_4B_0043_2D4_spx_l2b-v27-2026-196.fits
+2026-11-14 07:50:50,334 | INFO    |     [Cutout 4/4] Downloaded 3.77 MB (level2_2025W47_1A_0472_4D4_spx_l2b-v27-2026-208.fits)
+2026-11-14 07:50:50,921 | INFO    |     [Cutout 3/4] Downloaded 3.77 MB (level2_2025W17_4B_0043_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 07:50:50,921 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for cosmos_sdt_65; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:50:57,217 | INFO    | [18/18] Building 6-slice cube for 99942 Apophis & 101955 Bennu (CSA NEOSSat + SPHEREx) (RA=185.79550, Dec=-61.83130, Ch=81, FoV=6.0')
+2026-11-14 07:51:24,840 | INFO    |   -> Matched 17 IRSA exposures for neossat_apophis_bennu; downloading 4 multi-epoch cutouts...
+2026-11-14 07:51:32,016 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W29_1A_0133_1D5_spx_l2b-v27-2026-217.fits)
+2026-11-14 07:52:01,345 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W27_2A_0700_4D5_spx_l2b-v27-2026-215.fits)
+2026-11-14 07:52:10,003 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W28_1B_0035_1D5_spx_l2b-v27-2026-215.fits)
+2026-11-14 07:52:26,873 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W28_2A_0423_4D5_spx_l2b-v27-2026-216.fits)
+2026-11-14 07:52:26,875 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for neossat_apophis_bennu; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 07:52:33,878 | INFO    | Successfully generated 21 binary cutout cubes in C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\cache\r2_staging\cubes
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>

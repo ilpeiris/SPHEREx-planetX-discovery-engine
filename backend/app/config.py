@@ -206,10 +206,18 @@ class Settings(BaseSettings):
     # --- unWISE / WiseView Archival Cutout Endpoint ---
     UNWISE_CUTOUT_BASE_URL: str = "https://www.legacysurvey.org/viewer/fits-cutout"
 
-    # --- Local Cache & Compute Pool Settings ---
-    CACHE_DIR: Path = Path(os.getenv("SPHEREX_CACHE_DIR", "/tmp/spherex_cache"))
+# --- Local Cache & Compute Pool Settings ---
+    CACHE_DIR: Path = Path(
+        os.getenv(
+            "SPHEREX_CACHE_DIR",
+            str(Path(__file__).resolve().parent.parent / "cache" / "r2_staging" / "cubes"),
+        )
+    )
     SAPM_CACHE_DIR: Path = Path(
-        os.getenv("SPHEREX_SAPM_CACHE_DIR", str(Path(__file__).resolve().parent.parent / "cache" / "sapm"))
+        os.getenv(
+            "SPHEREX_SAPM_CACHE_DIR",
+            str(Path(__file__).resolve().parent.parent / "cache" / "sapm"),
+        )
     )
     DUCKDB_MEMORY_LIMIT: str = "3GB"
     DUCKDB_THREADS: int = 2

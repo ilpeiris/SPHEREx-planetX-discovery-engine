@@ -165,11 +165,22 @@ def build_all_golden_target_cubes(
                 timeout_sec=35,
          )
             if tap_rows:
-                urls = [str(r["cutout_uri"]) for r in tap_rows[:10] if r.get("cutout_uri")]
-                downloaded = fetch_cutouts_threaded_sync(urls, max_workers=10, timeout_sec=35)
+                urls = [str(r["cutout_uri"]) for r in tap_rows[:4] if r.get("cutout_uri")]
+                logger.info(
+                    "  -> Matched %d IRSA exposures for %s; downloading %d multi-epoch cutouts...",
+                    len(tap_rows),
+                    t_id,
+                    len(urls),
+                )
+                downloaded = fetch_cutouts_threaded_sync(urls, max_workers=2, timeout_sec=90)
                 fits_payloads = [b for b in downloaded if b is not None]
 
         if fits_payloads:
+            logger.info(
+                "  -> Downloaded %d REAL NASA IRSA Level-2 FITS cutouts for %s; running ZODI + SAPM + WCS + ZOGY...",
+                len(fits_payloads),
+                t_id,
+            )
             float_cube, uint16_cube = _worker_process_cutouts_to_6slice_cube(
                 fits_bytes_list=fits_payloads,
                 ra_deg=ra_deg,
@@ -182,6 +193,7 @@ def build_all_golden_target_cubes(
             )
             source_mode = "irsa_level2_mef"
         else:
+            logger.warning("  -> WARNING: 0 live FITS cutouts returned for %s; using fallback!", t_id)
             float_cube, uint16_cube = build_physics_fallback_6slice_cube(
                 ra_deg=ra_deg,
                 dec_deg=dec_deg,

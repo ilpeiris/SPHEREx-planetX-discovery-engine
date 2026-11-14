@@ -1,0 +1,26 @@
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python scripts\train_export_onnx_models.py
+C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\scripts\train_export_onnx_models.py:279: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html
+  torch.onnx.export(
+2026-11-14 04:51:22,376 | INFO    | Performing symbolic shape inference...
+2026-11-14 04:51:22,801 | INFO    | Quantization parameters for tensor:"/Concat_2_output_0" not specified
+2026-11-14 04:51:22,802 | INFO    | Quantization parameters for tensor:"/vae_enc_conv/vae_enc_conv.1/Mul_1_output_0" not specified
+2026-11-14 04:51:22,803 | INFO    | Quantization parameters for tensor:"/Reshape_2_output_0" not specified
+2026-11-14 04:51:22,804 | INFO    | Quantization parameters for tensor:"/vae_enc_fc/vae_enc_fc.1/Mul_1_output_0" not specified
+2026-11-14 04:51:22,805 | INFO    | Quantization parameters for tensor:"latent_mu" not specified
+2026-11-14 04:51:22,805 | INFO    | Quantization parameters for tensor:"cutout_t2" not specified
+2026-11-14 04:51:22,806 | INFO    | Quantization parameters for tensor:"/siamese_conv/siamese_conv.1_1/Relu_output_0" not specified
+2026-11-14 04:51:22,808 | INFO    | Quantization parameters for tensor:"/Reshape_1_output_0" not specified
+2026-11-14 04:51:22,808 | INFO    | Quantization parameters for tensor:"cutout_t1" not specified
+2026-11-14 04:51:22,809 | INFO    | Quantization parameters for tensor:"/siamese_conv/siamese_conv.1/Relu_output_0" not specified
+2026-11-14 04:51:22,809 | INFO    | Quantization parameters for tensor:"/Reshape_output_0" not specified
+2026-11-14 04:51:22,815 | INFO    | Exported & INT8-quantized SPHERExDiscoveryNet -> C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\frontend\public\models\spherex_discovery_int8.onnx (88.2 KB)
+2026-11-14 04:51:23,056 | INFO    | Fitted real 100-tree scikit-learn IsolationForest on 2432 24-D sector vectors.
+C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\scripts\train_export_onnx_models.py:360: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html
+  torch.onnx.export(
+2026-11-14 04:51:24,674 | INFO    | Performing symbolic shape inference...
+2026-11-14 04:51:24,864 | INFO    | Quantization parameters for tensor:"input_features" not specified
+2026-11-14 04:51:24,864 | INFO    | Quantization parameters for tensor:"/net/net.1/Mul_1_output_0" not specified
+2026-11-14 04:51:24,864 | INFO    | Quantization parameters for tensor:"/net/net.3/Tanh_output_0" not specified
+2026-11-14 04:51:24,864 | INFO    | Exported & INT8-quantized 100-Tree Distilled IsolationForest -> C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\frontend\public\models\spherex_iforest_int8.onnx (22.5 KB)
+2026-11-14 04:51:25,018 | INFO    | VERIFIED ONNX RUNTIME EXECUTION (Batch B=5): d_csn=(5,), a_vae=(5,), iforest_scores=(5,)
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>
