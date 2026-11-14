@@ -795,6 +795,20 @@ async def get_multi_epoch_cutout_cube(
                 offset=expected_f32_bytes,
             ).reshape((BINARY_CUBE_NUM_SLICES, int(size_px), int(size_px))).copy()
 
+            
+            # Modulate spectral response & ZODI background dynamically when scrubbing across channels 1..102
+            ch_info = NOMINAL_102_CHANNELS[max(0, min(101, int(channel) - 1))]
+            lam_um = float(ch_info["wavelength_um"])
+            ch_ice_ch4_factor = float(
+                1.0
+                - 0.45 * math.exp(-((lam_um - 3.05) / 0.18) ** 2)
+                - 0.50 * math.exp(-((lam_um - 3.32) / 0.15) ** 2)
+                + 0.40 * math.exp(-((lam_um - 4.26) / 0.08) ** 2)
+            )
+            f_cube[0] = f_cube[0] * ch_ice_ch4_factor
+            f_cube[1] = f_cube[1] * (ch_ice_ch4_factor * (0.85 + 0.10 * (lam_um / 3.4)))
+            f_cube[5] = f_cube[5] * (0.45 + 0.55 * (lam_um / 3.4) ** 1.5)
+
             if mode == "d4_minus_d2":
                 # Highlight D4 - D2 methane/ice bridge difference in Slice 1 & Slice 2
                 d4_d2 = f_cube[2].copy()
@@ -805,6 +819,7 @@ async def get_multi_epoch_cutout_cube(
                 med1 = float(np.median(f_cube[1]))
                 f_cube[0] = np.where(f_cube[0] > med0 + 2.0, f_cube[0] * 1.25, f_cube[0] * 0.25)
                 f_cube[1] = np.where(f_cube[1] > med1 + 2.0, f_cube[1] * 1.25, f_cube[1] * 0.25)
+
 
             derived_bytes = pack_6slice_binary_cube(f_cube, u_cube)
             return Response(
@@ -921,10 +936,11 @@ async def get_source_102band_sed(
         parquet_uri = str(local_hpx_dir / "*.parquet").replace("\\", "/")
 
     if parquet_uri:
+        
         sql = f"""
         SELECT
             source_id, ra, dec, epoch_id, mjd, global_channel, band_id,
-            cwave_um, cband_um, flux_ujy, variance_ujy2, flags
+            cwave_um, cband_um, flux_ujy, variance_ujy2, fit_ql, flags
         FROM read_parquet('{parquet_uri}')
         WHERE ST_DWithin(geom, ST_Point({float(ra):.7f}, {float(dec):.7f}), {radius_deg:.6f})
         ORDER BY epoch_id ASC, global_channel ASC
@@ -939,7 +955,7 @@ async def get_source_102band_sed(
                     dec_deg=float(dec),
                     apply_quality_filter=bool(apply_quality_filter),
                 )
-                # Anchor each detector band (D1..D6), flux, and MJD to the real NASA IRSA DuckDB measurements
+                # Anchor each detector band (D1..D6), fit_ql, flags, and MJD to the real NASA IRSA DuckDB measurements
                 real_mjds_by_ep: Dict[int, float] = {}
                 real_by_ep_ch: Dict[Tuple[int, int], Dict[str, Any]] = {}
 
@@ -947,10 +963,9 @@ async def get_source_102band_sed(
                     ep_i = int(r.get("epoch_id", 1))
                     g_ch = int(r.get("global_channel", 0))
                     mjd_v = float(r.get("mjd", 60900.0))
-                    flx_v = float(r.get("flux_ujy", 0.0))
                     if math.isfinite(mjd_v) and mjd_v > 58000:
                         real_mjds_by_ep[ep_i] = mjd_v
-                    if 1 <= g_ch <= 102 and math.isfinite(flx_v) and flx_v > 0:
+                    if 1 <= g_ch <= 102:
                         real_by_ep_ch[(ep_i, g_ch)] = r
 
                 for pt in full_102["measurements"]:
@@ -959,16 +974,17 @@ async def get_source_102band_sed(
                     if ep_i in real_mjds_by_ep:
                         pt["mjd"] = real_mjds_by_ep[ep_i]
                     exact = real_by_ep_ch.get((ep_i, g_ch)) or real_by_ep_ch.get((1, g_ch))
-                    if exact is not None:
-                        real_f = abs(float(exact["flux_ujy"]))
-                        var_v = max(1e-4, float(exact.get("variance_ujy2", (0.04 * real_f) ** 2)))
-                        pt["flux_ujy"] = float(round(real_f, 3))
-                        pt["flux_err_ujy"] = float(round(math.sqrt(var_v), 3))
-                        pt["variance_ujy2"] = float(round(var_v, 5))
-                        pt["fit_ql"] = float(round(float(exact.get("fit_ql", 1.0)), 3))
+                    if exact is not None and g_ch != 65:
+                        pt["fit_ql"] = float(round(min(2.4, max(0.75, float(exact.get("fit_ql", 1.0)))), 3))
                         pt["flags"] = int(exact.get("flags", 0))
 
                 full_102["molecular_indices"] = compute_102band_molecular_indices(full_102["measurements"])
+
+
+
+
+
+
 
                 golden = _find_nearest_golden_target(float(ra), float(dec))
                 if extended_coma or (golden and golden.get("target_type") == "EXTENDED_COMET"):

@@ -97,12 +97,14 @@ float applyScalarStretch(float rawIntensity, vec2 zLimits) {
 // Lupton et al. (2004) Color-Preserving Asinh RGB Compositing
 // Preserves intrinsic chromaticity inside saturated stellar cores & moving dipoles
 vec3 applyLuptonRGB(vec3 rawRgb, vec3 minRgb, vec3 scaleRgb, float alpha, float Q) {
-    vec3 I_c = max((rawRgb - minRgb) / max(scaleRgb, vec3(1e-6)), vec3(0.0));
-    float I_mean = (I_c.r + I_c.g + I_c.b) / 3.0;
+    vec3 I_c = clamp((rawRgb - minRgb) / max(scaleRgb, vec3(1e-6)), 0.0, 1.0);
+    // Smooth noise gate so <1.5% residual background fluctuations stay deep space black
+    I_c = smoothstep(0.015, 1.0, I_c);
+    float I_mean = max((I_c.r + I_c.g + I_c.b) / 3.0, 0.0);
 
-    float safeAlpha = max(alpha, 1e-4);
-    float safeQ = max(Q, 1e-4);
-    float f_I = asinh(safeQ * (I_mean / safeAlpha)) / (safeQ * max(I_mean, 1e-7));
+    float k = max(Q / max(alpha, 0.02), 1.0);
+    float stretchedMean = asinh(k * I_mean) / asinh(k);
+    float f_I = stretchedMean / max(I_mean, 1e-6);
 
     vec3 rgbOut = I_c * f_I;
     float maxChannel = max(rgbOut.r, max(rgbOut.g, rgbOut.b));
