@@ -120,7 +120,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
   embedIframeSnippet,
   userTier = "researcher",
   onChangeUserTier,
-  isLightMode = false,
+  isLightMode = true,
   onToggleLightMode,
 }) => {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -169,12 +169,12 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
 
   return (
     <header className={`w-full px-3 py-2 select-none transition-colors ${surfaceHeader}`}>
-      {/* Row 1: Instrument Identity, Coordinate Search, User Tier Switch, Multi-Mission Tools & Theme Toggle */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        {/* Left: Observatory Console Identity & Catalog Drawer Trigger */}
-        <div className="flex items-center gap-2">
+      {/* Row 1: Single Non-Jumping Line — Identity, @ilpeiris | GitHub, Explorer/Researcher, Search, Tools & Theme */}
+      <div className="flex items-center justify-between gap-1.5 flex-nowrap overflow-x-auto">
+        {/* Left Group: Brand, Catalog, @ilpeiris | GitHub, and Explorer/Researcher Switch */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <div
-            className={`flex items-center gap-2 px-2.5 py-1 rounded border ${
+            className={`flex items-center gap-2 px-2 py-1 rounded border ${
               isLightMode
                 ? "bg-slate-50 border-slate-300"
                 : "bg-[#121722] border-[#252D3F]"
@@ -183,63 +183,105 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
             <Telescope className="w-4 h-4 text-spherex-cyan shrink-0" />
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold tracking-wider">
-                  SPHEREx // IRSA
+                <span className="text-xs font-bold tracking-tight whitespace-nowrap">
+                  SPHEREx × Planet X
                 </span>
                 <span
-                  className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${
+                  className={`text-[9px] font-semibold px-1.5 py-0.5 rounded border whitespace-nowrap ${
                     isLightMode
                       ? "bg-sky-50 border-sky-200 text-sky-700"
                       : "bg-[#182030] border-spherex-cyan/30 text-spherex-cyan"
                   }`}
                 >
-                  102-CH TELEMETRY
+                  102-CH
                 </span>
               </div>
-              <p
-                className={`text-[9px] font-mono ${
-                  isLightMode ? "text-slate-500" : "text-slate-400"
-                }`}
-              >
-                Caltech/IPAC QR2–QR3 • unWISE 16-Yr • CSA NEOSSat
-              </p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onOpenGuidedTour}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-xs font-mono font-medium transition ${surfaceControl}`}
+            className={`flex items-center gap-1 px-2 py-1 rounded border text-xs font-medium whitespace-nowrap transition ${surfaceControl}`}
             title="Open the 18 pre-validated SPHEREx benchmark target catalog"
           >
-            <Compass className="w-3.5 h-3.5 text-spherex-cyan" />
+            <Compass className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
             <span>Catalog (18)</span>
           </button>
 
-          {/* Author & GitHub Repository Pill */}
+          {/* Clickable @ilpeiris (GitHub Profile) | GitHub (Repo) Pill */}
           <div
-            className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-[11px] font-mono ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[11px] whitespace-nowrap ${
               isLightMode
-                ? "bg-slate-50 border-slate-200 text-slate-600"
-                : "bg-[#121722] border-[#252D3F] text-slate-400"
+                ? "bg-slate-50 border-slate-300 text-slate-700"
+                : "bg-[#121722] border-[#252D3F] text-slate-300"
             }`}
           >
-            <span>@ilpeiris</span>
+            <a
+              href="https://github.com/ilpeiris"
+              target="_blank"
+              rel="noreferrer"
+              className="text-spherex-cyan hover:underline font-bold"
+              title="M.D.Isuru Lakmal Peiris (@ilpeiris) GitHub Profile"
+            >
+              @ilpeiris
+            </a>
             <span className="opacity-40">|</span>
             <a
               href="https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine"
               target="_blank"
               rel="noreferrer"
-              className="text-spherex-cyan hover:underline font-semibold"
-              title="View Source Code on GitHub"
+              className="text-spherex-amber hover:underline font-semibold"
+              title="View Project Source Code on GitHub"
             >
               GitHub
             </a>
           </div>
+
+          {/* Locked-Width Citizen Explorer vs Pro Researcher Switch (Never Jumps Lines) */}
+          {onChangeUserTier && (
+            <div
+              className={`flex items-center p-0.5 rounded border text-[11px] whitespace-nowrap ${
+                isLightMode
+                  ? "bg-slate-100 border-slate-300"
+                  : "bg-[#121722] border-[#252D3F]"
+              }`}
+              title="Switch between Citizen Explorer view and Pro Researcher telemetry"
+            >
+              <button
+                type="button"
+                onClick={() => onChangeUserTier("explorer")}
+                className={`flex items-center gap-1 px-2 py-0.5 rounded-sm transition ${
+                  userTier === "explorer"
+                    ? isLightMode
+                      ? "bg-white text-slate-900 font-bold shadow-sm"
+                      : "bg-[#222B3D] text-white font-semibold"
+                    : "text-slate-400 hover:text-slate-600"
+                }`}
+              >
+                <User className="w-3 h-3 text-spherex-cyan shrink-0" />
+                <span>Explorer</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onChangeUserTier("researcher")}
+                className={`flex items-center gap-1 px-2 py-0.5 rounded-sm transition ${
+                  userTier === "researcher"
+                    ? isLightMode
+                      ? "bg-white text-slate-900 font-bold shadow-sm"
+                      : "bg-[#222B3D] text-white font-semibold"
+                    : "text-slate-400 hover:text-slate-600"
+                }`}
+              >
+                <Microscope className="w-3 h-3 text-spherex-amber shrink-0" />
+                <span>Researcher</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Center: Universal RA/Dec Sexagesimal, Decimal & Target Search */}
-        <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[240px] max-w-md relative">
+        <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[180px] max-w-xs relative">
           <div
             className={`flex items-center rounded border overflow-hidden transition ${
               isLightMode
@@ -247,7 +289,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 : "bg-[#121722] border-[#252D3F] focus-within:border-spherex-cyan"
             }`}
           >
-            <Search className="w-3.5 h-3.5 text-slate-400 ml-2.5 shrink-0" />
+            <Search className="w-3.5 h-3.5 text-slate-400 ml-2 shrink-0" />
             <input
               type="text"
               value={searchInput}
@@ -255,8 +297,8 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 setSearchInput(e.target.value);
                 if (searchError) setSearchError(null);
               }}
-              placeholder="ICRS RA, Dec (08h55m10.831s, -7d14m42.53s) or Target..."
-              className={`w-full bg-transparent px-2 py-1 text-xs font-mono focus:outline-none ${
+              placeholder="RA, Dec or Target..."
+              className={`w-full bg-transparent px-2 py-1 text-xs focus:outline-none ${
                 isLightMode
                   ? "text-slate-900 placeholder-slate-400"
                   : "text-slate-100 placeholder-slate-500"
@@ -264,7 +306,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
             />
             <button
               type="submit"
-              className={`border-l px-2.5 py-1 text-[11px] font-mono font-semibold transition ${
+              className={`border-l px-2 py-1 text-[11px] font-semibold transition ${
                 isLightMode
                   ? "bg-slate-200 hover:bg-slate-300 text-slate-800 border-slate-300"
                   : "bg-[#1A2233] hover:bg-[#232D42] text-spherex-cyan border-[#252D3F]"
@@ -274,62 +316,21 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
             </button>
           </div>
           {searchError && (
-            <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] font-mono px-2 py-1 rounded shadow-lg z-40">
+            <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] px-2 py-1 rounded shadow-lg z-40 whitespace-nowrap">
               {searchError}
             </div>
           )}
         </form>
 
-        {/* Right: User Tier Switch (Explorer vs Pro), FoV, Co-Add, Survey, Modals, Share & Theme */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          {/* Option C: Citizen Explorer vs Pro Researcher Segmented Toggle */}
-          {onChangeUserTier && (
-            <div
-              className={`flex items-center p-0.5 rounded border text-[11px] font-mono ${
-                isLightMode
-                  ? "bg-slate-100 border-slate-300"
-                  : "bg-[#121722] border-[#252D3F]"
-              }`}
-              title="Switch between streamlined Citizen Scientist Explorer view and full Pro Researcher telemetry"
-            >
-              <button
-                type="button"
-                onClick={() => onChangeUserTier("explorer")}
-                className={`flex items-center gap-1 px-2 py-1 rounded-sm transition ${
-                  userTier === "explorer"
-                    ? isLightMode
-                      ? "bg-white text-slate-900 font-bold shadow-sm"
-                      : "bg-[#222B3D] text-white font-semibold"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                <User className="w-3 h-3 text-spherex-cyan" />
-                <span>Explorer</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onChangeUserTier("researcher")}
-                className={`flex items-center gap-1 px-2 py-1 rounded-sm transition ${
-                  userTier === "researcher"
-                    ? isLightMode
-                      ? "bg-white text-slate-900 font-bold shadow-sm"
-                      : "bg-[#222B3D] text-white font-semibold"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                <Microscope className="w-3 h-3 text-spherex-amber" />
-                <span>Researcher</span>
-              </button>
-            </div>
-          )}
-
+        {/* Right Group: FoV, Co-Add, Survey, Gaia PM, NEOSSat, Verify, URL/Embed & Theme Icon */}
+        <div className="flex items-center gap-1 shrink-0">
           {/* Field of View (FoV) Selector */}
-          <div className={`flex items-center rounded border px-2 py-1 ${surfaceControl}`}>
-            <span className="text-[10px] font-mono opacity-60 mr-1">FoV:</span>
+          <div className={`flex items-center rounded border px-1.5 py-1 whitespace-nowrap ${surfaceControl}`}>
+            <span className="text-[10px] opacity-60 mr-1">FoV:</span>
             <select
               value={fovArcmin}
               onChange={(e) => onChangeFov(Number(e.target.value) as 2 | 6 | 15 | 30)}
-              className="bg-transparent text-xs font-mono font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-xs font-semibold focus:outline-none cursor-pointer"
               title="Select angular Field of View (2' to 30')"
             >
               {FOV_OPTIONS.map((opt) => (
@@ -338,37 +339,35 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                   value={opt.fovArcmin}
                   className={isLightMode ? "bg-white text-slate-900" : "bg-[#0B0E14] text-white"}
                 >
-                  {opt.label}
+                  {opt.fovArcmin}'×{opt.fovArcmin}'
                 </option>
               ))}
             </select>
           </div>
 
-          {/* 6-Detector Broadband SNR Co-Add Toggle (Shown in Researcher Mode) */}
-          {userTier === "researcher" && (
-            <button
-              type="button"
-              onClick={onToggleCoaddDetector}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono border transition ${
-                coaddDetector
-                  ? isLightMode
-                    ? "bg-emerald-50 border-emerald-600 text-emerald-800 font-bold"
-                    : "bg-[#162622] border-emerald-500/80 text-emerald-300 font-semibold"
-                  : surfaceControl
-              }`}
-              title="Co-add all 17 spectral channels per SPHEREx detector array (D1-D6) for a 4.1x SNR boost"
-            >
-              <Layers className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{coaddDetector ? "6-Det Co-Add: ON" : "6-Det Co-Add"}</span>
-            </button>
-          )}
+          {/* 6-Detector Broadband SNR Co-Add Toggle (Fixed Width so Row 1 Never Shifts) */}
+          <button
+            type="button"
+            onClick={onToggleCoaddDetector}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${
+              coaddDetector
+                ? isLightMode
+                  ? "bg-emerald-50 border-emerald-600 text-emerald-800 font-bold"
+                  : "bg-[#162622] border-emerald-500/80 text-emerald-300 font-semibold"
+                : surfaceControl
+            }`}
+            title="Co-add all 17 spectral channels per SPHEREx detector array (D1-D6) for a 4.1x SNR boost"
+          >
+            <Layers className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <span>6-Det Co-Add</span>
+          </button>
 
           {/* Multi-Mission Survey Switcher */}
-          <div className={`flex items-center rounded border px-2 py-1 ${surfaceControl}`}>
+          <div className={`flex items-center rounded border px-1.5 py-1 ${surfaceControl}`}>
             <select
               value={aladinSurvey}
               onChange={(e) => onChangeAladinSurvey(e.target.value as AladinSurveyOptionId)}
-              className="bg-transparent text-xs font-mono focus:outline-none cursor-pointer max-w-[165px] truncate"
+              className="bg-transparent text-xs focus:outline-none cursor-pointer max-w-[135px] truncate"
               title="Overlay reference survey in Aladin Lite v3"
             >
               {MULTI_MISSION_SURVEYS.map((srv) => (
@@ -387,7 +386,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           <button
             type="button"
             onClick={onToggleGaiaVectors}
-            className={`px-2 py-1 rounded text-[11px] font-mono border transition ${
+            className={`px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${
               showGaiaVectors
                 ? isLightMode
                   ? "bg-sky-50 border-sky-600 text-sky-800 font-semibold"
@@ -403,10 +402,10 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           <button
             type="button"
             onClick={onOpenNeossatModal}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono border transition ${surfaceControl}`}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${surfaceControl}`}
             title="Open Canadian Space Agency (CSA) NEOSSat CADC Cutouts & Joint NEATM Solver"
           >
-            <Orbit className="w-3.5 h-3.5 text-spherex-amber" />
+            <Orbit className="w-3.5 h-3.5 text-spherex-amber shrink-0" />
             <span>NEOSSat</span>
           </button>
 
@@ -414,10 +413,10 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           <button
             type="button"
             onClick={onOpenVerifyModal}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono border transition ${surfaceControl}`}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${surfaceControl}`}
             title="Run 5-Stage Live Ephemeris & Catalog Cross-Match"
           >
-            <Radar className="w-3.5 h-3.5 text-spherex-cyan" />
+            <Radar className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
             <span>Verify</span>
           </button>
 
@@ -425,13 +424,13 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           <button
             type="button"
             onClick={() => handleCopy("url")}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-mono border transition ${surfaceControl}`}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${surfaceControl}`}
             title="Copy deep-link coordinate URL"
           >
             {copiedType === "url" ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
             ) : (
-              <Copy className="w-3.5 h-3.5" />
+              <Copy className="w-3.5 h-3.5 shrink-0" />
             )}
             <span>{copiedType === "url" ? "Copied" : "URL"}</span>
           </button>
@@ -439,18 +438,18 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           <button
             type="button"
             onClick={() => handleCopy("iframe")}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-mono border transition ${surfaceControl}`}
+            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${surfaceControl}`}
             title="Copy <iframe /> embed code"
           >
             {copiedType === "iframe" ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
             ) : (
-              <Code2 className="w-3.5 h-3.5" />
+              <Code2 className="w-3.5 h-3.5 shrink-0" />
             )}
             <span>{copiedType === "iframe" ? "Copied" : "Embed"}</span>
           </button>
 
-          {/* Dark / Light Theme Changer Icon Button */}
+          {/* Dark / White Theme Changer Icon Button */}
           {onToggleLightMode && (
             <button
               type="button"
@@ -459,7 +458,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
               title={
                 isLightMode
                   ? "Switch to Observatory Dark Theme"
-                  : "Switch to Daylight Lab White Theme"
+                  : "Switch to Daylight White Theme"
               }
             >
               {isLightMode ? (
@@ -480,7 +479,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
       >
         <div className="flex flex-wrap items-center gap-1">
           <span
-            className={`text-[10px] font-mono uppercase tracking-wider font-semibold flex items-center gap-1 mr-1 ${
+            className={`text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1 mr-1 ${
               isLightMode ? "text-slate-500" : "text-slate-400"
             }`}
           >
@@ -495,7 +494,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 key={target.id}
                 type="button"
                 onClick={() => onSelectTarget(target)}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono transition flex items-center gap-1.5 border ${
+                className={`px-2 py-0.5 rounded text-[11px] transition flex items-center gap-1.5 border ${
                   isSelected
                     ? isLightMode
                       ? "bg-slate-900 text-white border-slate-900 font-bold"
@@ -527,7 +526,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 key={target.id}
                 type="button"
                 onClick={() => onSelectTarget(target)}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono transition border ${
+                className={`px-2 py-0.5 rounded text-[11px] transition border ${
                   isSelected
                     ? isLightMode
                       ? "bg-slate-900 text-white border-slate-900 font-bold"
@@ -543,7 +542,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
 
         {/* Active Pointing Telemetry Readout */}
         <div
-          className={`text-[11px] font-mono flex items-center gap-2 ${
+          className={`text-[11px] flex items-center gap-2 ${
             isLightMode ? "text-slate-600" : "text-slate-400"
           }`}
         >

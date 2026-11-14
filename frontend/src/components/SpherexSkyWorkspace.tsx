@@ -460,7 +460,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   );
 
   // UI Theme, User Tier (Explorer vs Researcher) & Bottom Cockpit Dock Tab
-  const [isLightMode, setIsLightMode] = useState<boolean>(false);
+  const [isLightMode, setIsLightMode] = useState<boolean>(true);
   const [userTier, setUserTier] = useState<"explorer" | "researcher">("researcher");
   const [bottomDockTab, setBottomDockTab] = useState<"split" | "spectrum" | "candidates">("split");
 
@@ -1460,8 +1460,8 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         )}
       </main>
 
-      <footer
-        className={`w-full border-t px-4 py-2 text-[11px] font-mono transition-colors ${
+     <footer
+        className={`w-full border-t px-4 py-2 text-[11px] transition-colors ${
           isLightMode
             ? "bg-white border-slate-300 text-slate-600"
             : "bg-[#0B0E14] border-[#1E2433] text-slate-400"
@@ -1469,17 +1469,39 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       >
         <div className="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-bold">SPHEREx × Planet X Discovery Engine</span>
-            <span>•</span>
-            <span>
+            <span className="font-semibold">
               Engineered by{" "}
+              <a
+                href="https://github.com/ilpeiris"
+                target="_blank"
+                rel="noreferrer"
+                className={isLightMode ? "text-slate-900 hover:underline font-bold" : "text-white hover:underline font-bold"}
+              >
+                M.D.Isuru Lakmal Peiris
+              </a>
+            </span>
+            <span className="opacity-40">|</span>
+            <span>
+              LinkedIn:{" "}
               <a
                 href="https://www.linkedin.com/in/ilpeiris"
                 target="_blank"
                 rel="noreferrer"
                 className="text-spherex-cyan hover:underline font-bold"
               >
-                M.D.Isuru Lakmal Peiris (@ilpeiris)
+                @ilpeiris
+              </a>
+            </span>
+            <span className="opacity-40">|</span>
+            <span>
+              X:{" "}
+              <a
+                href="https://x.com/Ilpeiris"
+                target="_blank"
+                rel="noreferrer"
+                className="text-spherex-cyan hover:underline font-bold"
+              >
+                @ilpeiris
               </a>
             </span>
           </div>
@@ -1493,7 +1515,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
             >
               GitHub: ilpeiris/SPHEREx-planetX-discovery-engine
             </a>
-            <span>•</span>
+            <span className="opacity-40">•</span>
             <span>MIT License • 2026 NASA International Space Apps Challenge</span>
           </div>
         </div>
