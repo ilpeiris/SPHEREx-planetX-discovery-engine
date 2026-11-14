@@ -451,13 +451,20 @@ def calibrate_spherex_mef_bytes(
         raw_variance_ujy2 = (variance_mjysr2 * (scale_factor_ujy**2)).astype(np.float32)
 
         # 5. Apply Exact 32/64-Bit FLAGS Bitmask Algebra
-        # Retain 0 (nominal background), BIT_SOURCE (2^21 = 2097152), BIT_FULLSAMPLE (2^12 = 4096),
-        # and BIT_OVERFLOW (2^1 = 2) when NOT accompanied by BIT_SUR_ERROR (2^2 = 4).
+        # Retain nominal background (0), BIT_SOURCE (2^21), BIT_FULLSAMPLE (2^12),
+        # BIT_OUTLIER (2^19, preserved for moving solar system bodies), BIT_HALO /
+        # BIT_SATELLITE_HALO (2^28, 2^29, preserved for companions near bright stars like Eps Indi B),
+        # and BIT_OVERFLOW (2^1) when NOT accompanied by BIT_SUR_ERROR (2^2).
         flags_64 = flags_int32.astype(np.int64)
-        non_benign_bits = flags_64 & (~BENIGN_SCIENCE_BITS)
         fatal_overflow = ((flags_64 & BIT_OVERFLOW) != 0) & ((flags_64 & BIT_SUR_ERROR) != 0)
-        good_pixel_mask = (non_benign_bits == 0) & (~fatal_overflow) & ((flags_64 & FATAL_CORE_MASK) == 0)
+        hard_dead_mask = FATAL_CORE_MASK & ~((1 << 28) | (1 << 29) | (1 << 7))
+        good_pixel_mask = (~fatal_overflow) & ((flags_64 & hard_dead_mask) == 0)
 
+        # Safeguard: if >95% of cutout pixels were flagged, only mask strictly dead/missing pixels
+        if int(np.sum(good_pixel_mask)) < max(16, int(0.05 * good_pixel_mask.size)):
+            strictly_dead = (1 << 2) | (1 << 6) | (1 << 9) | (1 << 10) | (1 << 11)
+            good_pixel_mask = (flags_64 & strictly_dead) == 0
+            
         nan_mask = np.where(good_pixel_mask, 1.0, np.nan).astype(np.float32)
         flux_ujy = (raw_flux_ujy * nan_mask).astype(np.float32)
         flux_mjy = (flux_ujy * 1e-3).astype(np.float32)

@@ -1,0 +1,622 @@
+PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\cache> python extract_structure.py
+cache/
+├── r2_staging/
+│   ├── cubes/
+│   │   ├── ch060_ra113.6208_dec23.7847_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch060_ra162.2955_dec-53.3169_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch060_ra331.0442_dec-56.7828_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch060_ra331.0963_dec-56.8005_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch060_ra344.6562_dec58.7708_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch063_ra142.4673_dec20.0186_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch064_ra150.7818_dec3.3502_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch064_ra269.4463_dec4.7675_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch064_ra269.4521_dec4.6934_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch064_ra270.0000_dec66.5607_s256_fov15_coadd0_narrowband.bin
+│   │   ├── ch064_ra278.2907_dec67.8624_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch064_ra306.0708_dec-23.7067_s256_fov15_coadd0_narrowband.bin
+│   │   ├── ch064_ra58.8474_dec11.5621_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch064_ra72.0001_dec-71.3629_s256_fov15_coadd0_narrowband.bin
+│   │   ├── ch064_ra76.9561_dec30.4013_s256_fov2_coadd0_narrowband.bin
+│   │   ├── ch074_ra133.7599_dec-7.2423_s256_fov6_coadd0_d4_minus_d2.bin
+│   │   ├── ch074_ra133.7599_dec-7.2423_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch074_ra133.7951_dec-7.2451_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch081_ra170.1887_dec4.1001_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch081_ra185.7955_dec-61.8313_s256_fov6_coadd0_narrowband.bin
+│   │   ├── ch081_ra246.3667_dec-16.7420_s256_fov6_coadd0_narrowband.bin
+│   │   └── ch081_ra248.1683_dec66.7542_s256_fov2_coadd0_narrowband.bin
+│   ├── exposure_index/
+│   │   ├── channel=1/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=10/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=100/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=101/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=102/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=11/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=12/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=13/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=14/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=15/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=16/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=17/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=18/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=19/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=2/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=20/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=21/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=22/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=23/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=24/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=25/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=26/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=27/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=28/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=29/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=3/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=30/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=31/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=32/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=33/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=34/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=35/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=36/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=37/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=38/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=39/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=4/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=40/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=41/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=42/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=43/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=44/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=45/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=46/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=47/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=48/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=49/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=5/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=50/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=51/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=52/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=53/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=54/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=55/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=56/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=57/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=58/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=59/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=6/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=60/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=61/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=62/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=63/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=64/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=65/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=66/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=67/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=68/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=69/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=7/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=70/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=71/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=72/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=73/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=74/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=75/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=76/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=77/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=78/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=79/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=8/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=80/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=81/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=82/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=83/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=84/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=85/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=86/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=87/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=88/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=89/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=9/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=90/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=91/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=92/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=93/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=94/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=95/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=96/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=97/
+│   │   │   └── data_0.parquet
+│   │   ├── channel=98/
+│   │   │   └── data_0.parquet
+│   │   └── channel=99/
+│   │       └── data_0.parquet
+│   ├── forced_photometry/
+│   │   ├── hpx=1197/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=1443/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=1563/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=2295/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=2691/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=2692/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=2871/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=3034/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=3253/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=3422/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=3721/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=4941/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=4994/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=5407/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=5431/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=5597/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=6134/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=6627/
+│   │   │   └── data_0.parquet
+│   │   ├── hpx=6628/
+│   │   │   └── data_0.parquet
+│   │   └── hpx=6922/
+│   │       └── data_0.parquet
+│   └── zarr/
+│       ├── asteroid_171_ophelia.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── barnards_star.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── comet_3i_atlas_post.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── comet_3i_atlas_pre.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── cosmos_sdt_65.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── epsilon_indi_b.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── fuor_wtp16aakapb.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── luhman_16ab.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── neossat_apophis_bennu.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── nep_spurious_persist.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── pluto_makemake_tno.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── quasar_wise_j0929.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── r_draconis.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── rw_aurigae.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── spherex_nep_deep.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── spherex_sdf_deep.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       ├── suda_benchmarks.zarr/
+│       │   ├── flag_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── flux_cube/
+│       │   │   ├── .zarray
+│       │   │   ├── 0.0.0
+│       │   │   ├── 1.0.0
+│       │   │   ├── 2.0.0
+│       │   │   ├── 3.0.0
+│       │   │   ├── 4.0.0
+│       │   │   └── 5.0.0
+│       │   ├── .zattrs
+│       │   └── .zgroup
+│       └── wise_0855.zarr/
+│           ├── flag_cube/
+│           │   ├── .zarray
+│           │   ├── 0.0.0
+│           │   ├── 1.0.0
+│           │   ├── 2.0.0
+│           │   ├── 3.0.0
+│           │   ├── 4.0.0
+│           │   └── 5.0.0
+│           ├── flux_cube/
+│           │   ├── .zarray
+│           │   ├── 0.0.0
+│           │   ├── 1.0.0
+│           │   ├── 2.0.0
+│           │   ├── 3.0.0
+│           │   ├── 4.0.0
+│           │   └── 5.0.0
+│           ├── .zattrs
+│           └── .zgroup
+├── sapm/
+│   ├── solid_angle_pixel_map_D1_spx_cal-sapm-v2-2025-164.fits
+│   ├── solid_angle_pixel_map_D2_spx_cal-sapm-v2-2025-164.fits
+│   ├── solid_angle_pixel_map_D3_spx_cal-sapm-v2-2025-164.fits
+│   ├── solid_angle_pixel_map_D4_spx_cal-sapm-v2-2025-164.fits
+│   ├── solid_angle_pixel_map_D5_spx_cal-sapm-v2-2025-164.fits
+│   └── solid_angle_pixel_map_D6_spx_cal-sapm-v2-2025-164.fits

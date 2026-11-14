@@ -939,18 +939,36 @@ async def get_source_102band_sed(
                     dec_deg=float(dec),
                     apply_quality_filter=bool(apply_quality_filter),
                 )
-                # Anchor each detector band (D1..D6) and MJD to the real NASA IRSA DuckDB measurements
+                # Anchor each detector band (D1..D6), flux, and MJD to the real NASA IRSA DuckDB measurements
                 real_mjds_by_ep: Dict[int, float] = {}
+                real_by_ep_ch: Dict[Tuple[int, int], Dict[str, Any]] = {}
+
                 for r in recs:
                     ep_i = int(r.get("epoch_id", 1))
+                    g_ch = int(r.get("global_channel", 0))
                     mjd_v = float(r.get("mjd", 60900.0))
+                    flx_v = float(r.get("flux_ujy", 0.0))
                     if math.isfinite(mjd_v) and mjd_v > 58000:
                         real_mjds_by_ep[ep_i] = mjd_v
+                    if 1 <= g_ch <= 102 and math.isfinite(flx_v) and flx_v > 0:
+                        real_by_ep_ch[(ep_i, g_ch)] = r
 
                 for pt in full_102["measurements"]:
                     ep_i = int(pt.get("epoch_id", 1))
+                    g_ch = int(pt.get("global_channel", 0))
                     if ep_i in real_mjds_by_ep:
                         pt["mjd"] = real_mjds_by_ep[ep_i]
+                    exact = real_by_ep_ch.get((ep_i, g_ch)) or real_by_ep_ch.get((1, g_ch))
+                    if exact is not None:
+                        real_f = abs(float(exact["flux_ujy"]))
+                        var_v = max(1e-4, float(exact.get("variance_ujy2", (0.04 * real_f) ** 2)))
+                        pt["flux_ujy"] = float(round(real_f, 3))
+                        pt["flux_err_ujy"] = float(round(math.sqrt(var_v), 3))
+                        pt["variance_ujy2"] = float(round(var_v, 5))
+                        pt["fit_ql"] = float(round(float(exact.get("fit_ql", 1.0)), 3))
+                        pt["flags"] = int(exact.get("flags", 0))
+
+                full_102["molecular_indices"] = compute_102band_molecular_indices(full_102["measurements"])
 
                 golden = _find_nearest_golden_target(float(ra), float(dec))
                 if extended_coma or (golden and golden.get("target_type") == "EXTENDED_COMET"):

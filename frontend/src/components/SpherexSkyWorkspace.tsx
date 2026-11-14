@@ -512,9 +512,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   const aladinContainerRef = useRef<HTMLDivElement | null>(null);
   const aladinInstanceRef = useRef<any>(null);
   const footprintOverlayRef = useRef<any>(null);
-  const [aladinSurvey, setAladinSurvey] = useState<AladinSurveyOptionId>(
-    "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1" as AladinSurveyOptionId
-  );
+  const [aladinSurvey, setAladinSurvey] = useState<AladinSurveyOptionId>("P/allWISE/color");
   const [showGaiaVectors, setShowGaiaVectors] = useState<boolean>(true);
   const [aladinReady, setAladinReady] = useState<boolean>(false);
 

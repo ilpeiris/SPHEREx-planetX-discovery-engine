@@ -198,7 +198,9 @@ def warp_frame_to_target_wcs(
     # Replace NaNs with 0 prior to polygon intersection while tracking valid mask
     flux_filled = np.nan_to_num(clean_flux, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float64)
     zodi_filled = np.nan_to_num(zodi_ujy, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float64)
-    var_filled = np.nan_to_num(var_ujy2, nan=float(np.nanmedian(var_ujy2) or 1.0)).astype(np.float64)
+    finite_vars = var_ujy2[np.isfinite(var_ujy2) & (var_ujy2 > 0)]
+    fallback_var = float(np.median(finite_vars)) if finite_vars.size > 0 else 1.0
+    var_filled = np.nan_to_num(var_ujy2, nan=fallback_var, posinf=fallback_var, neginf=1.0).astype(np.float64)
     bad_mask_float = (~good_mask).astype(np.float64)
 
     ny_out, nx_out = int(shape_out[0]), int(shape_out[1])
@@ -283,9 +285,9 @@ def warp_frame_to_target_wcs(
     ).astype(np.float32)
     reproj_zodi_clean = (np.nan_to_num(reproj_zodi, nan=0.0) * area_scale).astype(np.float32)
     reproj_var_clean = np.where(
-        reproj_bad_bool | (reproj_var <= 0),
-        float(np.nanmedian(var_filled) or 1.0) * (area_scale**2),
-        np.nan_to_num(reproj_var, nan=1.0) * (area_scale**2),
+        reproj_bad_bool | (~np.isfinite(reproj_var)) | (reproj_var <= 0),
+        fallback_var * (area_scale**2),
+        np.nan_to_num(reproj_var, nan=fallback_var) * (area_scale**2),
     ).astype(np.float32)
     inv_var_weights = np.where(reproj_bad_bool, 0.0, 1.0 / np.maximum(reproj_var_clean, 1e-10)).astype(np.float32)
 

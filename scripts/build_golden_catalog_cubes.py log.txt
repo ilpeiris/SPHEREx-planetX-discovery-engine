@@ -162,7 +162,7 @@ C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-e
 
 
 
-
+Later 
 
 
 
@@ -182,4 +182,34 @@ C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-e
 C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine\backend\app\wcs_reproject.py:287: RuntimeWarning: All-NaN slice encountered
   float(np.nanmedian(var_filled) or 1.0) * (area_scale**2),
 2026-11-14 10:12:07,591 | INFO    | Successfully generated 2 binary cutout cubes in backend\cache\r2_staging\cubes
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>
+
+
+
+Later
+(.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine> python -c "import sys; from pathlib import Path; sys.path.insert(0, 'backend'); sys.path.insert(0, 'scripts'); import app.main as m; m.GOLDEN_TARGETS_CATALOG[:] = [t for t in m.GOLDEN_TARGETS_CATALOG if t['id'] in ('epsilon_indi_b', 'asteroid_171_ophelia')]; from build_golden_catalog_cubes import build_all_golden_target_cubes; build_all_golden_target_cubes(Path('backend/cache/r2_staging'), size_px=256, live_irsa=True)"
+2026-11-14 13:28:37,087 | INFO    | [01/02] Building 6-slice cube for Epsilon Indi Ba/Bb (T1 + T6 Binary) (RA=331.09627, Dec=-56.80052, Ch=60, FoV=6.0')
+2026-11-14 13:28:50,759 | INFO    |   -> Matched 4 IRSA exposures for epsilon_indi_b; downloading 4 multi-epoch cutouts...
+2026-11-14 13:28:51,479 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1/6 for level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits — waiting 2s...
+2026-11-14 13:28:55,786 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W17_4B_0468_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 13:29:02,275 | INFO    |     [Cutout 1/4] Downloaded 3.80 MB (level2_2025W17_4B_0077_2D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 13:29:03,483 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W17_4B_0077_3D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 13:29:07,511 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W17_4B_0468_1D4_spx_l2b-v27-2026-196.fits)
+2026-11-14 13:29:07,511 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for epsilon_indi_b; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 13:29:13,367 | INFO    | [02/02] Building 6-slice cube for 171 Ophelia, 1 Ceres & 4 Vesta (SPHEREx + NEOSSat) (RA=113.62083, Dec=23.78472, Ch=60, FoV=6.0')
+2026-11-14 13:29:37,805 | INFO    |   -> Matched 21 IRSA exposures for asteroid_171_ophelia; downloading 4 multi-epoch cutouts...
+2026-11-14 13:29:38,535 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 1/6 for level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits — waiting 2s...
+2026-11-14 13:29:38,560 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 1/6 for level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits — waiting 2s...
+2026-11-14 13:29:41,321 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 2/6 for level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits — waiting 4s...
+2026-11-14 13:29:41,361 | WARNING |     [Cutout 1/4] HTTP 503 on attempt 2/6 for level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits — waiting 4s...
+2026-11-14 13:29:46,178 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 3/6 for level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits — waiting 6s...
+2026-11-14 13:29:52,941 | WARNING |     [Cutout 2/4] HTTP 503 on attempt 4/6 for level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits — waiting 8s...
+2026-11-14 13:29:58,285 | INFO    |     [Cutout 1/4] Downloaded 3.81 MB (level2_2025W40_2B_0744_1D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 13:29:59,049 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 1/6 for level2_2025W40_2B_0744_2D4_spx_l2b-v27-2026-241.fits — waiting 2s...
+2026-11-14 13:30:01,730 | WARNING |     [Cutout 3/4] HTTP 503 on attempt 2/6 for level2_2025W40_2B_0744_2D4_spx_l2b-v27-2026-241.fits — waiting 4s...
+2026-11-14 13:30:13,146 | INFO    |     [Cutout 2/4] Downloaded 3.81 MB (level2_2025W42_1A_0736_1D4_spx_l2b-v27-2026-243.fits)
+2026-11-14 13:30:25,951 | INFO    |     [Cutout 3/4] Downloaded 3.81 MB (level2_2025W40_2B_0744_2D4_spx_l2b-v27-2026-241.fits)
+2026-11-14 13:30:26,650 | INFO    |     [Cutout 4/4] Downloaded 3.81 MB (level2_2025W41_2B_0042_1D4_spx_l2b-v27-2026-242.fits)
+2026-11-14 13:30:26,652 | INFO    |   -> Downloaded 4 REAL NASA IRSA Level-2 FITS cutouts for asteroid_171_ophelia; running ZODI + SAPM + WCS + ZOGY...
+2026-11-14 13:30:34,249 | INFO    | Successfully generated 3 binary cutout cubes in backend\cache\r2_staging\cubes
 (.venv) PS C:\Users\ilpeiris\Desktop\Planet X and SPHEREx\build\spherex-planetx-discovery-engine>
