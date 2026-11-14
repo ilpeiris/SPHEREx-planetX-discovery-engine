@@ -32,11 +32,11 @@ import {
 } from "../lib/goldenCatalog";
 
 export type AladinSurveyOptionId =
-  | "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1"
-  | "https://alasky.cds.unistra.fr/SPHEREx/QR2/D1"
-  | "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g"
-  | "https://alasky.cds.unistra.fr/DSS/DSSColor"
-  | "https://alasky.cds.unistra.fr/2MASS/Color";
+  | "P/allWISE/color"
+  | "P/PanSTARRS/DR1/color-z-zg-g"
+  | "P/DSS2/color"
+  | "P/2MASS/color"
+  | "CDS/P/SPHEREx/QR2/D1";
 
 export const MULTI_MISSION_SURVEYS: Array<{
   id: AladinSurveyOptionId;
@@ -44,29 +44,29 @@ export const MULTI_MISSION_SURVEYS: Array<{
   missionBadge: string;
 }> = [
   {
-    id: "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1",
+    id: "P/allWISE/color",
     label: "AllWISE / NEOWISE Mid-IR (3.4 & 4.6 µm)",
     missionBadge: "WISE IR",
   },
   {
-    id: "https://alasky.cds.unistra.fr/SPHEREx/QR2/D1",
-    label: "SPHEREx QR2 Band 1 HiPS (0.75–1.09 µm)",
-    missionBadge: "SPHEREx HiPS",
-  },
-  {
-    id: "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g",
+    id: "P/PanSTARRS/DR1/color-z-zg-g",
     label: "Pan-STARRS DR1 Optical (Disambiguation)",
     missionBadge: "Optical Check",
   },
   {
-    id: "https://alasky.cds.unistra.fr/DSS/DSSColor",
+    id: "P/DSS2/color",
     label: "DSS2 Optical Reference Survey",
     missionBadge: "DSS2 Optical",
   },
   {
-    id: "https://alasky.cds.unistra.fr/2MASS/Color",
+    id: "P/2MASS/color",
     label: "2MASS Near-IR (J, H, Ks)",
     missionBadge: "2MASS NIR",
+  },
+  {
+    id: "CDS/P/SPHEREx/QR2/D1",
+    label: "SPHEREx QR2 Band 1 HiPS (0.75–1.09 µm)",
+    missionBadge: "SPHEREx HiPS",
   },
 ];
 

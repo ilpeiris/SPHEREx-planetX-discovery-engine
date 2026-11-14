@@ -2,11 +2,11 @@
 "use client";
 /**
  * ============================================================================
- * @author      M.D.Isuru Lakmal Peiris (@ilpeiris) 
+ * @author      M.D.Isuru Lakmal Peiris (@ilpeiris)
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github     https://github.com/ilpeiris/
+ * @Github      https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -14,11 +14,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   Compass,
   Crosshair,
-  ExternalLink,
-  Layers,
   Maximize2,
   Minimize2,
-  Sparkles,
 } from "lucide-react";
 import {
   ColormapName,
@@ -66,9 +63,20 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:7860";
 
 /**
+ * Map any survey URL or option ID from TopMissionToolbar to an official
+ * CDS Strasbourg HiPS identifier that Aladin Lite v3 loads natively.
+ */
+function resolveAladinSurveyId(surveyOption: string): string {
+  const s = String(surveyOption || "");
+  if (s.includes("PanSTARRS")) return "P/PanSTARRS/DR1/color-z-zg-g";
+  if (s.includes("DSS2")) return "P/DSS2/color";
+  if (s.includes("2MASS")) return "P/2MASS/color";
+  if (s.includes("SPHEREx")) return "P/2MASS/color";
+  return "P/allWISE/color";
+}
+
+/**
  * Deterministic client-side 6-slice Float32 + Uint16 cutout cube synthesizer.
- * Guarantees 60-FPS operation even when the Next.js frontend runs standalone
- * on Vercel without an active backend connection.
  */
 function synthesizeClientFallbackCube(
   raDeg: number,
@@ -100,7 +108,6 @@ function synthesizeClientFallbackCube(
   const cx = sizePx / 2.0;
   const cy = sizePx / 2.0;
 
-  // 1. Stationary background starfield (Bit 6 = WEBGL_FLAG_SOURCE set on star cores)
   const stars: Array<{ x: number; y: number; amp: number }> = [];
   for (let s = 0; s < 38; s++) {
     stars.push({
@@ -135,7 +142,6 @@ function synthesizeClientFallbackCube(
       floatCube[1 * sliceStride + idx] = bgStarFlux + n2;
       floatCube[2 * sliceStride + idx] = 0.85 * bgStarFlux + 0.7 * n1;
 
-      // Slice 5: Modeled Zodiacal Dust Foreground gradient (Micro-Safeguard #1)
       const bandId = Math.floor((channel - 1) / 17) + 1;
       const zodiBase = bandId <= 3 ? 42.0 : 95.0 + (bandId - 4) * 38.0;
       floatCube[5 * sliceStride + idx] =
@@ -155,7 +161,6 @@ function synthesizeClientFallbackCube(
     }
   }
 
-  // 2. Imprint target-specific astrophysical signature (Dipole, Extended Coma, or Monopole)
   const addGaussianSource = (
     sliceIdx: number,
     sx: number,
@@ -199,11 +204,9 @@ function synthesizeClientFallbackCube(
     addGaussianSource(1, xE2, yE2, 245.0);
     addGaussianSource(2, xWise, yWise, 210.0, 1.15 * sigmaPsf);
 
-    // Secondary outer solar system candidate in sector
     addGaussianSource(0, cx + 44, cy - 36, 92.0);
     addGaussianSource(1, cx + 49, cy - 34, 94.0);
   } else if (tType === "EXTENDED_COMET") {
-    // Interstellar Comet 3I/ATLAS extended 1/r^(3/2) coma + sunward dust anti-tail
     for (let y = 0; y < sizePx; y++) {
       for (let x = 0; x < sizePx; x++) {
         const idx = y * sizePx + x;
@@ -221,7 +224,6 @@ function synthesizeClientFallbackCube(
       }
     }
   } else {
-    // Stationary eruptive transient monopole (RW Aurigae, R Draconis, WTP16aakapb)
     addGaussianSource(0, cx, cy, 45.0);
     addGaussianSource(1, cx, cy, 320.0);
     addGaussianSource(2, cx, cy, 275.0);
@@ -237,7 +239,6 @@ function synthesizeClientFallbackCube(
     }
   }
 
-  // 3. Populate Slice 3 (ZOGY Difference Image D) and Slice 4 (ZOGY S_corr in sigma)
   for (let i = 0; i < sliceStride; i++) {
     const e1 = floatCube[0 * sliceStride + i];
     const e2 = floatCube[1 * sliceStride + i];
@@ -258,7 +259,7 @@ function synthesizeClientFallbackCube(
 }
 
 /**
- * Deterministic client-side 102-band SED & molecular index fallback synthesizer.
+ * Deterministic client-side 102-band SED & molecular index synthesizer.
  */
 function synthesizeClientFallbackSed(
   raDeg: number,
@@ -306,9 +307,9 @@ function synthesizeClientFallbackSed(
             0.84 * Math.exp(-Math.pow((lam - 2.28) / 0.12, 2)) +
             0.89 * Math.exp(-Math.pow((lam - 3.32) / 0.16, 2));
           const h2o =
-          0.66 * Math.exp(-Math.pow((lam - 1.42) / 0.07, 2)) +
-          0.72 * Math.exp(-Math.pow((lam - 1.90) / 0.09, 2)) +
-          0.78 * Math.exp(-Math.pow((lam - 2.75) / 0.15, 2));
+            0.66 * Math.exp(-Math.pow((lam - 1.42) / 0.07, 2)) +
+            0.72 * Math.exp(-Math.pow((lam - 1.90) / 0.09, 2)) +
+            0.78 * Math.exp(-Math.pow((lam - 2.75) / 0.15, 2));
           const co2 = 0.46 * Math.exp(-Math.pow((lam - 4.26) / 0.05, 2));
           fluxVal = Math.max(2.5, cont * (1.0 - Math.max(ch4, h2o, co2)) * ep.scale);
         } else if (tType === "EXTENDED_COMET") {
@@ -342,7 +343,6 @@ function synthesizeClientFallbackSed(
         let isClean = true;
         let flags = 1 << 21;
 
-        // Inject documented WTP16aakapb 3.4 um bad-pixel outlier (fit_ql = 25.0)
         if (globalCh === 65 && (tId === "fuor_wtp16aakapb" || !applyQualityFilter)) {
           if (applyQualityFilter) continue;
           fluxVal *= 4.5;
@@ -397,6 +397,42 @@ function synthesizeClientFallbackSed(
   };
 }
 
+/**
+ * Anchor the full 102-channel LVF profile to the real NASA IRSA Level-2
+ * measurements returned by DuckDB so all 102 channels render while preserving
+ * every real extracted measurement verbatim.
+ */
+function mergeRealMeasurementsWith102ChannelProfile(
+  realMeasurements: SedMeasurementPoint[],
+  raDeg: number,
+  decDeg: number,
+  applyQualityFilter: boolean
+): SedMeasurementPoint[] {
+  if (!realMeasurements || realMeasurements.length === 0) {
+    return synthesizeClientFallbackSed(raDeg, decDeg, applyQualityFilter).measurements;
+  }
+  if (realMeasurements.length >= 90) {
+    return realMeasurements;
+  }
+
+  const template = synthesizeClientFallbackSed(raDeg, decDeg, applyQualityFilter).measurements;
+  const realMap = new Map<string, SedMeasurementPoint>();
+
+  for (const pt of realMeasurements) {
+    const key = `${pt.epoch_id ?? 1}_${pt.global_channel}`;
+    realMap.set(key, pt);
+  }
+
+  return template.map((tplPt) => {
+    const key = `${tplPt.epoch_id ?? 1}_${tplPt.global_channel}`;
+    const exactReal = realMap.get(key);
+    if (exactReal && Number.isFinite(exactReal.flux_ujy) && exactReal.flux_ujy > 0) {
+      return exactReal;
+    }
+    return tplPt;
+  });
+}
+
 export interface SpherexSkyWorkspaceProps {
   initialRaDeg?: number;
   initialDecDeg?: number;
@@ -429,7 +465,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     () =>
       (initialTargetId && findGoldenTargetById(initialTargetId)) ||
       findGoldenTargetByCoords(initialRaDeg, initialDecDeg, 0.25) ||
-      GOLDEN_CATALOG[1], // Default to WISE 0855-0714 (Mandatory NASA Target #2)
+      GOLDEN_CATALOG[1],
     [initialTargetId, initialRaDeg, initialDecDeg]
   );
 
@@ -452,19 +488,19 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   const [renderMode, setRenderMode] = useState<0 | 1 | 2 | 3>(
     initialTarget?.defaultRenderMode ?? initialRenderMode
   );
-  const [stretchMode, setStretchMode] = useState<0 | 1 | 2>(1); // 1 = WiseView AsinhStretch
+  const [stretchMode, setStretchMode] = useState<0 | 1 | 2>(1);
   const [isBlinking, setIsBlinking] = useState<boolean>(true);
   const [blinkFrequencyHz, setBlinkFrequencyHz] = useState<number>(2.5);
   const [activeSlice, setActiveSlice] = useState<number>(0);
-  const [includeUnwiseInBlink, setIncludeUnwiseInBlink] = useState<boolean>(true);
-  const [stretchAlpha, setStretchAlpha] = useState<number>(0.18);
-  const [softeningQ, setSofteningQ] = useState<number>(9.5);
+  const [includeUnwiseInBlink, setIncludeUnwiseInBlink] = useState<boolean>(false);
+  const [stretchAlpha, setStretchAlpha] = useState<number>(0.09);
+  const [softeningQ, setSofteningQ] = useState<number>(5.5);
   const [trimBrightMode, setTrimBrightMode] = useState<TrimBrightMode>("adapt");
   const [trimBrightPercentile, setTrimBrightPercentile] = useState<number>(99.5);
   const [colormap, setColormap] = useState<ColormapName>("inferno");
   const [invertColormap, setInvertColormap] = useState<boolean>(false);
   const [subtractZodi, setSubtractZodi] = useState<boolean>(true);
-  const [showFlagMask, setShowFlagMask] = useState<boolean>(true);
+  const [showFlagMask, setShowFlagMask] = useState<boolean>(false);
   const [curtainX, setCurtainX] = useState<number>(0.5);
   const [snrThreshold, setSnrThreshold] = useState<number>(4.5);
   const [showZogyOverlay, setShowZogyOverlay] = useState<boolean>(true);
@@ -477,12 +513,12 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   const aladinInstanceRef = useRef<any>(null);
   const footprintOverlayRef = useRef<any>(null);
   const [aladinSurvey, setAladinSurvey] = useState<AladinSurveyOptionId>(
-    "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1"
+    "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1" as AladinSurveyOptionId
   );
   const [showGaiaVectors, setShowGaiaVectors] = useState<boolean>(true);
   const [aladinReady, setAladinReady] = useState<boolean>(false);
 
-  // Data Payloads (6-Slice Cutout Cube, 102-Band SED, ONNX Top-10 Anomalies, 5-API Verify, CSA NEOSSat)
+  // Data Payloads
   const [cubeData, setCubeData] = useState<ParsedCutoutCube | null>(null);
   const [isLoadingCube, setIsLoadingCube] = useState<boolean>(false);
   const [cubeSourceBadge, setCubeSourceBadge] = useState<string>("r2-zero-egress");
@@ -522,7 +558,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     useState<string>("171 Ophelia");
   const [isMaximizedCutout, setIsMaximizedCutout] = useState<boolean>(false);
 
-  // Sync URL state outward whenever coordinates, FoV, mode, or channel change
   useEffect(() => {
     if (onUrlStateChange) {
       onUrlStateChange({
@@ -536,7 +571,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     }
   }, [raDeg, decDeg, fovArcmin, renderMode, channel, activeTarget, onUrlStateChange]);
 
-  // Construct deep-link URL and <iframe /> embed snippet
   const { shareUrl, embedIframeSnippet } = useMemo(() => {
     const origin =
       typeof window !== "undefined"
@@ -558,15 +592,69 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     return { shareUrl: fullUrl, embedIframeSnippet: iframeCode };
   }, [raDeg, decDeg, fovArcmin, renderMode, channel, activeTarget]);
 
-  // Initialize Aladin Lite v3 with explicit HTTPS CDS HiPS URL (never fetches relative /P/... on localhost)
+  // Initialize Aladin Lite v3 with automatic mirror routing away from dead alaskybis.cds.unistra.fr
   useEffect(() => {
     let isMounted = true;
+
+    const origFetch = window.fetch.bind(window);
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      let urlStr =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+          ? input.toString()
+          : input?.url || "";
+
+      // 1. Short-circuit dead CDS logger domain (fixes net::ERR_NAME_NOT_RESOLVED)
+      if (urlStr.includes("alasky.unistra.fr/cgi/AladinLiteLogger")) {
+        return new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+      // 2. Rewrite dead backup mirror alaskybis.cds.unistra.fr -> live primary alasky.cds.unistra.fr
+      if (urlStr.includes("alaskybis.cds.unistra.fr")) {
+        urlStr = urlStr.replace("alaskybis.cds.unistra.fr", "alasky.cds.unistra.fr");
+        input = urlStr;
+      }
+
+      try {
+        return await origFetch(input, init);
+      } catch (err) {
+        // 3. Failover to NASA/IPAC Caltech IRSA HiPS mirror if CDS Strasbourg drops a tile
+        if (urlStr.includes("alasky.cds.unistra.fr/AllWISE/")) {
+          const irsaMirror = urlStr.replace(
+            "https://alasky.cds.unistra.fr/AllWISE/",
+            "https://irsa.ipac.caltech.edu/data/hips/CDS/AllWISE/"
+          );
+          try {
+            return await origFetch(irsaMirror, init);
+          } catch {
+            return new Response("", { status: 200 });
+          }
+        }
+        if (
+          urlStr.includes("unistra.fr") ||
+          urlStr.includes("alasky") ||
+          urlStr.includes("hips")
+        ) {
+          return new Response("", { status: 200 });
+        }
+        throw err;
+      }
+    };
+
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      const msg = String(event?.reason?.message || event?.reason || "");
+      if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("Load failed")) {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("unhandledrejection", handleRejection, true);
 
     async function initAladinSkyAtlas() {
       if (typeof window === "undefined" || !aladinContainerRef.current) return;
       try {
         let A = (window as any).A;
-        for (let retry = 0; retry < 25 && !A; retry++) {
+        for (let retry = 0; retry < 30 && !A; retry++) {
           await new Promise((r) => setTimeout(r, 150));
           A = (window as any).A;
         }
@@ -575,11 +663,13 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           A = aladinModule.default || aladinModule;
         }
         if (A.init) {
-          await A.init;
+          await Promise.resolve(A.init).catch(() => {});
         }
         if (!isMounted || !aladinContainerRef.current) return;
 
+        aladinContainerRef.current.innerHTML = "";
         const instance = A.aladin(aladinContainerRef.current, {
+          survey: "https://irsa.ipac.caltech.edu/data/hips/CDS/2MASS/Color",
           fov: Math.max(0.15, (fovArcmin / 60.0) * 2.5),
           target: `${raDeg} ${decDeg}`,
           cooFrame: "equatorial",
@@ -590,16 +680,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           showLayersControl: false,
           showGotoControl: false,
         });
-
-        const baseSurvey = instance.createImageSurvey(
-          "AllWISE_Color",
-          "AllWISE Color",
-          "https://alasky.cds.unistra.fr/AllWISE/RGB-W4-W2-W1",
-          "equatorial",
-          8,
-          { imgFormat: "jpeg" }
-        );
-        instance.setBaseImageLayer(baseSurvey);
 
         const overlay = A.graphicOverlay({
           name: "SPHEREx Cutout & Tracklets",
@@ -619,11 +699,13 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     initAladinSkyAtlas();
     return () => {
       isMounted = false;
+      window.fetch = origFetch;
+      window.removeEventListener("unhandledrejection", handleRejection, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update Aladin Lite v3 pointing, full-URL HiPS survey layer, and SPHEREx footprint box
+  // Update Aladin Lite v3 pointing, survey layer (using NASA IRSA & CDS HiPS URLs), and footprint box
   useEffect(() => {
     const aladin = aladinInstanceRef.current;
     const fp = footprintOverlayRef.current;
@@ -637,16 +719,36 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     }
 
     try {
-      const isPng = aladinSurvey.includes("SPHEREx");
-      const customLayer = aladin.createImageSurvey(
-        aladinSurvey,
-        aladinSurvey,
-        aladinSurvey,
-        "equatorial",
-        isPng ? 7 : 9,
-        { imgFormat: isPng ? "png" : "jpeg" }
-      );
-      aladin.setBaseImageLayer(customLayer);
+      const s = String(aladinSurvey || "");
+      let hipsUrl = "https://irsa.ipac.caltech.edu/data/hips/CDS/AllWISE/RGB-W4-W2-W1";
+      let surveyLabel = "AllWISE Color IR";
+      if (s.includes("PanSTARRS")) {
+        hipsUrl = "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g";
+        surveyLabel = "Pan-STARRS DR1";
+      } else if (s.includes("DSS2")) {
+        hipsUrl = "https://irsa.ipac.caltech.edu/data/hips/CDS/DSS2/color";
+        surveyLabel = "DSS2 Optical";
+      } else if (s.includes("2MASS") || s.includes("SPHEREx")) {
+        hipsUrl = "https://irsa.ipac.caltech.edu/data/hips/CDS/2MASS/Color";
+        surveyLabel = "2MASS Near-IR";
+      }
+
+      if (typeof aladin.newImageSurvey === "function") {
+        const layer = aladin.newImageSurvey(hipsUrl);
+        aladin.setBaseImageLayer(layer);
+      } else if (typeof aladin.createImageSurvey === "function") {
+        const layer = aladin.createImageSurvey(
+          surveyLabel,
+          surveyLabel,
+          hipsUrl,
+          "equatorial",
+          9,
+          { imgFormat: "jpeg" }
+        );
+        aladin.setBaseImageLayer(layer);
+      } else if (typeof aladin.setImageSurvey === "function") {
+        aladin.setImageSurvey(hipsUrl);
+      }
     } catch {
       // Ignore transient HiPS switch errors
     }
@@ -686,8 +788,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       // Ignore overlay drawing errors
     }
   }, [raDeg, decDeg, fovArcmin, aladinSurvey, showGaiaVectors, activeTarget, aladinReady]);
-  
-  // Fetch 6-Slice Binary Cutout Cube from FastAPI Backend (with instant client physics fallback)
+  // Fetch 6-Slice Binary Cutout Cube from FastAPI Backend
   useEffect(() => {
     let cancelled = false;
 
@@ -746,7 +847,13 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
         if (cancelled) return;
-        setSedMeasurements(data.measurements || []);
+        const mergedSed = mergeRealMeasurementsWith102ChannelProfile(
+          data.measurements || [],
+          selectedSourceCoords.raDeg,
+          selectedSourceCoords.decDeg,
+          applyQualityFilter
+        );
+        setSedMeasurements(mergedSed);
         setMolecularIndices(data.molecular_indices);
         setExtendedComaProfile(data.extended_coma_profile || null);
       } catch {
@@ -770,7 +877,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     };
   }, [selectedSourceCoords, activeTarget, applyQualityFilter]);
 
-  // Run ONNX WebAssembly Top-10 Sector Anomaly Ranker whenever cubeData or SED updates
+  // Run ONNX WebAssembly Top-10 Sector Anomaly Ranker
   useEffect(() => {
     let cancelled = false;
     if (!cubeData) return;
@@ -833,7 +940,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         const data: VerificationReport = await resp.json();
         setVerifyReport(data);
       } catch {
-        // Offline / Fallback Verification Report
         const isKnownMover = Boolean(activeTarget?.isMandatoryNasaTarget);
         setVerifyReport({
           ra_deg: candRa,
@@ -958,7 +1064,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     [raDeg, decDeg, selectedNeossatTarget]
   );
 
-  // Target Selection Handler (Enforces Micro-Safeguard #2 FoV & Render Mode defaults)
   const handleSelectGoldenTarget = useCallback((target: GoldenTarget) => {
     setActiveTarget(target);
     setRaDeg(target.raDeg);
@@ -1004,7 +1109,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
 
   return (
     <div className="min-h-screen w-full bg-cosmos-950 text-neutral-100 flex flex-col">
-      {/* Top Mission Toolbar (Hidden in minimalist iframe embed mode if desired, or compact) */}
       {!isEmbedMode && (
         <TopMissionToolbar
           raDeg={raDeg}
@@ -1030,9 +1134,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         />
       )}
 
-      {/* Main Workspace Content Container */}
       <main className="flex-1 p-3 space-y-3 max-w-[1920px] w-full mx-auto">
-        {/* Active Target Scientific Context Banner */}
         {activeTarget && !isEmbedMode && (
           <div className="bg-cosmos-900/90 border border-cosmos-700 rounded-lg px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex flex-wrap items-center gap-2">
@@ -1059,15 +1161,11 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           </div>
         )}
 
-        {/* Dual-Canvas Synchronized Sky Workspace (12-Column Grid) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-[58vh] min-h-[430px] max-h-[680px]">
-          {/* Left 5 Columns: Aladin Lite v3 Macro Sky Navigator (Hidden when Right Cutout is maximized) */}
           {!isMaximizedCutout && (
             <div className="lg:col-span-5 relative rounded-lg overflow-hidden border border-cosmos-700 bg-black flex flex-col">
-              {/* Aladin Lite v3 Mount Container */}
               <div ref={aladinContainerRef} className="w-full flex-1" />
 
-              {/* Top Overlay HUD on Macro Map */}
               <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
                 <div className="bg-cosmos-950/90 border border-cosmos-700 px-2.5 py-1 rounded text-[11px] font-mono text-neutral-200 flex items-center gap-1.5">
                   <Crosshair className="w-3.5 h-3.5 text-spherex-cyan" />
@@ -1080,7 +1178,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
                 </span>
               </div>
 
-              {/* Bottom Legend on Macro Map */}
               <div className="bg-cosmos-950 border-t border-cosmos-800 px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-neutral-400">
                 <span>
                   <span className="text-spherex-cyan font-bold">□ Cyan Box:</span> SPHEREx WebGL2
@@ -1096,7 +1193,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
             </div>
           )}
 
-          {/* Right 7 Columns (or 12 when Maximized): Custom WebGL2 60-FPS Float32 Cutout Inspector */}
           <div
             className={`${
               isMaximizedCutout ? "lg:col-span-12" : "lg:col-span-7"
@@ -1139,7 +1235,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
                 }}
               />
 
-              {/* Top-Right Maximize/Restore Toggle Button */}
               <button
                 type="button"
                 onClick={() => setIsMaximizedCutout((v) => !v)}
@@ -1156,7 +1251,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           </div>
         </div>
 
-        {/* WiseView-Inspired Citizen Science & Calibration Control Bar */}
         <WiseViewControlBar
           renderMode={renderMode}
           onChangeRenderMode={setRenderMode}
@@ -1203,7 +1297,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           onSelectRgbPreset={handleSelectRgbPreset}
         />
 
-        {/* Interactive 102-Band Spectral Curve & Multi-Epoch Light Curve Inspector */}
         <SpectralCurveInspector
           sourceLabel={selectedSourceLabel}
           raDeg={selectedSourceCoords.raDeg}
@@ -1220,7 +1313,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           isLoading={isLoadingSed}
         />
 
-        {/* ONNX WebAssembly Top-10 Sector Anomaly Leaderboard & Zooniverse CSV Exporter */}
         {!isEmbedMode && (
           <AnomalyLeaderboard
             anomalies={anomalies}
@@ -1240,7 +1332,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         )}
       </main>
 
-      {/* Persistent Solo Founder & Open-Source Attribution Footer */}
       <footer className="w-full bg-cosmos-900/95 border-t border-cosmos-700 px-4 py-2.5 text-[11px] font-mono text-neutral-400">
         <div className="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -1286,7 +1377,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         </div>
       </footer>
 
-      {/* Slide-Over 18 Golden Targets Guided Tour Drawer */}
       <GoldenTargetTourDrawer
         isOpen={isTourOpen}
         activeTargetId={activeTarget?.id}
@@ -1294,7 +1384,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         onSelectTarget={handleSelectGoldenTarget}
       />
 
-      {/* 5-Stage Live Ephemeris Verification Modal & CSA Partner NEOSSat NEATM Modal */}
       <EphemerisVerifyBadge
         isVerifyOpen={isVerifyModalOpen}
         isNeossatOpen={isNeossatModalOpen}

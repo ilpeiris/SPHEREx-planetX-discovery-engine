@@ -224,19 +224,23 @@ export function computeCubeSliceZLimits(
       0.22
     );
 
-    let effectiveZ1 = baseStats.median - 1.5 * baseStats.sigma;
+// Clip background sky noise below (median + 2.1 * sigma) to pure black (#000000)
+    // so only real >2.1-sigma astronomical sources illuminate the viewport
+    let effectiveZ1 =
+      s === 3 || s === 4
+        ? baseStats.median + 1.25 * baseStats.sigma
+        : baseStats.median + 2.1 * baseStats.sigma;
     let effectiveZ2 = baseStats.z2;
 
     if (trimBrightMode === "adapt") {
-      effectiveZ1 = Math.min(baseStats.z1, baseStats.median - 1.25 * baseStats.sigma);
       effectiveZ2 = Math.max(
-        effectiveZ1 + 4.0 * baseStats.sigma,
-        0.65 * baseStats.p995 + 0.35 * baseStats.z2
+        effectiveZ1 + 6.0 * baseStats.sigma,
+        0.75 * baseStats.p995 + 0.25 * baseStats.z2
       );
     } else if (trimBrightMode === "percent") {
-      const pctFactor = Math.max(0.1, Math.min(2.5, (trimBrightPercentile - 85.0) / 14.5));
+      const pctFactor = Math.max(0.15, Math.min(2.5, (trimBrightPercentile - 85.0) / 14.5));
       effectiveZ2 = Math.max(
-        effectiveZ1 + 2.0 * baseStats.sigma,
+        effectiveZ1 + 3.0 * baseStats.sigma,
         baseStats.median + pctFactor * (baseStats.p995 - baseStats.median)
       );
     } else if (trimBrightMode === "fixed") {
