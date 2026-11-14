@@ -12,7 +12,10 @@
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Activity,
+  Columns,
   Compass,
+  Cpu,
   Crosshair,
   Maximize2,
   Minimize2,
@@ -61,19 +64,6 @@ import { WiseViewControlBar } from "./WiseViewControlBar";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:7860";
-
-/**
- * Map any survey URL or option ID from TopMissionToolbar to an official
- * CDS Strasbourg HiPS identifier that Aladin Lite v3 loads natively.
- */
-function resolveAladinSurveyId(surveyOption: string): string {
-  const s = String(surveyOption || "");
-  if (s.includes("PanSTARRS")) return "P/PanSTARRS/DR1/color-z-zg-g";
-  if (s.includes("DSS2")) return "P/DSS2/color";
-  if (s.includes("2MASS")) return "P/2MASS/color";
-  if (s.includes("SPHEREx")) return "P/2MASS/color";
-  return "P/allWISE/color";
-}
 
 /**
  * Deterministic client-side 6-slice Float32 + Uint16 cutout cube synthesizer.
@@ -469,6 +459,11 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     [initialTargetId, initialRaDeg, initialDecDeg]
   );
 
+  // UI Theme, User Tier (Explorer vs Researcher) & Bottom Cockpit Dock Tab
+  const [isLightMode, setIsLightMode] = useState<boolean>(false);
+  const [userTier, setUserTier] = useState<"explorer" | "researcher">("researcher");
+  const [bottomDockTab, setBottomDockTab] = useState<"split" | "spectrum" | "candidates">("split");
+
   // Core Astronomical Viewport State
   const [raDeg, setRaDeg] = useState<number>(initialTarget?.raDeg ?? initialRaDeg);
   const [decDeg, setDecDeg] = useState<number>(initialTarget?.decDeg ?? initialDecDeg);
@@ -519,7 +514,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
   // Data Payloads
   const [cubeData, setCubeData] = useState<ParsedCutoutCube | null>(null);
   const [isLoadingCube, setIsLoadingCube] = useState<boolean>(false);
-  const [cubeSourceBadge, setCubeSourceBadge] = useState<string>("r2-zero-egress");
+  const [cubeSourceBadge, setCubeSourceBadge] = useState<string>("local-cache");
 
   const [sedMeasurements, setSedMeasurements] = useState<SedMeasurementPoint[]>([]);
   const [molecularIndices, setMolecularIndices] = useState<
@@ -573,7 +568,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     const origin =
       typeof window !== "undefined"
         ? window.location.origin
-        : "https://spherex-planetx.vercel.app";
+        : "https://spherex.inifiga.com";
     const qs = new URLSearchParams({
       ra: raDeg.toFixed(5),
       dec: decDeg.toFixed(5),
@@ -590,7 +585,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     return { shareUrl: fullUrl, embedIframeSnippet: iframeCode };
   }, [raDeg, decDeg, fovArcmin, renderMode, channel, activeTarget]);
 
-  // Initialize Aladin Lite v3 with automatic mirror routing away from dead alaskybis.cds.unistra.fr
+  // Initialize Aladin Lite v3 with automatic mirror routing
   useEffect(() => {
     let isMounted = true;
 
@@ -603,12 +598,10 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           ? input.toString()
           : input?.url || "";
 
-      // 1. Short-circuit dead CDS logger domain (fixes net::ERR_NAME_NOT_RESOLVED)
       if (urlStr.includes("alasky.unistra.fr/cgi/AladinLiteLogger")) {
         return new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
       }
 
-      // 2. Rewrite dead backup mirror alaskybis.cds.unistra.fr -> live primary alasky.cds.unistra.fr
       if (urlStr.includes("alaskybis.cds.unistra.fr")) {
         urlStr = urlStr.replace("alaskybis.cds.unistra.fr", "alasky.cds.unistra.fr");
         input = urlStr;
@@ -617,7 +610,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       try {
         return await origFetch(input, init);
       } catch (err) {
-        // 3. Failover to NASA/IPAC Caltech IRSA HiPS mirror if CDS Strasbourg drops a tile
         if (urlStr.includes("alasky.cds.unistra.fr/AllWISE/")) {
           const irsaMirror = urlStr.replace(
             "https://alasky.cds.unistra.fr/AllWISE/",
@@ -703,7 +695,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update Aladin Lite v3 pointing, survey layer (using NASA IRSA & CDS HiPS URLs), and footprint box
+  // Update Aladin Lite v3 pointing, survey layer, and footprint box
   useEffect(() => {
     const aladin = aladinInstanceRef.current;
     const fp = footprintOverlayRef.current;
@@ -786,6 +778,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       // Ignore overlay drawing errors
     }
   }, [raDeg, decDeg, fovArcmin, aladinSurvey, showGaiaVectors, activeTarget, aladinReady]);
+
   // Fetch 6-Slice Binary Cutout Cube from FastAPI Backend
   useEffect(() => {
     let cancelled = false;
@@ -828,7 +821,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     };
   }, [raDeg, decDeg, channel, fovArcmin, coaddDetector, alignmentMode]);
 
-  // Fetch 102-Band Forced Photometry SED for the selected source
+  // Fetch 102-Band Forced Photometry SED
   useEffect(() => {
     let cancelled = false;
 
@@ -923,7 +916,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cubeData, raDeg, decDeg, fovArcmin, molecularIndices]);
 
-  // Execute 5-Stage Live Ephemeris & Catalog Verification Cascade
+  // Execute 5-Stage Live Ephemeris Verification
   const triggerLiveVerification = useCallback(
     async (candRa = selectedSourceCoords.raDeg, candDec = selectedSourceCoords.decDeg) => {
       setIsVerifyModalOpen(true);
@@ -995,7 +988,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     [selectedSourceCoords, activeTarget]
   );
 
-  // Execute CSA Partner NEOSSat CADC & Joint NEATM Asteroid Solver
+  // Execute CSA Partner NEOSSat CADC & Joint NEATM Solver
   const triggerNeossatNeatmSolver = useCallback(
     async (targetName = selectedNeossatTarget) => {
       setSelectedNeossatTarget(targetName);
@@ -1105,8 +1098,16 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     [raDeg, decDeg]
   );
 
+  const rootBg = isLightMode
+    ? "bg-slate-100 text-slate-900"
+    : "bg-[#06080D] text-slate-100";
+
+  const bannerSurface = isLightMode
+    ? "bg-white border-slate-300 text-slate-800 shadow-sm"
+    : "bg-[#0B0E14] border-[#1E2433] text-slate-200";
+
   return (
-    <div className="min-h-screen w-full bg-cosmos-950 text-neutral-100 flex flex-col">
+    <div className={`min-h-screen w-full flex flex-col transition-colors ${rootBg}`}>
       {!isEmbedMode && (
         <TopMissionToolbar
           raDeg={raDeg}
@@ -1129,23 +1130,34 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           }
           shareUrl={shareUrl}
           embedIframeSnippet={embedIframeSnippet}
+          userTier={userTier}
+          onChangeUserTier={setUserTier}
+          isLightMode={isLightMode}
+          onToggleLightMode={() => setIsLightMode((v) => !v)}
         />
       )}
 
-      <main className="flex-1 p-3 space-y-3 max-w-[1920px] w-full mx-auto">
+      <main className="flex-1 p-2.5 space-y-2.5 max-w-[1920px] w-full mx-auto">
+        {/* Compact Target Telemetry Strip */}
         {activeTarget && !isEmbedMode && (
-          <div className="bg-cosmos-900/90 border border-cosmos-700 rounded-lg px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className={`border rounded-md px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-xs ${bannerSurface}`}>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="bg-spherex-cyan/20 border border-spherex-cyan/50 text-spherex-cyan font-mono font-bold px-2 py-0.5 rounded text-[11px]">
+              <span
+                className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] border ${
+                  isLightMode
+                    ? "bg-slate-100 border-slate-300 text-slate-700"
+                    : "bg-[#121722] border-[#252D3F] text-spherex-cyan"
+                }`}
+              >
                 {activeTarget.category}
               </span>
-              <strong className="text-white font-bold">{activeTarget.name}:</strong>
-              <span className="text-neutral-300">{activeTarget.demoHook}</span>
+              <strong className="font-bold">{activeTarget.name}:</strong>
+              <span className="opacity-80">{activeTarget.demoHook}</span>
             </div>
-            <div className="flex items-center gap-2 font-mono text-[11px]">
-              <span className="text-neutral-400">
-                Pipeline:{" "}
-                <strong className="text-emerald-400 uppercase">{cubeSourceBadge}</strong>
+            <div className="flex items-center gap-3 font-mono text-[11px]">
+              <span className="opacity-75">
+                Feed:{" "}
+                <strong className="text-emerald-500 uppercase">{cubeSourceBadge}</strong>
               </span>
               <button
                 type="button"
@@ -1153,38 +1165,43 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
                 className="text-spherex-cyan hover:underline flex items-center gap-1"
               >
                 <Compass className="w-3.5 h-3.5" />
-                <span>Browse All 18 Targets</span>
+                <span>All 18 Targets</span>
               </button>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-[58vh] min-h-[430px] max-h-[680px]">
+        {/* Dual Sky Viewports (Aladin Lite v3 Macro Context + 60-FPS WebGL2 Cutout Engine) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 h-[52vh] min-h-[390px] max-h-[620px]">
           {!isMaximizedCutout && (
-            <div className="lg:col-span-5 relative rounded-lg overflow-hidden border border-cosmos-700 bg-black flex flex-col">
+            <div
+              className={`lg:col-span-5 relative rounded-md overflow-hidden border bg-black flex flex-col ${
+                isLightMode ? "border-slate-300 shadow-sm" : "border-[#1E2433]"
+              }`}
+            >
               <div ref={aladinContainerRef} className="w-full flex-1" />
 
-              <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
-                <div className="bg-cosmos-950/90 border border-cosmos-700 px-2.5 py-1 rounded text-[11px] font-mono text-neutral-200 flex items-center gap-1.5">
+              <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none z-10">
+                <div className="bg-black/80 border border-white/15 px-2.5 py-1 rounded text-[11px] font-mono text-slate-100 flex items-center gap-1.5">
                   <Crosshair className="w-3.5 h-3.5 text-spherex-cyan" />
                   <span>
-                    Aladin Lite v3 HiPS • {centerSexagesimal.raHms} {centerSexagesimal.decDms}
+                    Aladin Lite v3 • {centerSexagesimal.raHms} {centerSexagesimal.decDms}
                   </span>
                 </div>
-                <span className="bg-cosmos-950/90 border border-spherex-cyan/40 text-spherex-cyan px-2 py-0.5 rounded text-[10px] font-mono">
-                  FoV Box: {fovArcmin}&apos;×{fovArcmin}&apos;
+                <span className="bg-black/80 border border-spherex-cyan/40 text-spherex-cyan px-2 py-0.5 rounded text-[10px] font-mono">
+                  FoV: {fovArcmin}'×{fovArcmin}'
                 </span>
               </div>
 
-              <div className="bg-cosmos-950 border-t border-cosmos-800 px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-neutral-400">
+              <div className="bg-[#080A0F] border-t border-[#1E2433] px-3 py-1 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-slate-400">
                 <span>
                   <span className="text-spherex-cyan font-bold">□ Cyan Box:</span> SPHEREx WebGL2
-                  Cutout Footprint
+                  Footprint
                 </span>
                 {activeTarget?.raRefDeg !== undefined && (
                   <span>
                     <span className="text-spherex-amber font-bold">― Amber Vector:</span> 16-Yr
-                    Proper Motion ({activeTarget.shift16YrArcsec}&quot;)
+                    Motion ({activeTarget.shift16YrArcsec}")
                   </span>
                 )}
               </div>
@@ -1194,7 +1211,9 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           <div
             className={`${
               isMaximizedCutout ? "lg:col-span-12" : "lg:col-span-7"
-            } relative rounded-lg overflow-hidden border border-cosmos-700 bg-black flex flex-col`}
+            } relative rounded-md overflow-hidden border bg-black flex flex-col ${
+              isLightMode ? "border-slate-300 shadow-sm" : "border-[#1E2433]"
+            }`}
           >
             <div className="flex-1 relative">
               <WebGL2BlinkMachine
@@ -1236,8 +1255,8 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
               <button
                 type="button"
                 onClick={() => setIsMaximizedCutout((v) => !v)}
-                className="absolute top-2.5 right-2.5 z-20 bg-cosmos-950/90 hover:bg-cosmos-800 border border-cosmos-700 text-neutral-200 p-1.5 rounded transition"
-                title={isMaximizedCutout ? "Restore Dual-Viewport Split" : "Maximize WebGL2 Cutout Viewport"}
+                className="absolute top-2.5 right-2.5 z-20 bg-black/80 hover:bg-black border border-white/20 text-slate-200 p-1.5 rounded transition"
+                title={isMaximizedCutout ? "Restore Dual-Viewport Split" : "Maximize WebGL2 Viewport"}
               >
                 {isMaximizedCutout ? (
                   <Minimize2 className="w-3.5 h-3.5" />
@@ -1249,6 +1268,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           </div>
         </div>
 
+        {/* Streamlined Instrument Control Deck */}
         <WiseViewControlBar
           renderMode={renderMode}
           onChangeRenderMode={setRenderMode}
@@ -1293,50 +1313,165 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           onToggleShowZogyOverlay={() => setShowZogyOverlay((v) => !v)}
           activeRgbPresetId={activeRgbPresetId}
           onSelectRgbPreset={handleSelectRgbPreset}
+          userTier={userTier}
+          isLightMode={isLightMode}
         />
 
-        <SpectralCurveInspector
-          sourceLabel={selectedSourceLabel}
-          raDeg={selectedSourceCoords.raDeg}
-          decDeg={selectedSourceCoords.decDeg}
-          activeChannel={channel}
-          activeTarget={activeTarget}
-          measurements={sedMeasurements}
-          molecularIndices={molecularIndices}
-          extendedComaProfile={extendedComaProfile}
-          applyQualityFilter={applyQualityFilter}
-          onToggleQualityFilter={() => setApplyQualityFilter((v) => !v)}
-          onSelectChannel={setChannel}
-          onOpenNeossatModal={() => triggerNeossatNeatmSolver(selectedNeossatTarget)}
-          isLoading={isLoadingSed}
-        />
-
+        {/* Option B: Cockpit Bottom Dock (Split Side-by-Side vs Full Spectrum vs Full Candidates) */}
         {!isEmbedMode && (
-          <AnomalyLeaderboard
-            anomalies={anomalies}
-            selectedAnomalyId={selectedAnomalyId}
-            onSelectAnomaly={(cand) => {
-              setSelectedAnomalyId(cand.id);
-              setSelectedSourceLabel(`${cand.id} (${cand.classification})`);
-              setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
-            }}
-            onVerifyCandidate={(cand) => {
-              setSelectedAnomalyId(cand.id);
-              setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
-              triggerLiveVerification(cand.raDeg, cand.decDeg);
-            }}
-            isRanking={isRankingAnomalies}
-          />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div
+                className={`inline-flex items-center p-0.5 rounded border text-xs font-mono ${
+                  isLightMode
+                    ? "bg-white border-slate-300"
+                    : "bg-[#0B0E14] border-[#1E2433]"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setBottomDockTab("split")}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-sm transition ${
+                    bottomDockTab === "split"
+                      ? isLightMode
+                        ? "bg-slate-900 text-white font-bold"
+                        : "bg-[#1C2638] text-white font-semibold"
+                      : "opacity-65 hover:opacity-100"
+                  }`}
+                >
+                  <Columns className="w-3.5 h-3.5 text-spherex-cyan" />
+                  <span>Split Dock (Spectrum + Candidates)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBottomDockTab("spectrum")}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-sm transition ${
+                    bottomDockTab === "spectrum"
+                      ? isLightMode
+                        ? "bg-slate-900 text-white font-bold"
+                        : "bg-[#1C2638] text-white font-semibold"
+                      : "opacity-65 hover:opacity-100"
+                  }`}
+                >
+                  <Activity className="w-3.5 h-3.5 text-spherex-amber" />
+                  <span>102-Band Spectrum</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBottomDockTab("candidates")}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-sm transition ${
+                    bottomDockTab === "candidates"
+                      ? isLightMode
+                        ? "bg-slate-900 text-white font-bold"
+                        : "bg-[#1C2638] text-white font-semibold"
+                      : "opacity-65 hover:opacity-100"
+                  }`}
+                >
+                  <Cpu className="w-3.5 h-3.5 text-spherex-magenta" />
+                  <span>Sector Candidates ({anomalies.slice(0, 5).length})</span>
+                </button>
+              </div>
+            </div>
+
+            {bottomDockTab === "split" && (
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-2.5 items-stretch">
+                <div className="xl:col-span-8">
+                  <SpectralCurveInspector
+                    sourceLabel={selectedSourceLabel}
+                    raDeg={selectedSourceCoords.raDeg}
+                    decDeg={selectedSourceCoords.decDeg}
+                    activeChannel={channel}
+                    activeTarget={activeTarget}
+                    measurements={sedMeasurements}
+                    molecularIndices={molecularIndices}
+                    extendedComaProfile={extendedComaProfile}
+                    applyQualityFilter={applyQualityFilter}
+                    onToggleQualityFilter={() => setApplyQualityFilter((v) => !v)}
+                    onSelectChannel={setChannel}
+                    onOpenNeossatModal={() => triggerNeossatNeatmSolver(selectedNeossatTarget)}
+                    isLoading={isLoadingSed}
+                    userTier={userTier}
+                    isLightMode={isLightMode}
+                  />
+                </div>
+                <div className="xl:col-span-4">
+                  <AnomalyLeaderboard
+                    anomalies={anomalies}
+                    selectedAnomalyId={selectedAnomalyId}
+                    onSelectAnomaly={(cand) => {
+                      setSelectedAnomalyId(cand.id);
+                      setSelectedSourceLabel(`${cand.id} (${cand.classification})`);
+                      setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
+                    }}
+                    onVerifyCandidate={(cand) => {
+                      setSelectedAnomalyId(cand.id);
+                      setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
+                      triggerLiveVerification(cand.raDeg, cand.decDeg);
+                    }}
+                    isRanking={isRankingAnomalies}
+                    isLightMode={isLightMode}
+                    compactMode={true}
+                  />
+                </div>
+              </div>
+            )}
+
+            {bottomDockTab === "spectrum" && (
+              <SpectralCurveInspector
+                sourceLabel={selectedSourceLabel}
+                raDeg={selectedSourceCoords.raDeg}
+                decDeg={selectedSourceCoords.decDeg}
+                activeChannel={channel}
+                activeTarget={activeTarget}
+                measurements={sedMeasurements}
+                molecularIndices={molecularIndices}
+                extendedComaProfile={extendedComaProfile}
+                applyQualityFilter={applyQualityFilter}
+                onToggleQualityFilter={() => setApplyQualityFilter((v) => !v)}
+                onSelectChannel={setChannel}
+                onOpenNeossatModal={() => triggerNeossatNeatmSolver(selectedNeossatTarget)}
+                isLoading={isLoadingSed}
+                userTier={userTier}
+                isLightMode={isLightMode}
+              />
+            )}
+
+            {bottomDockTab === "candidates" && (
+              <AnomalyLeaderboard
+                anomalies={anomalies}
+                selectedAnomalyId={selectedAnomalyId}
+                onSelectAnomaly={(cand) => {
+                  setSelectedAnomalyId(cand.id);
+                  setSelectedSourceLabel(`${cand.id} (${cand.classification})`);
+                  setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
+                }}
+                onVerifyCandidate={(cand) => {
+                  setSelectedAnomalyId(cand.id);
+                  setSelectedSourceCoords({ raDeg: cand.raDeg, decDeg: cand.decDeg });
+                  triggerLiveVerification(cand.raDeg, cand.decDeg);
+                }}
+                isRanking={isRankingAnomalies}
+                isLightMode={isLightMode}
+                compactMode={false}
+              />
+            )}
+          </div>
         )}
       </main>
 
-      <footer className="w-full bg-cosmos-900/95 border-t border-cosmos-700 px-4 py-2.5 text-[11px] font-mono text-neutral-400">
+      <footer
+        className={`w-full border-t px-4 py-2 text-[11px] font-mono transition-colors ${
+          isLightMode
+            ? "bg-white border-slate-300 text-slate-600"
+            : "bg-[#0B0E14] border-[#1E2433] text-slate-400"
+        }`}
+      >
         <div className="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-white font-bold">SPHEREx × Planet X Discovery Engine</span>
+            <span className="font-bold">SPHEREx × Planet X Discovery Engine</span>
             <span>•</span>
             <span>
-              Powered by{" "}
+              Engineered by{" "}
               <a
                 href="https://www.linkedin.com/in/ilpeiris"
                 target="_blank"
@@ -1345,9 +1480,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
               >
                 M.D.Isuru Lakmal Peiris (@ilpeiris)
               </a>
-            </span>
-            <span className="bg-cosmos-800 text-neutral-300 px-1.5 py-0.5 rounded text-[10px]">
-              Founder • Colombo, Sri Lanka
             </span>
           </div>
 
@@ -1361,16 +1493,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
               GitHub: ilpeiris/SPHEREx-planetX-discovery-engine
             </a>
             <span>•</span>
-            <a
-              href="https://www.linkedin.com/in/ilpeiris"
-              target="_blank"
-              rel="noreferrer"
-              className="text-spherex-cyan hover:underline"
-            >
-              LinkedIn: @ilpeiris
-            </a>
-            <span>•</span>
-            <span className="text-neutral-500">MIT License • 2026 NASA Space Apps</span>
+            <span>MIT License • 2026 NASA International Space Apps Challenge</span>
           </div>
         </div>
       </footer>
