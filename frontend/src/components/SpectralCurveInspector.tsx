@@ -2,11 +2,11 @@
 "use client";
 /**
  * ============================================================================
- * @author      M.D.Isuru Lakmal Peiris (@ilpeiris)
+ * @author      M.D.Isuru Lakmal Peiris (@ilpeiris) 
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github      https://github.com/ilpeiris/
+ * @Github     https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -75,8 +75,6 @@ export interface SpectralCurveInspectorProps {
   onSelectChannel: (globalChannel: number) => void;
   onOpenNeossatModal?: () => void;
   isLoading?: boolean;
-  userTier?: "explorer" | "researcher";
-  isLightMode?: boolean;
 }
 
 export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
@@ -93,8 +91,6 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
   onSelectChannel,
   onOpenNeossatModal,
   isLoading = false,
-  userTier = "researcher",
-  isLightMode = false,
 }) => {
   const [activeMolecules, setActiveMolecules] = useState<
     Array<"H2O" | "CH4" | "CO2" | "CO">
@@ -107,6 +103,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     );
   };
 
+  // Partition measurements into Epoch 1, Epoch 2, and Flagged Outliers (fit_ql >= 3.0 or bad FLAGS)
   const {
     epoch1Points,
     epoch2Points,
@@ -149,6 +146,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       .filter((pt) => (pt.epoch_id ?? 1) >= 2)
       .sort((a, b) => a.wavelength_um - b.wavelength_um);
 
+    // If only one epoch is present, mirror into ep1
     const finalEp1 = ep1.length > 0 ? ep1 : filtered;
     const finalEp2 = ep2;
 
@@ -159,6 +157,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       }
     }
 
+    // Build synchronized multi-epoch MJD light curve near the currently selected channel (or Band D4/D5)
     const chWindow = filtered.filter(
       (pt) => Math.abs(pt.global_channel - activeChannel) <= 4
     );
@@ -190,6 +189,8 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         });
       });
 
+    
+
     return {
       epoch1Points: finalEp1,
       epoch2Points: finalEp2,
@@ -206,11 +207,8 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     [selectedTemplateId]
   );
 
+  // Build Apache ECharts configuration for linked 102-Band SED (Top) + Multi-Epoch Light Curve (Bottom)
   const chartOptions = useMemo(() => {
-    const bgHex = isLightMode ? "#FFFFFF" : "#080A0F";
-    const axisTextHex = isLightMode ? "#475569" : "#94A3B8";
-    const splitLineHex = isLightMode ? "#E2E8F0" : "#161C28";
-
     const markAreas: any[] = [];
     MOLECULAR_BAND_OVERLAYS.forEach((mol) => {
       if (activeMolecules.includes(mol.id)) {
@@ -240,7 +238,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         type: "line",
         xAxisIndex: 0,
         yAxisIndex: 0,
-        symbolSize: 5,
+        symbolSize: 6,
         itemStyle: { color: "#FA903E" },
         lineStyle: { width: 1.75, color: "#FA903E" },
         data: epoch1Points.map((pt) => [
@@ -262,9 +260,9 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         type: "line",
         xAxisIndex: 0,
         yAxisIndex: 0,
-        symbolSize: 5,
-        itemStyle: { color: "#0EA5E9" },
-        lineStyle: { width: 1.75, color: "#0EA5E9" },
+        symbolSize: 6,
+        itemStyle: { color: "#12B5CB" },
+        lineStyle: { width: 1.75, color: "#12B5CB" },
         data: epoch2Points.map((pt) => [
           pt.wavelength_um,
           pt.flux_ujy,
@@ -284,8 +282,8 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         xAxisIndex: 0,
         yAxisIndex: 0,
         symbol: "diamond",
-        symbolSize: 10,
-        itemStyle: { color: "#EF4444", borderColor: isLightMode ? "#0F172A" : "#FFFFFF", borderWidth: 1 },
+        symbolSize: 11,
+        itemStyle: { color: "#EF4444", borderColor: "#FFFFFF", borderWidth: 1 },
         data: outlierPoints.map((pt) => [
           pt.wavelength_um,
           pt.flux_ujy,
@@ -324,14 +322,15 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       });
     }
 
+    // Multi-Epoch MJD Light Curve on Bottom Grid
     seriesList.push({
-      name: "Multi-Epoch Light Curve",
+      name: "Multi-Epoch Light Curve (unWISE + SPHEREx)",
       type: "line",
       xAxisIndex: 1,
       yAxisIndex: 1,
-      symbolSize: 7,
-      itemStyle: { color: "#EC4899" },
-      lineStyle: { width: 1.5, color: "#EC4899" },
+      symbolSize: 8,
+      itemStyle: { color: "#F538A0" },
+      lineStyle: { width: 1.5, color: "#F538A0" },
       data: lightCurvePoints.map((lc) => [
         lc.mjd,
         lc.fluxUjy,
@@ -341,14 +340,14 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     });
 
     return {
-      backgroundColor: bgHex,
-      animationDuration: 220,
-      textStyle: { color: axisTextHex, fontFamily: "monospace" },
+      backgroundColor: "#05060a",
+      animationDuration: 250,
+      textStyle: { color: "#e5e7eb", fontFamily: "monospace" },
       tooltip: {
         trigger: "axis",
-        backgroundColor: isLightMode ? "rgba(255, 255, 255, 0.96)" : "rgba(11, 14, 20, 0.95)",
-        borderColor: isLightMode ? "#CBD5E1" : "#252D3F",
-        textStyle: { color: isLightMode ? "#0F172A" : "#F1F5F9", fontSize: 11, fontFamily: "monospace" },
+        backgroundColor: "rgba(10, 12, 20, 0.95)",
+        borderColor: "#242c44",
+        textStyle: { color: "#f3f4f6", fontSize: 11, fontFamily: "monospace" },
         formatter: (params: any) => {
           if (!Array.isArray(params) || params.length === 0) return "";
           const first = params[0];
@@ -383,11 +382,11 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       legend: {
         top: 6,
         right: 12,
-        textStyle: { color: axisTextHex, fontSize: 10 },
+        textStyle: { color: "#d1d5db", fontSize: 10 },
       },
       grid: [
-        { left: 58, right: 20, top: 34, height: "50%" },
-        { left: 58, right: 20, top: "68%", height: "22%" },
+        { left: 62, right: 22, top: 38, height: "50%" }, // Top: 102-Band SED
+        { left: 62, right: 22, top: "68%", height: "22%" }, // Bottom: MJD Light Curve
       ],
       xAxis: [
         {
@@ -395,23 +394,23 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           type: "value",
           min: 0.72,
           max: 5.05,
-          name: "Wavelength λ (µm) [D1–D4: R=35–41 | D5–D6: R=112–128]",
+          name: "Wavelength λ (µm) [Bands D1–D4: R=35–41 | Bands D5–D6: R=112–128 High-Res Ice/Gas]",
           nameLocation: "middle",
-          nameGap: 21,
-          nameTextStyle: { color: axisTextHex, fontSize: 10 },
-          axisLabel: { color: axisTextHex, fontSize: 10 },
-          splitLine: { lineStyle: { color: splitLineHex } },
+          nameGap: 22,
+          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
+          axisLabel: { color: "#9ca3af", fontSize: 10 },
+          splitLine: { lineStyle: { color: "#171c2d" } },
         },
         {
           gridIndex: 1,
           type: "value",
           scale: true,
-          name: "Observation Epoch (Modified Julian Date — MJD)",
+          name: "Observation Epoch (Modified Julian Date — SPHEREx Multi-Epoch Survey)",
           nameLocation: "middle",
-          nameGap: 21,
-          nameTextStyle: { color: axisTextHex, fontSize: 10 },
-          axisLabel: { color: axisTextHex, fontSize: 10 },
-          splitLine: { lineStyle: { color: splitLineHex } },
+          nameGap: 22,
+          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
+          axisLabel: { color: "#9ca3af", fontSize: 10 },
+          splitLine: { lineStyle: { color: "#171c2d" } },
         },
       ],
       yAxis: [
@@ -419,23 +418,22 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           gridIndex: 0,
           type: "value",
           name: "Flux (µJy)",
-          nameTextStyle: { color: axisTextHex, fontSize: 10 },
-          axisLabel: { color: axisTextHex, fontSize: 10 },
-          splitLine: { lineStyle: { color: splitLineHex } },
+          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
+          axisLabel: { color: "#9ca3af", fontSize: 10 },
+          splitLine: { lineStyle: { color: "#171c2d" } },
         },
         {
           gridIndex: 1,
           type: "value",
           name: "Flux (µJy)",
-          nameTextStyle: { color: axisTextHex, fontSize: 10 },
-          axisLabel: { color: axisTextHex, fontSize: 10 },
-          splitLine: { lineStyle: { color: splitLineHex } },
+          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
+          axisLabel: { color: "#9ca3af", fontSize: 10 },
+          splitLine: { lineStyle: { color: "#171c2d" } },
         },
       ],
       series: seriesList,
     };
   }, [
-    isLightMode,
     activeMolecules,
     epoch1Points,
     epoch2Points,
@@ -465,40 +463,30 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     [onSelectChannel]
   );
 
-  const outerPanel = isLightMode
-    ? "bg-white border-slate-300 text-slate-800 shadow-sm"
-    : "bg-[#0B0E14] border-[#1E2433] text-slate-100";
-
-  const metricBox = isLightMode
-    ? "bg-slate-50 border-slate-200"
-    : "bg-[#10141D] border-[#1E2433]";
-
   return (
-    <section className={`w-full border rounded-md p-2.5 space-y-2 select-none transition-colors ${outerPanel}`}>
-      {/* Header Row */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-inherit">
+    <section className="w-full bg-cosmos-900/95 border border-cosmos-700 rounded-lg p-3 text-neutral-100 space-y-2.5 select-none">
+      {/* Header Row: Source Coordinates, Molecular Overlays, Template Matcher & Quality Filter */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-cosmos-800">
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4 text-spherex-cyan shrink-0" />
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-xs font-bold tracking-wide uppercase">
-                Spectrophotometry & Time-Series (0.75–5.00 µm)
+              <h3 className="text-xs font-bold tracking-wide text-white">
+                102-Band Near-Infrared Spectrophotometry Inspector (0.75–5.00 µm)
               </h3>
-              <span
-                className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
-                  isLightMode
-                    ? "bg-slate-100 border-slate-300 text-slate-700"
-                    : "bg-[#141924] border-[#252D3F] text-spherex-cyan"
-                }`}
-              >
+              <span className="text-[10px] font-mono bg-cosmos-800 text-spherex-cyan px-2 py-0.5 rounded">
                 {sourceLabel} ({raDeg.toFixed(4)}°, {decDeg >= 0 ? "+" : ""}
                 {decDeg.toFixed(4)}°)
               </span>
             </div>
+            <p className="text-[10px] font-mono text-neutral-400">
+              Click any spectral point to lock the WebGL2 viewport to that narrowband LVF channel (Current: Ch{" "}
+              {activeChannel})
+            </p>
           </div>
         </div>
 
-        {/* Molecular Band Overlays, Template Matcher & QC Filter */}
+        {/* Right Controls: Molecular Band Toggles, Template Matcher & Before/After fit_ql Filter */}
         <div className="flex flex-wrap items-center gap-1.5">
           {MOLECULAR_BAND_OVERLAYS.map((mol) => {
             const isOn = activeMolecules.includes(mol.id);
@@ -509,160 +497,137 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
                 onClick={() => toggleMolecule(mol.id)}
                 title={mol.label}
                 style={{
-                  borderColor: isOn ? mol.borderHex : isLightMode ? "#CBD5E1" : "#252D3F",
-                  backgroundColor: isOn ? mol.colorRgba : "transparent",
+                  borderColor: isOn ? mol.borderHex : "#242c44",
+                  backgroundColor: isOn ? mol.colorRgba : "#05060a",
                 }}
-                className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold border transition"
+                className="px-2 py-1 rounded text-[10px] font-mono font-semibold border transition text-white"
               >
                 {mol.formula}
               </button>
             );
           })}
 
-          {userTier === "researcher" && (
-            <>
-              <div
-                className={`flex items-center border rounded px-2 py-0.5 ${
-                  isLightMode ? "bg-slate-50 border-slate-300" : "bg-[#141924] border-[#252D3F]"
-                }`}
-              >
-                <Sparkles className="w-3 h-3 text-spherex-amber mr-1 shrink-0" />
-                <select
-                  value={selectedTemplateId}
-                  onChange={(e) => setSelectedTemplateId(e.target.value)}
-                  className="bg-transparent text-[10px] font-mono focus:outline-none cursor-pointer max-w-[185px] truncate"
-                  title="Overplot empirical L0-Y4 brown dwarf, SPLICES ice, or KBO/Comet reference templates"
-                >
-                  <option
-                    value="none"
-                    className={isLightMode ? "bg-white text-slate-700" : "bg-[#0B0E14] text-slate-300"}
-                  >
-                    Template: Off
-                  </option>
-                  {EMPIRICAL_SPECTRAL_TEMPLATES.map((tpl) => (
-                    <option
-                      key={tpl.id}
-                      value={tpl.id}
-                      className={isLightMode ? "bg-white text-slate-900" : "bg-[#0B0E14] text-white"}
-                    >
-                      [{tpl.category}] {tpl.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          {/* Empirical Spectral Template Matcher Dropdown */}
+          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 rounded px-2 py-1">
+            <Sparkles className="w-3 h-3 text-spherex-magenta mr-1.5 shrink-0" />
+            <select
+              value={selectedTemplateId}
+              onChange={(e) => setSelectedTemplateId(e.target.value)}
+              className="bg-transparent text-[11px] font-mono text-neutral-200 focus:outline-none cursor-pointer max-w-[205px] truncate"
+              title="Overplot empirical L0-Y4 brown dwarf, SPLICES ice, or KBO/Comet reference templates"
+            >
+              <option value="none" className="bg-cosmos-900 text-neutral-300">
+                Template Matcher: Off
+              </option>
+              {EMPIRICAL_SPECTRAL_TEMPLATES.map((tpl) => (
+                <option key={tpl.id} value={tpl.id} className="bg-cosmos-900 text-white">
+                  [{tpl.category}] {tpl.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-              <button
-                type="button"
-                onClick={onToggleQualityFilter}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border transition ${
-                  applyQualityFilter
-                    ? isLightMode
-                      ? "bg-emerald-50 border-emerald-600 text-emerald-800 font-semibold"
-                      : "bg-[#14221E] border-emerald-500/80 text-emerald-300 font-semibold"
-                    : isLightMode
-                    ? "bg-rose-50 border-rose-500 text-rose-800"
-                    : "bg-[#26151A] border-rose-500/70 text-rose-200"
-                }`}
-                title="Filter out channels with Tractor fit_ql >= 3.0 or hardware FLAGS"
-              >
-                {applyQualityFilter ? (
-                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                ) : (
-                  <Filter className="w-3 h-3 text-rose-400" />
-                )}
-                <span>
-                  {applyQualityFilter
-                    ? "QC Filter: ON (fit_ql<3)"
-                    : `Raw (${outlierPoints.length} Outlier)`}
-                </span>
-              </button>
-            </>
-          )}
+          {/* "Before vs. After FLAGS & fit_ql < 3.0 Filter" Toggle */}
+          <button
+            type="button"
+            onClick={onToggleQualityFilter}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-mono border transition ${
+              applyQualityFilter
+                ? "bg-emerald-950/90 border-emerald-500 text-emerald-300 font-semibold"
+                : "bg-rose-950/80 border-rose-500/80 text-rose-200"
+            }`}
+            title="Filter out channels contaminated by cosmic rays, dichroic edge attenuation, or Tractor fit_ql >= 3.0"
+          >
+            {applyQualityFilter ? (
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            ) : (
+              <Filter className="w-3.5 h-3.5 text-rose-400" />
+            )}
+            <span>
+              {applyQualityFilter
+                ? "QC Filter ON (fit_ql < 3.0)"
+                : `Raw Spectrum (${outlierPoints.length} Outlier Spike)`}
+            </span>
+          </button>
         </div>
       </div>
 
-      {/* Diagnostic Sub-Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-1.5 text-[10px] font-mono">
-        <div className={`border rounded px-2 py-1 ${metricBox}`}>
-          <span className="opacity-60 block">3.0µm H₂O Ice (τ₃.₀):</span>
-          <span className="text-spherex-cyan font-bold">
+      {/* Diagnostic Sub-Banner: 4 Molecular Absorption Indices + 3I/ATLAS Coma Q_gas / NEOSSat Badges */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-[10px] font-mono">
+        <div className="bg-cosmos-950 border border-cosmos-800 rounded px-2.5 py-1.5">
+          <span className="text-neutral-400 block">3.0 µm H₂O Ice Depth (τ₃.₀):</span>
+          <span className="text-spherex-cyan font-bold text-xs">
             {molecularIndices ? molecularIndices.tau_h2o_30.toFixed(3) : "0.420"}
           </span>
         </div>
 
-        <div className={`border rounded px-2 py-1 ${metricBox}`}>
-          <span className="opacity-60 block">CH₄ Index (1.65/2.25µm):</span>
-          <span className="text-spherex-magenta font-bold">
+        <div className="bg-cosmos-950 border border-cosmos-800 rounded px-2.5 py-1.5">
+          <span className="text-neutral-400 block">CH₄ Index (1.65 & 2.25 µm):</span>
+          <span className="text-spherex-magenta font-bold text-xs">
             {molecularIndices ? molecularIndices.c_ch4.toFixed(3) : "0.680"} mag
           </span>
         </div>
 
-        <div className={`border rounded px-2 py-1 ${metricBox}`}>
-          <span className="opacity-60 block">NIR H₂O (1.4/1.9µm):</span>
-          <span className="text-emerald-500 font-bold">
+        <div className="bg-cosmos-950 border border-cosmos-800 rounded px-2.5 py-1.5">
+          <span className="text-neutral-400 block">NIR H₂O Index (1.4 & 1.9 µm):</span>
+          <span className="text-emerald-400 font-bold text-xs">
             {molecularIndices ? molecularIndices.c_h2o_nir.toFixed(3) : "0.510"} mag
           </span>
         </div>
 
-        <div className={`border rounded px-2 py-1 ${metricBox}`}>
-          <span className="opacity-60 block">W1–Ks Excess (C_W1/K):</span>
-          <span className="text-spherex-amber font-bold">
+        <div className="bg-cosmos-950 border border-cosmos-800 rounded px-2.5 py-1.5">
+          <span className="text-neutral-400 block">W1–Ks Window Excess (C_W1/K):</span>
+          <span className="text-spherex-amber font-bold text-xs">
             {molecularIndices ? molecularIndices.c_w1_k.toFixed(3) : "+1.150"} mag
           </span>
         </div>
 
         {extendedComaProfile ? (
-          <div className={`col-span-2 border rounded px-2 py-1 flex items-center justify-between ${metricBox}`}>
+          <div className="col-span-2 bg-amber-950/50 border border-spherex-amber/60 rounded px-2.5 py-1.5 flex items-center justify-between">
             <div>
               <span className="text-spherex-amber font-bold flex items-center gap-1">
                 <Flame className="w-3 h-3" />
-                3I/ATLAS Coma Profiler:
+                3I/ATLAS Extended Coma Profiler (Lisse+25/26):
               </span>
-              <span className="opacity-80 block">
-                Core: {extendedComaProfile.f_core_2pix_mJy.toFixed(1)} mJy | 30px:{" "}
+              <span className="text-neutral-200 block">
+                2px Core: {extendedComaProfile.f_core_2pix_mJy.toFixed(1)} mJy | 30px (3&apos;) Coma:{" "}
                 {extendedComaProfile.f_total_30pix_mJy.toFixed(1)} mJy
               </span>
             </div>
             <div className="text-right">
-              <span className="opacity-60 block">Q_gas:</span>
-              <span className="text-emerald-500 font-bold">
-                {extendedComaProfile.Q_gas_molecules_sec.toExponential(2)} s⁻¹
+              <span className="text-neutral-400 block">Outgassing Q_gas:</span>
+              <span className="text-emerald-300 font-bold">
+                {extendedComaProfile.Q_gas_molecules_sec.toExponential(2)} mol/s
               </span>
             </div>
           </div>
         ) : (
-          <div className={`col-span-2 border rounded px-2 py-1 flex items-center justify-between ${metricBox}`}>
+          <div className="col-span-2 bg-cosmos-950 border border-cosmos-800 rounded px-2.5 py-1.5 flex items-center justify-between">
             <div>
-              <span className="opacity-60 block flex items-center gap-1">
+              <span className="text-neutral-400 block flex items-center gap-1">
                 <Layers className="w-3 h-3 text-spherex-cyan" />
-                Multi-Mission Synergy:
+                Cross-Mission Synergy:
               </span>
-              <span>SPHEREx + unWISE + CSA NEOSSat</span>
+              <span className="text-neutral-200">
+                SPHEREx 102-Ch IR + unWISE 16-Yr + CSA NEOSSat
+              </span>
             </div>
             {onOpenNeossatModal && (
               <button
                 type="button"
                 onClick={onOpenNeossatModal}
-                className={`px-2 py-1 rounded text-[10px] font-semibold border flex items-center gap-1 transition ${
-                  isLightMode
-                    ? "bg-amber-50 border-amber-500 text-amber-800 hover:bg-amber-100"
-                    : "bg-[#241D14] border-spherex-amber/60 text-spherex-amber hover:bg-[#2F2519]"
-                }`}
+                className="bg-amber-950 hover:bg-amber-900 border border-spherex-amber/60 text-spherex-amber px-2 py-1 rounded text-[10px] font-semibold flex items-center gap-1 transition"
               >
                 <Orbit className="w-3 h-3" />
-                <span>NEATM Solver</span>
+                <span>Solve NEATM (D, p_V, η)</span>
               </button>
             )}
           </div>
         )}
       </div>
 
-      {/* ECharts Canvas */}
-      <div
-        className={`relative w-full h-[265px] rounded border overflow-hidden ${
-          isLightMode ? "bg-white border-slate-200" : "bg-[#080A0F] border-[#1A202E]"
-        }`}
-      >
+      {/* Main Apache ECharts Canvas */}
+      <div className="relative w-full h-[290px] bg-cosmos-950 rounded border border-cosmos-800 overflow-hidden">
         <ReactECharts
           option={chartOptions}
           style={{ height: "100%", width: "100%" }}
@@ -671,7 +636,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           lazyUpdate={true}
         />
         {isLoading && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-cosmos-950/70 flex items-center justify-center">
             <span className="text-xs font-mono text-spherex-cyan animate-pulse">
               Extracting 102-Band Forced Photometry SED...
             </span>

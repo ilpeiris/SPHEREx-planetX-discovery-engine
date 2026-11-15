@@ -1,29 +1,16 @@
 /**
  * ============================================================================
- * @author      M.D.Isuru Lakmal Peiris (@ilpeiris)
- * @project     SPHEREx x Planet X - 102-Band WebGL2 & WASM Discovery Engine
+ * @author      M.D.Isuru Lakmal Peiris (@ilpeiris) 
+ * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github      https://github.com/ilpeiris/
+ * @Github     https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
 
 // frontend/tailwind.config.ts
 import type { Config } from "tailwindcss";
-
-const smoothProFontStack = [
-  "var(--font-jakarta)",
-  "var(--font-inter)",
-  "Google Sans",
-  "-apple-system",
-  "BlinkMacSystemFont",
-  "SF Pro Display",
-  "SF Pro Text",
-  "Segoe UI",
-  "Roboto",
-  "sans-serif",
-];
 
 const config: Config = {
   content: [
@@ -49,8 +36,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: smoothProFontStack,
-        mono: smoothProFontStack,
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "Fira Code", "ui-monospace", "SFMono-Regular", "monospace"],
       },
     },
   },

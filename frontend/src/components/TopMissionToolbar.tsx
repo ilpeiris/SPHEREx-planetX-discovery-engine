@@ -2,11 +2,11 @@
 "use client";
 /**
  * ============================================================================
- * @author      M.D.Isuru Lakmal Peiris (@ilpeiris)
+ * @author      M.D.Isuru Lakmal Peiris (@ilpeiris) 
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github      https://github.com/ilpeiris/
+ * @Github     https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -17,15 +17,11 @@ import {
   Compass,
   Copy,
   Layers,
-  Microscope,
-  Moon,
   Orbit,
   Radar,
   Search,
   Sparkles,
-  Sun,
   Telescope,
-  User,
 } from "lucide-react";
 import {
   FOV_OPTIONS,
@@ -93,10 +89,6 @@ export interface TopMissionToolbarProps {
   onOpenVerifyModal: () => void;
   shareUrl: string;
   embedIframeSnippet: string;
-  userTier?: "explorer" | "researcher";
-  onChangeUserTier?: (tier: "explorer" | "researcher") => void;
-  isLightMode?: boolean;
-  onToggleLightMode?: () => void;
 }
 
 export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
@@ -118,10 +110,6 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
   onOpenVerifyModal,
   shareUrl,
   embedIframeSnippet,
-  userTier = "researcher",
-  onChangeUserTier,
-  isLightMode = true,
-  onToggleLightMode,
 }) => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -159,137 +147,84 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
     }
   };
 
-  const surfaceHeader = isLightMode
-    ? "bg-white border-b border-slate-200 text-slate-800 shadow-sm"
-    : "bg-[#0B0E14] border-b border-[#1E2433] text-slate-100";
-
-  const surfaceControl = isLightMode
-    ? "bg-slate-100 border-slate-300 text-slate-700 hover:border-slate-400"
-    : "bg-[#121722] border-[#252D3F] text-slate-200 hover:border-slate-600";
-
   return (
-    <header className={`w-full px-3 py-2 select-none transition-colors ${surfaceHeader}`}>
-      {/* Row 1: Single Non-Jumping Line — Identity, @ilpeiris | GitHub, Explorer/Researcher, Search, Tools & Theme */}
-      <div className="flex items-center justify-between gap-1.5 flex-nowrap overflow-x-auto">
-        {/* Left Group: Brand, Catalog, @ilpeiris | GitHub, and Explorer/Researcher Switch */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <div
-            className={`flex items-center gap-2 px-2 py-1 rounded border ${
-              isLightMode
-                ? "bg-slate-50 border-slate-300"
-                : "bg-[#121722] border-[#252D3F]"
-            }`}
-          >
+    <header className="w-full bg-cosmos-900/95 border-b border-cosmos-700 px-3 py-2 text-neutral-100 select-none">
+      {/* Row 1: Brand Title, Coordinate Search Bar, Multi-Mission Controls & Share/Embed */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        {/* Left: Mission Title & Guided Tour Button */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 bg-cosmos-950 border border-spherex-cyan/40 px-2.5 py-1.5 rounded-md">
             <Telescope className="w-4 h-4 text-spherex-cyan shrink-0" />
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold tracking-tight whitespace-nowrap">
-                  SPHEREx × Planet X
+                <span className="text-xs font-bold tracking-wider text-white">
+                  SPHEREx × PLANET X
                 </span>
-                <span
-                  className={`text-[9px] font-semibold px-1.5 py-0.5 rounded border whitespace-nowrap ${
-                    isLightMode
-                      ? "bg-sky-50 border-sky-200 text-sky-700"
-                      : "bg-[#182030] border-spherex-cyan/30 text-spherex-cyan"
-                  }`}
-                >
-                  102-CH
+                <span className="text-[10px] font-mono bg-spherex-cyan/20 text-spherex-cyan px-1.5 py-0.2 rounded">
+                  102-BAND ENGINE
                 </span>
               </div>
+              <p className="text-[10px] text-neutral-400 font-mono">
+                NASA/IPAC IRSA QR2/QR3 • unWISE 16-Yr • CSA NEOSSat
+              </p>
+
+
+
+
+
             </div>
           </div>
 
           <button
             type="button"
             onClick={onOpenGuidedTour}
-            className={`flex items-center gap-1 px-2 py-1 rounded border text-xs font-medium whitespace-nowrap transition ${surfaceControl}`}
-            title="Open the 18 pre-validated SPHEREx benchmark target catalog"
+            className="flex items-center gap-1.5 bg-spherex-magenta/20 hover:bg-spherex-magenta/30 border border-spherex-magenta/60 text-spherex-magenta px-2.5 py-1.5 rounded-md text-xs font-medium transition"
           >
-            <Compass className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
-            <span>Catalog (18)</span>
+            <Compass className="w-3.5 h-3.5" />
+            <span>18 Golden Targets Tour</span>
           </button>
 
-          {/* Clickable @ilpeiris (GitHub Profile) | GitHub (Repo) Pill */}
-          <div
-            className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[11px] whitespace-nowrap ${
-              isLightMode
-                ? "bg-slate-50 border-slate-300 text-slate-700"
-                : "bg-[#121722] border-[#252D3F] text-slate-300"
-            }`}
-          >
+
+
+        {/* Author & GitHub Repository Attribution Pill */}
+          <div className="flex items-center gap-1.5 bg-cosmos-950 border border-cosmos-700 px-2.5 py-1.5 rounded-md text-[11px] font-mono">
+            <span className="text-neutral-400">Made by</span>
             <a
-              href="https://github.com/ilpeiris"
+              href="https://www.linkedin.com/in/ilpeiris"
               target="_blank"
               rel="noreferrer"
               className="text-spherex-cyan hover:underline font-bold"
-              title="M.D.Isuru Lakmal Peiris (@ilpeiris) GitHub Profile"
+              title="M.D.Isuru Lakmal Peiris (@ilpeiris) on LinkedIn"
             >
               @ilpeiris
             </a>
-            <span className="opacity-40">|</span>
+            <span className="text-cosmos-700">|</span>
             <a
               href="https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine"
               target="_blank"
               rel="noreferrer"
-              className="text-spherex-amber hover:underline font-semibold"
-              title="View Project Source Code on GitHub"
+              className="text-spherex-amber hover:underline font-semibold flex items-center gap-1"
+              title="View Source Code on GitHub: ilpeiris/SPHEREx-planetX-discovery-engine"
             >
-              GitHub
+              <span>GitHub Repo</span>
             </a>
           </div>
 
-          {/* Locked-Width Citizen Explorer vs Pro Researcher Switch (Never Jumps Lines) */}
-          {onChangeUserTier && (
-            <div
-              className={`flex items-center p-0.5 rounded border text-[11px] whitespace-nowrap ${
-                isLightMode
-                  ? "bg-slate-100 border-slate-300"
-                  : "bg-[#121722] border-[#252D3F]"
-              }`}
-              title="Switch between Citizen Explorer view and Pro Researcher telemetry"
-            >
-              <button
-                type="button"
-                onClick={() => onChangeUserTier("explorer")}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded-sm transition ${
-                  userTier === "explorer"
-                    ? isLightMode
-                      ? "bg-white text-slate-900 font-bold shadow-sm"
-                      : "bg-[#222B3D] text-white font-semibold"
-                    : "text-slate-400 hover:text-slate-600"
-                }`}
-              >
-                <User className="w-3 h-3 text-spherex-cyan shrink-0" />
-                <span>Explorer</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onChangeUserTier("researcher")}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded-sm transition ${
-                  userTier === "researcher"
-                    ? isLightMode
-                      ? "bg-white text-slate-900 font-bold shadow-sm"
-                      : "bg-[#222B3D] text-white font-semibold"
-                    : "text-slate-400 hover:text-slate-600"
-                }`}
-              >
-                <Microscope className="w-3 h-3 text-spherex-amber shrink-0" />
-                <span>Researcher</span>
-              </button>
-            </div>
-          )}
+
+
+
+
+
+
+
+
+
         </div>
 
         {/* Center: Universal RA/Dec Sexagesimal, Decimal & Target Search */}
-        <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[180px] max-w-xs relative">
-          <div
-            className={`flex items-center rounded border overflow-hidden transition ${
-              isLightMode
-                ? "bg-slate-50 border-slate-300 focus-within:border-sky-600"
-                : "bg-[#121722] border-[#252D3F] focus-within:border-spherex-cyan"
-            }`}
-          >
-            <Search className="w-3.5 h-3.5 text-slate-400 ml-2 shrink-0" />
+        <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[260px] max-w-md relative">
+          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 focus-within:border-spherex-cyan rounded-md overflow-hidden">
+            <Search className="w-3.5 h-3.5 text-neutral-400 ml-2.5 shrink-0" />
             <input
               type="text"
               value={searchInput}
@@ -297,194 +232,146 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 setSearchInput(e.target.value);
                 if (searchError) setSearchError(null);
               }}
-              placeholder="RA, Dec or Target..."
-              className={`w-full bg-transparent px-2 py-1 text-xs focus:outline-none ${
-                isLightMode
-                  ? "text-slate-900 placeholder-slate-400"
-                  : "text-slate-100 placeholder-slate-500"
-              }`}
+              placeholder="RA, Dec (08h55m10.831s, -7d14m42.53s) or Target..."
+              className="w-full bg-transparent px-2 py-1.5 text-xs font-mono text-neutral-100 placeholder-neutral-500 focus:outline-none"
             />
             <button
               type="submit"
-              className={`border-l px-2 py-1 text-[11px] font-semibold transition ${
-                isLightMode
-                  ? "bg-slate-200 hover:bg-slate-300 text-slate-800 border-slate-300"
-                  : "bg-[#1A2233] hover:bg-[#232D42] text-spherex-cyan border-[#252D3F]"
-              }`}
+              className="bg-spherex-cyan/20 hover:bg-spherex-cyan/30 text-spherex-cyan border-l border-cosmos-700 px-2.5 py-1.5 text-[11px] font-mono font-semibold transition"
             >
               Slew
             </button>
           </div>
           {searchError && (
-            <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] px-2 py-1 rounded shadow-lg z-40 whitespace-nowrap">
+            <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] font-mono px-2 py-1 rounded shadow-lg z-40">
               {searchError}
             </div>
           )}
         </form>
 
-        {/* Right Group: FoV, Co-Add, Survey, Gaia PM, NEOSSat, Verify, URL/Embed & Theme Icon */}
-        <div className="flex items-center gap-1 shrink-0">
-          {/* Field of View (FoV) Selector */}
-          <div className={`flex items-center rounded border px-1.5 py-1 whitespace-nowrap ${surfaceControl}`}>
-            <span className="text-[10px] opacity-60 mr-1">FoV:</span>
+        {/* Right: FoV Selector, 6-Detector Co-Add, Multi-Mission Survey, NEOSSat & URL/Embed */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {/* User-Selectable Field of View (FoV) Dropdown */}
+          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 rounded-md px-2 py-1">
+            <span className="text-[10px] font-mono text-neutral-400 mr-1.5">FoV:</span>
             <select
               value={fovArcmin}
               onChange={(e) => onChangeFov(Number(e.target.value) as 2 | 6 | 15 | 30)}
-              className="bg-transparent text-xs font-semibold focus:outline-none cursor-pointer"
-              title="Select angular Field of View (2' to 30')"
+              className="bg-transparent text-xs font-mono text-spherex-cyan focus:outline-none cursor-pointer"
+              title="Larger fields of view track faster-moving sources at the cost of longer transfer times"
             >
               {FOV_OPTIONS.map((opt) => (
-                <option
-                  key={opt.fovArcmin}
-                  value={opt.fovArcmin}
-                  className={isLightMode ? "bg-white text-slate-900" : "bg-[#0B0E14] text-white"}
-                >
-                  {opt.fovArcmin}'×{opt.fovArcmin}'
+                <option key={opt.fovArcmin} value={opt.fovArcmin} className="bg-cosmos-900 text-white">
+                  {opt.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* 6-Detector Broadband SNR Co-Add Toggle (Fixed Width so Row 1 Never Shifts) */}
+          {/* 6-Detector Broadband SNR Boost Toggle (D1-D6 17-Channel Co-Add) */}
           <button
             type="button"
             onClick={onToggleCoaddDetector}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-mono border transition ${
               coaddDetector
-                ? isLightMode
-                  ? "bg-emerald-50 border-emerald-600 text-emerald-800 font-bold"
-                  : "bg-[#162622] border-emerald-500/80 text-emerald-300 font-semibold"
-                : surfaceControl
+                ? "bg-emerald-950/90 border-emerald-500 text-emerald-300 font-semibold"
+                : "bg-cosmos-950 border-cosmos-700 text-neutral-300 hover:border-neutral-500"
             }`}
             title="Co-add all 17 spectral channels per SPHEREx detector array (D1-D6) for a 4.1x SNR boost"
           >
-            <Layers className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            <span>6-Det Co-Add</span>
+            <Layers className="w-3.5 h-3.5" />
+            <span>{coaddDetector ? "6-Det Co-Add: ON (4.1× SNR)" : "6-Det SNR Co-Add"}</span>
           </button>
 
-          {/* Multi-Mission Survey Switcher */}
-          <div className={`flex items-center rounded border px-1.5 py-1 ${surfaceControl}`}>
+          {/* Multi-Mission Survey & Optical Disambiguation Switcher */}
+          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 rounded-md px-2 py-1">
             <select
               value={aladinSurvey}
               onChange={(e) => onChangeAladinSurvey(e.target.value as AladinSurveyOptionId)}
-              className="bg-transparent text-xs focus:outline-none cursor-pointer max-w-[135px] truncate"
-              title="Overlay reference survey in Aladin Lite v3"
+              className="bg-transparent text-xs font-mono text-neutral-200 focus:outline-none cursor-pointer max-w-[185px] truncate"
+              title="Overlay astronomical data from WISE, SPHEREx HiPS, Pan-STARRS Optical, or 2MASS"
             >
               {MULTI_MISSION_SURVEYS.map((srv) => (
-                <option
-                  key={srv.id}
-                  value={srv.id}
-                  className={isLightMode ? "bg-white text-slate-900" : "bg-[#0B0E14] text-white"}
-                >
+                <option key={srv.id} value={srv.id} className="bg-cosmos-900 text-white">
                   [{srv.missionBadge}] {srv.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Gaia DR3 Proper Motion Vector Toggle */}
+          {/* Gaia DR3 Proper Motion Overlay Toggle */}
           <button
             type="button"
             onClick={onToggleGaiaVectors}
-            className={`px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${
+            className={`px-2 py-1.5 rounded-md text-[11px] font-mono border transition ${
               showGaiaVectors
-                ? isLightMode
-                  ? "bg-sky-50 border-sky-600 text-sky-800 font-semibold"
-                  : "bg-[#152232] border-spherex-cyan/80 text-spherex-cyan font-semibold"
-                : surfaceControl
+                ? "bg-spherex-cyan/20 border-spherex-cyan text-spherex-cyan font-semibold"
+                : "bg-cosmos-950 border-cosmos-700 text-neutral-400 hover:text-neutral-200"
             }`}
-            title="Overlay Gaia DR3 proper-motion vectors"
+            title="Overlay Gaia DR3 proper-motion vectors (STScI MAST + ESA Failover)"
           >
-            Gaia PM
+            Gaia DR3 PM
           </button>
 
-          {/* CSA NEOSSat Modal Trigger */}
+          {/* CSA Partner NEOSSat + SPHEREx NEATM Solver Button */}
           <button
             type="button"
             onClick={onOpenNeossatModal}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${surfaceControl}`}
-            title="Open Canadian Space Agency (CSA) NEOSSat CADC Cutouts & Joint NEATM Solver"
+            className="flex items-center gap-1 bg-amber-950/70 hover:bg-amber-900/70 border border-spherex-amber/70 text-spherex-amber px-2.5 py-1.5 rounded-md text-xs font-mono font-medium transition"
+            title="Open Canadian Space Agency (CSA) NEOSSat CADC Optical Cutouts & Joint NEATM Asteroid Solver"
           >
-            <Orbit className="w-3.5 h-3.5 text-spherex-amber shrink-0" />
-            <span>NEOSSat</span>
+            <Orbit className="w-3.5 h-3.5" />
+            <span>CSA NEOSSat</span>
           </button>
 
-          {/* 5-API Ephemeris Verification Modal Trigger */}
+          {/* 5-Stage Live Ephemeris Verification Modal Button */}
           <button
             type="button"
             onClick={onOpenVerifyModal}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-xs border whitespace-nowrap transition ${surfaceControl}`}
-            title="Run 5-Stage Live Ephemeris & Catalog Cross-Match"
+            className="flex items-center gap-1 bg-cosmos-950 hover:bg-cosmos-800 border border-spherex-cyan/50 text-spherex-cyan px-2.5 py-1.5 rounded-md text-xs font-mono transition"
+            title="Run 5-Stage Live Ephemeris & Catalog Cross-Match (Gaia DR3, SIMBAD, SkyBoT, JPL sb_ident, MPC)"
           >
-            <Radar className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
-            <span>Verify</span>
+            <Radar className="w-3.5 h-3.5" />
+            <span>5-API Verify</span>
           </button>
 
           {/* Deep-Link URL & Iframe Embed Copy Buttons */}
           <button
             type="button"
             onClick={() => handleCopy("url")}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${surfaceControl}`}
-            title="Copy deep-link coordinate URL"
+            className="flex items-center gap-1 bg-cosmos-950 hover:bg-cosmos-800 border border-cosmos-700 text-neutral-300 px-2 py-1.5 rounded-md text-[11px] font-mono transition"
+            title="Copy deep-link coordinate URL (?ra=...&dec=...&fov=...)"
           >
             {copiedType === "url" ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
             ) : (
-              <Copy className="w-3.5 h-3.5 shrink-0" />
+              <Copy className="w-3.5 h-3.5" />
             )}
-            <span>{copiedType === "url" ? "Copied" : "URL"}</span>
+            <span>{copiedType === "url" ? "Copied!" : "URL"}</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleCopy("iframe")}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] border whitespace-nowrap transition ${surfaceControl}`}
-            title="Copy <iframe /> embed code"
+            className="flex items-center gap-1 bg-cosmos-950 hover:bg-cosmos-800 border border-cosmos-700 text-neutral-300 px-2 py-1.5 rounded-md text-[11px] font-mono transition"
+            title="Copy <iframe /> embed snippet for external websites and citizen science portals"
           >
             {copiedType === "iframe" ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
             ) : (
-              <Code2 className="w-3.5 h-3.5 shrink-0" />
+              <Code2 className="w-3.5 h-3.5" />
             )}
-            <span>{copiedType === "iframe" ? "Copied" : "Embed"}</span>
+            <span>{copiedType === "iframe" ? "Copied!" : "Embed"}</span>
           </button>
-
-          {/* Dark / White Theme Changer Icon Button */}
-          {onToggleLightMode && (
-            <button
-              type="button"
-              onClick={onToggleLightMode}
-              className={`p-1.5 rounded border transition ${surfaceControl}`}
-              title={
-                isLightMode
-                  ? "Switch to Observatory Dark Theme"
-                  : "Switch to Daylight White Theme"
-              }
-            >
-              {isLightMode ? (
-                <Moon className="w-3.5 h-3.5 text-slate-700" />
-              ) : (
-                <Sun className="w-3.5 h-3.5 text-spherex-amber" />
-              )}
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Row 2: Benchmark Target Bar (5 Mandatory NASA Targets + Featured Survey Targets) */}
-      <div
-        className={`mt-1.5 pt-1.5 border-t flex flex-wrap items-center justify-between gap-2 ${
-          isLightMode ? "border-slate-200" : "border-[#1A202E]"
-        }`}
-      >
-        <div className="flex flex-wrap items-center gap-1">
-          <span
-            className={`text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1 mr-1 ${
-              isLightMode ? "text-slate-500" : "text-slate-400"
-            }`}
-          >
-            <Sparkles className="w-3 h-3 text-spherex-amber" />
-            Benchmark Targets:
+      {/* Row 2: Official NASA Challenge Prompt 5 Mandatory Test Target Quick-Select Pills */}
+      <div className="mt-2 pt-1.5 border-t border-cosmos-800 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-spherex-amber font-semibold flex items-center gap-1 mr-1">
+            <Sparkles className="w-3 h-3" />
+            Official NASA Test Targets:
           </span>
 
           {NASA_MANDATORY_TEST_TARGETS.map((target) => {
@@ -494,30 +381,36 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 key={target.id}
                 type="button"
                 onClick={() => onSelectTarget(target)}
-                className={`px-2 py-0.5 rounded text-[11px] transition flex items-center gap-1.5 border ${
+                className={`px-2.5 py-1 rounded text-[11px] font-mono transition flex items-center gap-1.5 border ${
                   isSelected
-                    ? isLightMode
-                      ? "bg-slate-900 text-white border-slate-900 font-bold"
-                      : "bg-[#1C2638] text-white border-spherex-cyan font-semibold"
-                    : surfaceControl
+                    ? "bg-spherex-cyan text-cosmos-950 border-spherex-cyan font-bold shadow-sm"
+                    : "bg-cosmos-950 hover:bg-cosmos-800 text-neutral-200 border-cosmos-700"
                 }`}
               >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    target.shift16YrArcsec > 5 ? "bg-spherex-cyan" : "bg-spherex-amber"
-                  }`}
-                />
                 <span>{target.shortLabel}</span>
-                <span className="text-[9px] opacity-70">
-                  {target.shift16YrArcsec > 5
-                    ? `${target.totalPmArcsecYr.toFixed(1)}"/yr`
-                    : "Var"}
-                </span>
+                {target.shift16YrArcsec > 5 ? (
+                  <span
+                    className={`text-[9px] px-1 rounded ${
+                      isSelected ? "bg-cosmos-950/20 text-cosmos-950" : "bg-cosmos-800 text-spherex-cyan"
+                    }`}
+                  >
+                    {target.totalPmArcsecYr.toFixed(1)}&quot;/yr
+                  </span>
+                ) : (
+                  <span
+                    className={`text-[9px] px-1 rounded ${
+                      isSelected ? "bg-cosmos-950/20 text-cosmos-950" : "bg-cosmos-800 text-spherex-magenta"
+                    }`}
+                  >
+                    Variable
+                  </span>
+                )}
               </button>
             );
           })}
 
-          <span className="opacity-30 mx-1">|</span>
+          <span className="text-cosmos-700 mx-1">|</span>
+          <span className="text-[10px] font-mono text-neutral-400">Featured Discoveries:</span>
 
           {featuredExtraTargets.map((target) => {
             const isSelected = activeTarget?.id === target.id;
@@ -526,12 +419,10 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
                 key={target.id}
                 type="button"
                 onClick={() => onSelectTarget(target)}
-                className={`px-2 py-0.5 rounded text-[11px] transition border ${
+                className={`px-2 py-1 rounded text-[11px] font-mono transition border ${
                   isSelected
-                    ? isLightMode
-                      ? "bg-slate-900 text-white border-slate-900 font-bold"
-                      : "bg-[#1C2638] text-white border-spherex-cyan font-semibold"
-                    : surfaceControl
+                    ? "bg-spherex-magenta text-white border-spherex-magenta font-bold"
+                    : "bg-cosmos-950 hover:bg-cosmos-800 text-neutral-300 border-cosmos-700"
                 }`}
               >
                 {target.shortLabel}
@@ -540,31 +431,17 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
           })}
         </div>
 
-        {/* Active Pointing Telemetry Readout */}
-        <div
-          className={`text-[11px] flex items-center gap-2 ${
-            isLightMode ? "text-slate-600" : "text-slate-400"
-          }`}
-        >
+        {/* Active Target Coordinate Readout Pill */}
+        <div className="text-[11px] font-mono text-neutral-400 flex items-center gap-2">
           <span>
-            ICRS:{" "}
-            <strong className={isLightMode ? "text-slate-900" : "text-slate-200"}>
-              {raDeg.toFixed(5)}°
-            </strong>
-            ,{" "}
-            <strong className={isLightMode ? "text-slate-900" : "text-slate-200"}>
+            Center: <strong className="text-neutral-200">{raDeg.toFixed(5)}°</strong>,{" "}
+            <strong className="text-neutral-200">
               {decDeg >= 0 ? "+" : ""}
               {decDeg.toFixed(5)}°
             </strong>
           </span>
           {activeTarget && (
-            <span
-              className={`px-1.5 py-0.5 rounded text-[10px] border ${
-                isLightMode
-                  ? "bg-slate-100 border-slate-300 text-slate-700"
-                  : "bg-[#121722] border-[#252D3F] text-slate-300"
-              }`}
-            >
+            <span className="bg-cosmos-800 text-spherex-cyan px-2 py-0.5 rounded text-[10px]">
               {activeTarget.spectralTypeOrClass}
             </span>
           )}
