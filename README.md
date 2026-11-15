@@ -3,13 +3,22 @@
 # 🔭 SPHEREx × Planet X Discovery Engine
 ### 102-Band Multi-Epoch Infrared Time-Domain & Spectrophotometric Hypercube Platform
 
+
+<img src="./docs/screenshots/cover.jpg" alt="SPHEREx x Planet X Cover Banner" width="100%" />
+
 [![NASA Space Apps 2026](https://img.shields.io/badge/2026_NASA_Space_Apps-Planet_X_%26_SPHEREx-0B3D91?style=for-the-badge&logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/2026/challenges/planet-x-and-spherex/)
 [![Live WebGL2 App](https://img.shields.io/badge/Live_App-Vercel_Production-00C7B7?style=for-the-badge&logo=vercel&logoColor=white)](https://spherex-planetx-discovery-engine.vercel.app)
 [![Live FastAPI + DuckDB](https://img.shields.io/badge/Live_API-Hugging_Face_Spaces-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://ilpeiris-spherex-planetx-api.hf.space/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-38bdf8?style=for-the-badge)](https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine?tab=License-1-ov-file)
 
-**Engineered by M.D.Isuru Lakmal Peiris ([@ilpeiris](https://github.com/ilpeiris))**
+**Engineered by M.D.Isuru Lakmal Peiris ([@ilpeiris](https://github.com/ilpeiris)) — Founder •  Sri Lanka**
+<br>
 [🌐 **Launch Live Web App**](https://spherex-planetx-discovery-engine.vercel.app) • [⚡ **Live API Swagger Docs (`/docs`)**](https://ilpeiris-spherex-planetx-api.hf.space/docs) • [🩺 **API Health Check (`/health`)**](https://ilpeiris-spherex-planetx-api.hf.space/health) • [💼 **LinkedIn**](https://www.linkedin.com/in/ilpeiris) • [𝕏 **@Ilpeiris**](https://x.com/Ilpeiris)
+
+<br />
+
+<img src="./docs/screenshots/01-hero-workspace.png" alt="SPHEREx x Planet X 4-Zone WebGL2 Discovery Workspace" width="100%" />
+<p><em>Figure 1: Live 4-Zone SPHEREx × Planet X Discovery Workspace tracking the 250 K Y4 brown dwarf WISE 0855-0714 (126.4″ proper-motion dipole) across synchronized Aladin Lite v3 wide-field sky maps, 60-FPS WebGL2 Lupton Dipole RGB cutouts, 102-band spectrophotometry, and in-browser ONNX WebAssembly anomaly ranking.</em></p>
 
 </div>
 
@@ -65,6 +74,12 @@ Both the frontend workspace and the scientific compute backend are deployed live
 
 We designed the interface so **first-time citizen scientists, students, and astrophysicists** can make discoveries side-by-side. Clicking the **`[Guide]`** button in the top-left toolbar opens an interactive tutorial modal at any time:
 
+
+<div align="center">
+  <img src="./docs/screenshots/02-citizen-science-guide.png" alt="Interactive Citizen Science & Technical Guide Modal" width="95%" />
+  <p><em>Figure 2: Built-in Interactive Guide Modal combining plain-English citizen science explanations, deep technical pipeline specifications, and 4 one-click interactive discovery scenarios.</em></p>
+</div>
+
 1. **Pick a Target or Enter Any Sky Coordinate (Top Mission Bar):** Click any of the **5 Official NASA Test Target pills** (*Barnard's Star*, *WISE 0855-0714*, *Epsilon Indi Ba/Bb*, *RW Aurigae*, *R Draconis*), open the **18 Golden Targets Tour**, or type any RA/Dec coordinate (sexagesimal `08h55m10.831s, -7d14m42.53s` or decimal degrees) into the search bar.
 2. **Compare the Neighborhood vs. The Time Machine (Main Split Viewports):**
    * **Left Panel (Aladin Lite v3 Wide-Angle Sky Map):** Shows the surrounding sky survey (`AllWISE IR`, `Pan-STARRS DR1 Optical`, `DSS2`, `2MASS`, or `SPHEREx HiPS`). Switch from Infrared to Optical to verify that cold brown dwarfs and Planet X candidates disappear completely in optical light!
@@ -94,7 +109,7 @@ Every technical prompt requirement and bonus consideration from the official **2
 | **6. User-Selectable Field of View (FoV)** | Interactive FoV selector (`2'×2' Fast`, `6'×6' Standard`, `15'×15' Wide`, `30'×30' Sector Parallax`) docked on the Aladin header bar, with automatic `6'×6'` framing for fast movers so 158.5″ tracks are never clipped. | `SpherexSkyWorkspace.tsx`, `goldenCatalog.ts` |
 | **7. Incorporating Other Missions (WISE, Gaia, NEOSSat, Optical)** | 16-year archival `unWISE` (2010–2024) + SPHEREx (2025–2026) radiometric time bridge (`bridge_unwise_to_spherex`), synchronized Aladin Lite v3 (`AllWISE`, `Pan-STARRS DR1`, `DSS2`, `2MASS`), 4-tier **STScI MAST + ESA Gaia DR3** proper-motion vectors, and **CSA NEOSSat** CADC optical cutouts + Joint NEATM thermal modeling. | `neossat_cadc.py`, `crossmatch_cascade.py`, `SpherexSkyWorkspace.tsx` |
 | **8. Querying Coordinates via URL & Website Embedding** | Bidirectional URL state router (`?ra=&dec=&fov=&mode=&band=&target=&embed=true`) with 1-click **Deep-Link URL** and chromeless **`<iframe />` Embed** copy buttons. | `frontend/src/app/page.tsx`, `TopMissionToolbar.tsx` |
-| **9. Displaying Metadata & Contamination Flags (`FLAGS` & `ZODI`)** | Hardware `gl.R16UI` bitmask texture (`u_flagCube`) hatches `NONFUNC`, `DICHROIC`, `PERSIST`, `TRANSIENT/CR`, and `SUR_ERROR` while preserving `MP_SOURCE` (`Bit 21`), paired with a `<0.4 ms` 60-FPS Slice 5 `ZODI` foreground subtraction toggle. | `calibration.py`, `WebGL2BlinkMachine.tsx` |
+| **9. Displaying Metadata & Contamination Flags (`FLAGS` & `ZODI`)** | Hardware `gl.R16UI` bitmask texture (`u_flagCube`) hatches `NONFUNC`, `DICHROIC`, `PERSIST`, `TRANSIENT/CR`, and `SUR_ERROR` while preserving known reference catalog sources (`MP_SOURCE` Bit 21) and moving solar system outliers (`MP_OUTLIER` Bit 19), paired with a `<0.4 ms` 60-FPS Slice 5 `ZODI` foreground subtraction toggle. | `calibration.py`, `WebGL2BlinkMachine.tsx` |
 
 ---
 
@@ -130,6 +145,13 @@ Every technical prompt requirement and bonus consideration from the official **2
 │  • unWISE / NEOWISE 16-Yr Archive • JPL Horizons sb_ident • IMCCE SkyBoT • IAU MPC        │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+<div align="center">
+  <img src="./docs/screenshots/03a-zogy-and-102band-sed.png" alt="ZOGY Curtain significance heatmap and 102-band SED for comet 3I/ATLAS" width="95%" />
+<img src="./docs/screenshots/03b-zogy-and-102band-sed.png" alt="ZOGY Curtain significance heatmap and 102-band SED for comet 3I/ATLAS" width="95%" />
+
+  <p><em>Figure 3: Mode 3 ZOGY Curtain revealing the proper-subtraction significance heatmap for comet 3I/ATLAS, alongside the 102-band SED showing H₂O, CO₂, and CO emission spikes.</em></p>
+</div>
 
 ### 🎨 Ergonomic 4-Zone UI & Dual-Theme Design (`Dark` Default + `White` Lab Mode)
 
@@ -180,6 +202,11 @@ Dividing the matched-filtered statistic by the total pixel + astrometric registr
 ### 6.4 Canadian Space Agency (CSA) Partner Integration: Joint NEOSSat + SPHEREx NEATM Solver (`neossat_cadc.py`)
 
 Queries the **CSA NEOSSat** archive via CADC's CAOM-2 Argus TAP (`/argus/sync`) and SODA cutout service (`collection = 'NEOSSAT'`), applies `RAW -> COR -> CORD` dark/flat calibration (`asc-csa/NEOSSAT_Tutorial`), and solves the Near-Earth Asteroid Thermal Model (NEATM; Harris 1998) by combining NEOSSat optical reflected sunlight (0.35–1.05 μm) with SPHEREx thermal emission (2.5–5.0 μm) to break the asteroid **diameter (*D*) vs. geometric albedo (*p*<sub>V</sub>) vs. beaming parameter (η)** degeneracy.
+
+<div align="center">
+  <img src="./docs/screenshots/04-verify-and-neossat.png" alt="5-API live verification and CSA NEOSSat NEATM modal" width="95%" />
+  <p><em>Figure 4: Live 5-API verification and CSA NEOSSat + SPHEREx NEATM thermal-solver modal opened over the discovery workspace.</em></p>
+</div>
 
 ---
 
@@ -235,6 +262,7 @@ SPHEREx-planetX-discovery-engine/
 │   │       └── discoveryRanker.worker.ts    # [File 17] onnxruntime-web WASM SIMD + Physics Priority Score ranker
 │   ├── package.json                   # [File 13] Next.js 14, React 18, ECharts, ONNX Runtime Web, Tailwind CSS
 │   └── tailwind.config.ts             # [File 13] Class-based dark/light theme semantic color tokens
+├── docs/screenshots/                  # Production UI & scientific benchmark screenshots
 ├── docker-compose.yml                 # [File 24] One-command full-stack local orchestration
 ├── PROGRESS_TRACKER.md                # Architecture & cross-file interface contract manifest
 ├── SUBMISSION_PACK.md                 # [File 25] 30-second video script, 7-slide deck & judging guide
