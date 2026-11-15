@@ -8,7 +8,7 @@
 [![Live FastAPI + DuckDB](https://img.shields.io/badge/Live_API-Hugging_Face_Spaces-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://ilpeiris-spherex-planetx-api.hf.space/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-38bdf8?style=for-the-badge)](https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine?tab=License-1-ov-file)
 
-**Engineered by M.D.Isuru Lakmal Peiris ([@ilpeiris](https://github.com/ilpeiris)) — Solo Founder • Colombo, Sri Lanka**
+**Engineered by M.D.Isuru Lakmal Peiris ([@ilpeiris](https://github.com/ilpeiris))**
 [🌐 **Launch Live Web App**](https://spherex-planetx-discovery-engine.vercel.app) • [⚡ **Live API Swagger Docs (`/docs`)**](https://ilpeiris-spherex-planetx-api.hf.space/docs) • [🩺 **API Health Check (`/health`)**](https://ilpeiris-spherex-planetx-api.hf.space/health) • [💼 **LinkedIn**](https://www.linkedin.com/in/ilpeiris) • [𝕏 **@Ilpeiris**](https://x.com/Ilpeiris)
 
 </div>
@@ -32,11 +32,11 @@
 
 ## 🌌 1. Executive Summary & The Challenge
 
-Since May 2025, NASA's **SPHEREx** (*Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer*) space telescope has photographed the entire sky every six months across **102 contiguous near-to-mid-infrared wavelength channels ($0.75\text{–}5.00\ \mu\text{m}$)**, capturing over **one billion astronomical objects**. Distant hypothesized solar system planets (**"Planet X"**), ultra-cold Y-type brown dwarfs ("failed stars"), interstellar comets, near-Earth asteroids, and eruptive young stellar objects reveal themselves by **shifting position** or **changing brightness** across epochs.
+Since May 2025, NASA's **SPHEREx** (*Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer*) space telescope has photographed the entire sky every six months across **102 contiguous near-to-mid-infrared wavelength channels (0.75–5.00 μm)**, capturing over **one billion astronomical objects**. Distant hypothesized solar system planets (**"Planet X"**), ultra-cold Y-type brown dwarfs ("failed stars"), interstellar comets, near-Earth asteroids, and eruptive young stellar objects reveal themselves by **shifting position** or **changing brightness** across epochs.
 
-However, inspecting a billion objects across 102 spectral channels and multiple epochs is impossible for any single science team or automated pipeline alone. While citizen-science tools like *WiseView* revolutionized 2-band broadband blinking for NASA's WISE mission, SPHEREx introduces a $51\times$ higher spectral dimensionality, spatially varying Linear Variable Filter (LVF) bandpasses, strong zodiacal dust foregrounds (`ZODI`), and complex 32-bit hardware contamination bitmasks (`FLAGS`).
+However, inspecting a billion objects across 102 spectral channels and multiple epochs is impossible for any single science team or automated pipeline alone. While citizen-science tools like *WiseView* revolutionized 2-band broadband blinking for NASA's WISE mission, SPHEREx introduces a 51× higher spectral dimensionality, spatially varying Linear Variable Filter (LVF) bandpasses, strong zodiacal dust foregrounds (`ZODI`), and complex 32-bit hardware contamination bitmasks (`FLAGS`).
 
-**SPHEREx × Planet X** solves this bottleneck. It is a zero-install, **60-FPS WebGL2 and WebAssembly discovery engine** backed by a cloud **FastAPI + DuckDB + Astropy/ZOGY scientific API** that transforms SPHEREx's Level-2 Multi-Extension FITS (MEF) archive into an interactive **4D spectrophotometric hypercube ($\text{RA} \times \text{Dec} \times 102\ \text{bands} \times N\ \text{epochs}$)** — bridged across a **16-year baseline (2010–2026)** with archival **WISE/unWISE**, **STScI MAST / ESA Gaia DR3**, and **Canadian Space Agency (CSA) NEOSSat** optical observations.
+**SPHEREx × Planet X** solves this bottleneck. It is a zero-install, **60-FPS WebGL2 and WebAssembly discovery engine** backed by a cloud **FastAPI + DuckDB + Astropy/ZOGY scientific API** that transforms SPHEREx's Level-2 Multi-Extension FITS (MEF) archive into an interactive **4D spectrophotometric hypercube (RA × Dec × 102 bands × N epochs)** — bridged across a **16-year baseline (2010–2026)** with archival **WISE/unWISE**, **STScI MAST / ESA Gaia DR3**, and **Canadian Space Agency (CSA) NEOSSat** optical observations.
 
 ---
 
@@ -53,10 +53,10 @@ Both the frontend workspace and the scientific compute backend are deployed live
 
 ### 🎯 One-Click Deep-Link Target Scenarios (Click to Launch Directly in Browser)
 
-* 🪐 **[WISE 0855-0714 (Coldest 250 K Y4 Brown Dwarf / Planet X Analog)](https://spherex-planetx-discovery-engine.vercel.app/?target=wise_0855&mode=1&fov=6)** — Shifted $126.4''$ ($20.6\ \text{pixels}$) due west over the 16-year WISE-to-SPHEREx baseline; invisible in optical surveys, glowing in SPHEREx $4.5\ \mu\text{m}$ with deep $\text{CH}_4$ and $\text{H}_2\text{O}$ absorption.
-* ⭐ **[Barnard's Star (Fastest Proper-Motion Star — $10.39''/\text{yr}$)](https://spherex-planetx-discovery-engine.vercel.app/?target=barnards_star&mode=1&fov=6)** — Displays a $158.5''$ ($25.8\ \text{pixel}$) Red-to-Blue proper-motion dipole in Mode 1.
-* ☄️ **[Interstellar Comet 3I/ATLAS (`C/2025 N1`)](https://spherex-planetx-discovery-engine.vercel.app/?target=comet_3i_atlas_post&mode=2&fov=6)** — Inspect the Lisse et al. (2025/2026) extended cometary coma gas production rates ($Q_{\text{gas}}$) with towering $4.26\ \mu\text{m}$ $\text{CO}_2$, $2.7\ \mu\text{m}$ $\text{H}_2\text{O}$, and $4.67\ \mu\text{m}$ $\text{CO}$ emission spikes.
-* 💥 **[WTP16aakapb (Dusty FU Orionis Protostellar Outburst)](https://spherex-planetx-discovery-engine.vercel.app/?target=fuor_wtp16aakapb&mode=3&fov=6)** — Toggle the `fit_ql < 3.0` & `FLAGS` quality filter on the 102-band SED chart to reject a $3.4\ \mu\text{m}$ cosmic-ray spike while preserving the $2.5\ \text{mag}$ outburst.
+* 🪐 **[WISE 0855-0714 (Coldest 250 K Y4 Brown Dwarf / Planet X Analog)](https://spherex-planetx-discovery-engine.vercel.app/?target=wise_0855&mode=1&fov=6)** — Shifted 126.4″ (20.6 pixels) due west over the 16-year WISE-to-SPHEREx baseline; invisible in optical surveys, glowing in SPHEREx 4.5 μm with deep CH₄ and H₂O absorption.
+* ⭐ **[Barnard's Star (Fastest Proper-Motion Star — 10.39″/yr)](https://spherex-planetx-discovery-engine.vercel.app/?target=barnards_star&mode=1&fov=6)** — Displays a 158.5″ (25.8 pixel) Red-to-Blue proper-motion dipole in Mode 1.
+* ☄️ **[Interstellar Comet 3I/ATLAS (`C/2025 N1`)](https://spherex-planetx-discovery-engine.vercel.app/?target=comet_3i_atlas_post&mode=2&fov=6)** — Inspect the Lisse et al. (2025/2026) extended cometary coma gas production rates (*Q*<sub>gas</sub>) with towering 4.26 μm CO₂, 2.7 μm H₂O, and 4.67 μm CO emission spikes.
+* 💥 **[WTP16aakapb (Dusty FU Orionis Protostellar Outburst)](https://spherex-planetx-discovery-engine.vercel.app/?target=fuor_wtp16aakapb&mode=3&fov=6)** — Toggle the `fit_ql < 3.0` & `FLAGS` quality filter on the 102-band SED chart to reject a 3.4 μm cosmic-ray spike while preserving the 2.5 mag outburst.
 * 🛡️ **[WISE J1833+6751 (North Ecliptic Pole Persistence Trap)](https://spherex-planetx-discovery-engine.vercel.app/?target=spherex_nep_deep&mode=0&fov=6)** — Toggle the hardware `FLAGS` bitmask overlay to expose a fake transient caused by detector latent persistence (`Bit 10 PERSIST`).
 
 ---
@@ -70,12 +70,12 @@ We designed the interface so **first-time citizen scientists, students, and astr
    * **Left Panel (Aladin Lite v3 Wide-Angle Sky Map):** Shows the surrounding sky survey (`AllWISE IR`, `Pan-STARRS DR1 Optical`, `DSS2`, `2MASS`, or `SPHEREx HiPS`). Switch from Infrared to Optical to verify that cold brown dwarfs and Planet X candidates disappear completely in optical light!
    * **Right Panel (60-FPS WebGL2 Blink Comparator):** Flashes or subtracts SPHEREx multi-epoch cutouts. Stationary stars remain still (or cancel out), while moving objects jump across the frame.
 3. **Switch Between 4 GPU Inspection Modes (Middle Control Bar):**
-   * **Mode 0 (`Blink`):** Alternates Epoch 1 and Epoch 2 at $0.5\text{–}30\ \text{Hz}$.
-   * **Mode 1 (`Dipole RGB`):** Maps Epoch 1 to Red and Epoch 2 to Blue using Lupton color-preserving $\text{asinh}$ stretch — stationary stars render white, while moving objects jump out as vivid **Red-to-Blue pairs**.
-   * **Mode 2 (`Spectral RGB`):** Assigns 3 infrared channels to R, G, B to spot $\text{CH}_4$-absorbing Y-dwarfs or $\text{CO}_2$-rich comets.
-   * **Mode 3 (`ZOGY Curtain`):** Drag the interactive split-screen curtain across the viewport to reveal the Zackay-Ofek-Gal-Yam ($S_{\text{corr}}$) significance heatmap ($\ge 4.5\sigma$ detections).
+   * **Mode 0 (`Blink`):** Alternates Epoch 1 and Epoch 2 at 0.5–30 Hz.
+   * **Mode 1 (`Dipole RGB`):** Maps Epoch 1 to Red and Epoch 2 to Blue using Lupton color-preserving asinh stretch — stationary stars render white, while moving objects jump out as vivid **Red-to-Blue pairs**.
+   * **Mode 2 (`Spectral RGB`):** Assigns 3 infrared channels to R, G, B to spot CH₄-absorbing Y-dwarfs or CO₂-rich comets.
+   * **Mode 3 (`ZOGY Curtain`):** Drag the interactive split-screen curtain across the viewport to reveal the Zackay-Ofek-Gal-Yam (*S*<sub>corr</sub>) significance heatmap (≥ 4.5σ detections).
 4. **Inspect the 102-Band Chemical Fingerprint & Verify Live (Bottom Workspace):**
-   * **102-Band SED & Light-Curve Inspector (Bottom Left):** Displays the target's full $0.75\text{–}5.00\ \mu\text{m}$ spectrum across all 6 SPHEREx detectors (`D1`–`D6`) with shaded molecular absorption/emission bands ($\text{H}_2\text{O}$, $\text{CO}_2$, $\text{CH}_4$, $\text{CO}$), empirical brown dwarf/ice templates (`L0`–`Y4`, `SPLICES`), and multi-epoch MJD photometry.
+   * **102-Band SED & Light-Curve Inspector (Bottom Left):** Displays the target's full 0.75–5.00 μm spectrum across all 6 SPHEREx detectors (`D1`–`D6`) with shaded molecular absorption/emission bands (H₂O, CO₂, CH₄, CO), empirical brown dwarf/ice templates (`L0`–`Y4`, `SPLICES`), and multi-epoch MJD photometry.
    * **ONNX AI Anomaly Leaderboard & 5-API Live Verification (Bottom Right):** Automatically ranks the Top 10 moving or variable sources in the sector using an in-browser WebAssembly neural network (`290 KB INT8 ONNX`), cross-checks them live against **5 astronomical databases** (`Gaia DR3`, `SIMBAD`, `SkyBoT`, `JPL sb_ident`, `MPC`), and exports verified discoveries to a **Backyard Worlds / Zooniverse CSV** in one click.
 
 ---
@@ -87,11 +87,11 @@ Every technical prompt requirement and bonus consideration from the official **2
 | Official NASA Challenge Requirement | Implementation in This Repository | Primary Code Modules |
 | :--- | :--- | :--- |
 | **1. Test on All 5 Mandatory NASA Targets** | Pre-configured quick-select pills and dual-epoch coordinate aliases (`J2000`, `2010 WISE discovery`, and `2025.8/2026.3 SPHEREx propagated`) for **Barnard's Star**, **WISE 0855-0714** (`08h55m10.831s, -7d14m42.53s`), **Epsilon Indi Ba/Bb**, **RW Aurigae**, and **R Draconis**. | `frontend/src/lib/goldenCatalog.ts`, `TopMissionToolbar.tsx` |
-| **2. Easy Updates as New SPHEREx Data Releases Drop** | Zero-delay ADQL TAP discovery against `spherex.artifact` and `spherex.plane` (`collection IN ('spherex_qr3', 'spherex_qr2', ...)`) with automatic `VERSION` header branching (`< 7.0` 3D `PSF` cubes vs. $\ge 7.0$ `EPSF` empirical binary tables). | `backend/app/irsa_client.py`, `calibration.py` |
-| **3. Co-Adding Images per Detector Array (`D1`–`D6`)** | Dedicated **`6-Det SNR Co-Add (4.1× SNR)`** toggle stacks all 17 LVF sub-channels within a detector using inverse-variance weights $W_{xy} = \text{VARIANCE}_{xy}^{-1}(1 - M_{\text{bad},xy})$, plus a mutually exclusive **`D4–D2 Cold Object Filter`** ($2.85\ \mu\text{m} - 1.35\ \mu\text{m}$). | `backend/app/wcs_reproject.py`, `WiseViewControlBar.tsx` |
-| **4. On-the-Fly 102-Band Spectra ("Extra Kudos!")** | Dual-regime extraction: **Regime A** executes QR3 ePSF forced photometry ($r = 2.5\ \text{px}$, `fit_ql < 3.0`) for point sources; **Regime B** executes the Lisse et al. (2025/2026) 2-pixel core + $3\sigma$-clipped modal azimuthal annulus profiler ($Q_{\text{gas}}$ in $\text{molecules/s}$) for extended cometary comae (`3I/ATLAS`). | `backend/app/spectrophotometry.py`, `SpectralCurveInspector.tsx` |
-| **5. Adding Epochs & Subtracting Epochs** | 4 GPU shader modes (`Blink`, `Lupton Dipole RGB`, `Spectral RGB`, and `Fourier ZOGY Proper Subtraction` producing whitened difference image $D$ and astrometric-variance-corrected $S_{\text{corr}}$). | `backend/app/zogy.py`, `spherex_blink_zogy.frag.glsl` |
-| **6. User-Selectable Field of View (FoV)** | Interactive FoV selector (`2'×2' Fast`, `6'×6' Standard`, `15'×15' Wide`, `30'×30' Sector Parallax`) docked on the Aladin header bar, with automatic `6'×6'` framing for fast movers so $158.5''$ tracks are never clipped. | `SpherexSkyWorkspace.tsx`, `goldenCatalog.ts` |
+| **2. Easy Updates as New SPHEREx Data Releases Drop** | Zero-delay ADQL TAP discovery against `spherex.artifact` and `spherex.plane` (`collection IN ('spherex_qr3', 'spherex_qr2', ...)`) with automatic `VERSION` header branching (`< 7.0` 3D `PSF` cubes vs. ≥ 7.0 `EPSF` empirical binary tables). | `backend/app/irsa_client.py`, `calibration.py` |
+| **3. Co-Adding Images per Detector Array (`D1`–`D6`)** | Dedicated **`6-Det SNR Co-Add (4.1× SNR)`** toggle stacks all 17 LVF sub-channels within a detector using inverse-variance weights W<sub>xy</sub> = VARIANCE<sub>xy</sub><sup>−1</sup> · (1 − M<sub>bad,xy</sub>), plus a mutually exclusive **`D4–D2 Cold Object Filter`** (2.85 μm − 1.35 μm). | `backend/app/wcs_reproject.py`, `WiseViewControlBar.tsx` |
+| **4. On-the-Fly 102-Band Spectra ("Extra Kudos!")** | Dual-regime extraction: **Regime A** executes QR3 ePSF forced photometry (r = 2.5 px, `fit_ql < 3.0`) for point sources; **Regime B** executes the Lisse et al. (2025/2026) 2-pixel core + 3σ-clipped modal azimuthal annulus profiler (*Q*<sub>gas</sub> in molecules/s) for extended cometary comae (`3I/ATLAS`). | `backend/app/spectrophotometry.py`, `SpectralCurveInspector.tsx` |
+| **5. Adding Epochs & Subtracting Epochs** | 4 GPU shader modes (`Blink`, `Lupton Dipole RGB`, `Spectral RGB`, and `Fourier ZOGY Proper Subtraction` producing whitened difference image *D* and astrometric-variance-corrected *S*<sub>corr</sub>). | `backend/app/zogy.py`, `spherex_blink_zogy.frag.glsl` |
+| **6. User-Selectable Field of View (FoV)** | Interactive FoV selector (`2'×2' Fast`, `6'×6' Standard`, `15'×15' Wide`, `30'×30' Sector Parallax`) docked on the Aladin header bar, with automatic `6'×6'` framing for fast movers so 158.5″ tracks are never clipped. | `SpherexSkyWorkspace.tsx`, `goldenCatalog.ts` |
 | **7. Incorporating Other Missions (WISE, Gaia, NEOSSat, Optical)** | 16-year archival `unWISE` (2010–2024) + SPHEREx (2025–2026) radiometric time bridge (`bridge_unwise_to_spherex`), synchronized Aladin Lite v3 (`AllWISE`, `Pan-STARRS DR1`, `DSS2`, `2MASS`), 4-tier **STScI MAST + ESA Gaia DR3** proper-motion vectors, and **CSA NEOSSat** CADC optical cutouts + Joint NEATM thermal modeling. | `neossat_cadc.py`, `crossmatch_cascade.py`, `SpherexSkyWorkspace.tsx` |
 | **8. Querying Coordinates via URL & Website Embedding** | Bidirectional URL state router (`?ra=&dec=&fov=&mode=&band=&target=&embed=true`) with 1-click **Deep-Link URL** and chromeless **`<iframe />` Embed** copy buttons. | `frontend/src/app/page.tsx`, `TopMissionToolbar.tsx` |
 | **9. Displaying Metadata & Contamination Flags (`FLAGS` & `ZODI`)** | Hardware `gl.R16UI` bitmask texture (`u_flagCube`) hatches `NONFUNC`, `DICHROIC`, `PERSIST`, `TRANSIENT/CR`, and `SUR_ERROR` while preserving `MP_SOURCE` (`Bit 21`), paired with a `<0.4 ms` 60-FPS Slice 5 `ZODI` foreground subtraction toggle. | `calibration.py`, `WebGL2BlinkMachine.tsx` |
@@ -135,7 +135,7 @@ Every technical prompt requirement and bonus consideration from the official **2
 
 1. **Zone 1 — Global Mission Header (`TopMissionToolbar.tsx`):** Houses the interactive **`[Guide]`** modal (plain-English walkthrough + under-the-hood engineering specs + 4 live 1-click demos), **`18 Golden Targets Tour`** drawer, **`@ilpeiris | GitHub Repo`** attribution, sexagesimal/decimal **Coordinate Search**, **`CSA NEOSSat`** & **`5-API Verify`** modal triggers, **`URL` / `Embed`** copy buttons, **`[Dark / White]`** theme switcher, and the **5 Official NASA Test Target pills**.
 2. **Zone 2 — Docked Macro-Sky Context Header (`SpherexSkyWorkspace.tsx` Left Panel):** Sits cleanly above the Aladin Lite v3 canvas with the **Multi-Mission Survey Switcher** (`WISE IR`, `Pan-STARRS Optical`, `DSS2`, `2MASS`, `SPHEREx HiPS`), **`Gaia DR3 PM`** vector overlay toggle, and **`FoV` selector** (`2'×2'` to `30'×30'`) — plus an automatic `window.fetch` interceptor that fails over dead European CDS mirror tiles to Caltech IRSA.
-3. **Zone 3 — WebGL2 Shader & Stacking Control Bar (`WiseViewControlBar.tsx` Middle Bar):** Controls **Modes 0–3**, Blink Frequency ($0.5\text{–}30\ \text{Hz}$), 102-Channel LVF Wavelength Scrubber ($0.75\text{–}5.00\ \mu\text{m}$), Lupton `Asinh` $Q/\alpha$ sliders, Colormap LUTs (`Viridis`, `Inferno`, `Cubehelix`, `Magma`, `Grayscale`), live Slice 5 **`ZODI Subtracted`** & **`FLAGS Bitmask`** toggles, and mutually exclusive **`6-Det SNR Co-Add (4.1× SNR)`** and **`D4–D2 Cold Object Filter`** buttons.
+3. **Zone 3 — WebGL2 Shader & Stacking Control Bar (`WiseViewControlBar.tsx` Middle Bar):** Controls **Modes 0–3**, Blink Frequency (0.5–30 Hz), 102-Channel LVF Wavelength Scrubber (0.75–5.00 μm), Lupton `Asinh` *Q*/α sliders, Colormap LUTs (`Viridis`, `Inferno`, `Cubehelix`, `Magma`, `Grayscale`), live Slice 5 **`ZODI Subtracted`** & **`FLAGS Bitmask`** toggles, and mutually exclusive **`6-Det SNR Co-Add (4.1× SNR)`** and **`D4–D2 Cold Object Filter`** buttons.
 4. **Zone 4 — 102-Band Spectrophotometry & AI Discovery Hub (`SpectralCurveInspector.tsx` & `AnomalyLeaderboard.tsx`):** Synchronizes the dual-epoch 102-band ECharts SED inspector, `fit_ql < 3.0` quality filter toggle, Top-10 ONNX anomaly ranker, and 1-click Zooniverse CSV exporter.
 
 ---
@@ -147,35 +147,39 @@ Every technical prompt requirement and bonus consideration from the official **2
 To achieve 60-FPS GPU rendering with zero JSON serialization overhead, `/api/v1/cutout-cube` streams a compact `application/octet-stream` binary buffer directly into WebGL2 `gl.texImage3D`:
 
 * **Bytes `0..15` (16-Byte Little-Endian `Uint32Array(4)` Header):** `[numSlices = 6, height, width, reservedFlags]`
-* **Bytes `16 .. 16 + 24 * H * W` (`Float32Array` $\rightarrow$ `gl.R32F` `u_fluxCube`):**
-  * `Slice 0`: SPHEREx Epoch 1 Calibrated Point-Source Flux ($\mu\text{Jy}$, `ZODI`-subtracted)
-  * `Slice 1`: SPHEREx Epoch 2 Calibrated Point-Source Flux ($\mu\text{Jy}$, `ZODI`-subtracted)
-  * `Slice 2`: Archival `unWISE` (16-Yr Bridge) / $D4 - D2$ Color / CSA `NEOSSat` Optical Flux ($\mu\text{Jy}$)
-  * `Slice 3`: ZOGY Proper Difference Image $D$ (whitened)
-  * `Slice 4`: ZOGY Astrometric-Variance-Corrected Significance Map $S_{\text{corr}}$ (in Gaussian $\sigma$)
-  * `Slice 5`: Modeled Zodiacal Dust Foreground `ZODI` ($\mu\text{Jy}$) — enables `<0.4 ms` 60-FPS GPU toggling via `flux + (u_subtractZodi ? 0.0 : zodi)` without re-fetching from the backend.
-* **Remaining `12 * H * W` Bytes (`Uint16Array` $\rightarrow$ `gl.R16UI` `u_flagCube`):** Condensed SPHEREx hardware bitmask (`Bit 0 = NONFUNC`, `Bit 1 = DICHROIC`, `Bit 2 = PERSIST`, `Bit 3 = TRANSIENT/CR`, `Bit 4 = SUR_ERROR`, `Bit 5 = GHOST/STREAK`, `Bit 6 = MP_SOURCE`).
+* **Bytes `16 .. 16 + 24 * H * W` (`Float32Array` → `gl.R32F` `u_fluxCube`):**
+  * `Slice 0`: SPHEREx Epoch 1 Calibrated Point-Source Flux (μJy, `ZODI`-subtracted)
+  * `Slice 1`: SPHEREx Epoch 2 Calibrated Point-Source Flux (μJy, `ZODI`-subtracted)
+  * `Slice 2`: Archival `unWISE` (16-Yr Bridge) / D4 − D2 Color / CSA `NEOSSat` Optical Flux (μJy)
+  * `Slice 3`: ZOGY Proper Difference Image *D* (whitened)
+  * `Slice 4`: ZOGY Astrometric-Variance-Corrected Significance Map *S*<sub>corr</sub> (in Gaussian σ)
+  * `Slice 5`: Modeled Zodiacal Dust Foreground `ZODI` (μJy) — enables `<0.4 ms` 60-FPS GPU toggling via `flux + (u_subtractZodi ? 0.0 : zodi)` without re-fetching from the backend.
+* **Remaining `12 * H * W` Bytes (`Uint16Array` → `gl.R16UI` `u_flagCube`):** Condensed SPHEREx hardware bitmask (`Bit 0 = NONFUNC`, `Bit 1 = DICHROIC`, `Bit 2 = PERSIST`, `Bit 3 = TRANSIENT/CR`, `Bit 4 = SUR_ERROR`, `Bit 5 = GHOST/STREAK`, `Bit 6 = MP_SOURCE`).
 
 ### 6.2 SPHEREx Level-2 MEF Calibration & Exact Reprojection (`calibration.py` & `wcs_reproject.py`)
 
-1. **LVF Wavelength Lookup (`key="W"`, `sip=None`):** Evaluates the 2D polynomial Linear Variable Filter WCS in `HDU 1 (IMAGE)` with `sip=None` so Astropy does not misapply spatial SIP distortion coefficients to spectral coordinates $(\lambda_{xy}, \Delta\lambda_{xy})$.
-2. **Surface Brightness to Point-Source Flux ($\mu\text{Jy}$) Conversion:** Fetches the detector-specific Solid Angle Pixel Map (`SAPM`, in steradians) from `s3://nasa-irsa-spherex/qr2/level2/cal/` and converts calibrated surface brightness ($\text{MJy/sr}$) to microjanskys ($\mu\text{Jy}$):
+1. **LVF Wavelength Lookup (`key="W"`, `sip=None`):** Evaluates the 2D polynomial Linear Variable Filter WCS in `HDU 1 (IMAGE)` with `sip=None` so Astropy does not misapply spatial SIP distortion coefficients to spectral coordinates (λ<sub>xy</sub>, Δλ<sub>xy</sub>).
+2. **Surface Brightness to Point-Source Flux (μJy) Conversion:** Fetches the detector-specific Solid Angle Pixel Map (`SAPM`, in steradians) from `s3://nasa-irsa-spherex/qr2/level2/cal/` and converts calibrated surface brightness (MJy/sr) to microjanskys (μJy):
 
-   $$F_{\mu\text{Jy}}(x,y) = \left(\text{IMAGE}_{xy} - \text{ZODI}_{xy}\right) \times \Omega_{\text{SAPM}}(x,y) \times 10^{12}$$
+   ```math
+   F_{\mu\text{Jy}}(x,y) = \left(\text{IMAGE}_{xy} - \text{ZODI}_{xy}\right) \times \Omega_{\text{SAPM}}(x,y) \times 10^{12}
+   ```
 
-3. **Flux-Conserving Spherical Reprojection:** Warps multi-epoch cutouts onto a unified North-Up TAN grid ($6.15''/\text{px}$) using `reproject.reproject_exact` (exact spherical polygon intersection) for `IMAGE`, `ZODI`, and `VARIANCE` (scaled by pixel area ratio $\text{area\_scale} = \Omega_{\text{tgt}}/\Omega_{\text{src}}$ and $\text{area\_scale}^2$), while warping `FLAGS` with `order='nearest-neighbor'` to preserve exact integer bitmasks.
+3. **Flux-Conserving Spherical Reprojection:** Warps multi-epoch cutouts onto a unified North-Up TAN grid (6.15″/px) using `reproject.reproject_exact` (exact spherical polygon intersection) for `IMAGE`, `ZODI`, and `VARIANCE` (scaled by pixel area ratio `area_scale = Ω_tgt / Ω_src` and `area_scale²`), while warping `FLAGS` with `order='nearest-neighbor'` to preserve exact integer bitmasks.
 
 ### 6.3 Fourier ZOGY Proper Image Subtraction & Planet X Kinematics (`zogy.py`)
 
 Implements the Zackay, Ofek, & Gal-Yam (2016, *ApJ*, 830, 27) Fourier proper image subtraction algorithm to eliminate PSF variations across epochs:
 
-$$\widehat{D}(\mathbf{k}) = \frac{F_r \widehat{P}_r(\mathbf{k})\widehat{N}(\mathbf{k}) - F_n \widehat{P}_n(\mathbf{k})\widehat{R}(\mathbf{k})}{\sqrt{\sigma_n^2 F_r^2 \vert{}\widehat{P}_r(\mathbf{k})\vert{}^2 + \sigma_r^2 F_n^2 \vert{}\widehat{P}_n(\mathbf{k})\vert{}^2}}$$
+```math
+\widehat{D}(\mathbf{k}) = \frac{F_r \widehat{P}_r(\mathbf{k})\widehat{N}(\mathbf{k}) - F_n \widehat{P}_n(\mathbf{k})\widehat{R}(\mathbf{k})}{\sqrt{\sigma_n^2 F_r^2 \vert \widehat{P}_r(\mathbf{k})\vert ^2 + \sigma_r^2 F_n^2 \vert \widehat{P}_n(\mathbf{k})\vert ^2}}
+```
 
-Dividing the matched-filtered statistic by the total pixel + astrometric registration variance ($\sigma_{\text{ast}} \approx 0.08\ \text{px}$ across SPHEREx's undersampled $6.15''$ pixels) yields the false-positive-resistant significance map $S_{\text{corr}}$. Linked proper-motion dipoles are projected onto the instantaneous solar reflex parallax unit vector $\hat{\mathbf{u}}_\parallel(t_1, t_2)$ using exact solar ecliptic ephemerides (`astropy.coordinates.get_sun`) to estimate heliocentric distance $\hat{d}$ (in AU) and Keplerian orbital residual $r_{\text{orb}}$.
+Dividing the matched-filtered statistic by the total pixel + astrometric registration variance (σ<sub>ast</sub> ≈ 0.08 px across SPHEREx's undersampled 6.15″ pixels) yields the false-positive-resistant significance map *S*<sub>corr</sub>. Linked proper-motion dipoles are projected onto the instantaneous solar reflex parallax unit vector **û**<sub>∥</sub>(t₁, t₂) using exact solar ecliptic ephemerides (`astropy.coordinates.get_sun`) to estimate heliocentric distance *d̂* (in AU) and Keplerian orbital residual *r*<sub>orb</sub>.
 
 ### 6.4 Canadian Space Agency (CSA) Partner Integration: Joint NEOSSat + SPHEREx NEATM Solver (`neossat_cadc.py`)
 
-Queries the **CSA NEOSSat** archive via CADC's CAOM-2 Argus TAP (`/argus/sync`) and SODA cutout service (`collection = 'NEOSSAT'`), applies `RAW -> COR -> CORD` dark/flat calibration (`asc-csa/NEOSSAT_Tutorial`), and solves the Near-Earth Asteroid Thermal Model (NEATM; Harris 1998) by combining NEOSSat optical reflected sunlight ($0.35\text{–}1.05\ \mu\text{m}$) with SPHEREx thermal emission ($2.5\text{–}5.0\ \mu\text{m}$) to break the asteroid **diameter ($D$) vs. geometric albedo ($p_V$) vs. beaming parameter ($\eta$)** degeneracy.
+Queries the **CSA NEOSSat** archive via CADC's CAOM-2 Argus TAP (`/argus/sync`) and SODA cutout service (`collection = 'NEOSSAT'`), applies `RAW -> COR -> CORD` dark/flat calibration (`asc-csa/NEOSSAT_Tutorial`), and solves the Near-Earth Asteroid Thermal Model (NEATM; Harris 1998) by combining NEOSSat optical reflected sunlight (0.35–1.05 μm) with SPHEREx thermal emission (2.5–5.0 μm) to break the asteroid **diameter (*D*) vs. geometric albedo (*p*<sub>V</sub>) vs. beaming parameter (η)** degeneracy.
 
 ---
 
@@ -247,7 +251,7 @@ Interactive Swagger documentation is available live at [https://ilpeiris-spherex
 | :--- | :--- | :--- |
 | `/health` | `GET` | Returns engine telemetry (`{"status":"ok","service":"SPHEREx 102-Band Multi-Epoch Engine","cube_slices":6}`). |
 | `/api/v1/cutout-cube` | `GET` | Streams the 6-slice `Float32Array` + `Uint16Array` binary cutout cube (`?ra=&dec=&channel=1..102&size_px=256&fov_arcmin=6&coadd_detector=false&alignment_mode=narrowband\|detector_coadd\|d4_minus_d2`). |
-| `/api/v1/sed` | `GET` | Extracts the 102-band Dual-Epoch SED (0.75–5.00 µm), MJD light curve, molecular absorption depths, and 3I/ATLAS extended coma $Q_{\text{gas}}$ (`?ra=&dec=&target_id=&extended_coma=false`). |
+| `/api/v1/sed` | `GET` | Extracts the 102-band Dual-Epoch SED (0.75–5.00 µm), MJD light curve, molecular absorption depths, and 3I/ATLAS extended coma *Q*<sub>gas</sub> (`?ra=&dec=&target_id=&extended_coma=false`). |
 | `/api/v1/verify` | `GET` | Executes the 5-stage live ephemeris & catalog cross-match across STScI MAST/ESA Gaia DR3, SIMBAD, SkyBoT, JPL `sb_ident`, and MPC (`?ra=&dec=&mjd=60995.0`). |
 | `/api/v1/neossat-neatm` | `GET` | Queries CSA CADC NEOSSat optical observations and runs the Joint NEOSSat+SPHEREx NEATM thermal solver (`?ra=&dec=&target=`). |
 | `/api/v1/golden-targets` | `GET` | Lists all 18 pre-validated Golden Catalog benchmark targets and coordinate aliases. |
