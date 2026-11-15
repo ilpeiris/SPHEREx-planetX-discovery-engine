@@ -1,7 +1,9 @@
 <div align="center">
 
 # 🔭 SPHEREx × Planet X Discovery Engine
+
 <img src="./docs/screenshots/cover.jpg" alt="SPHEREx x Planet X Cover Banner" width="100%" />
+
 ### 102-Band Multi-Epoch Infrared Time-Domain & Spectrophotometric Hypercube Platform
 
 
@@ -13,13 +15,35 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-38bdf8?style=for-the-badge)](https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine?tab=License-1-ov-file)
 
 
+
 <br>
+
 [🌐 **Launch Live Web App**](https://spherex-planetx-discovery-engine.vercel.app) • [⚡ **Live API Swagger Docs (`/docs`)**](https://ilpeiris-spherex-planetx-api.hf.space/docs) • [🩺 **API Health Check (`/health`)**](https://ilpeiris-spherex-planetx-api.hf.space/health) • [💼 **LinkedIn**](https://www.linkedin.com/in/ilpeiris) • [𝕏 **@Ilpeiris**](https://x.com/Ilpeiris)
+
+
+
 
 <br />
 
+### 🌍 What Is This Project? 
+
+<p align="center">
+  <strong>The Problem:</strong> Since 2025, NASA's <strong>SPHEREx</strong> space telescope has photographed the entire sky every 6 months in <strong>102 invisible infrared colors</strong>, capturing over <strong>1 billion space objects</strong>. Hidden inside this massive treasure trove are undiscovered worlds like a possible <strong>"Planet X"</strong> at the edge of our solar system, freezing "failed stars" (brown dwarfs), and interstellar comets. Astronomers find them by comparing photos taken at different times to see what moved, but <strong>1 billion objects is far too much for any science team or computer to check alone.</strong>
+</p>
+
+<p align="center">
+  <strong>Our Solution:</strong> <strong>SPHEREx × Planet X</strong> is a free, browser-based <strong>"Sky Time Machine"</strong> that anyone can use no astronomy degree or software installation required. Pick any spot in the sky, and our tool rapidly flashes ("blinks") before-and-after telescope photos like a flipbook (combining new SPHEREx images with 16 years of older space archive photos). Stationary stars stay still, while moving planets, asteroids, and brown dwarfs jump right out on your screen! With one click, you can also inspect an object's <strong>102-color chemical fingerprint</strong> (to see if it contains water, carbon dioxide, or methane) and check live space databases to confirm if you have discovered a brand-new world.
+</p>
+
+<br />
+
+
+
 <img src="./docs/screenshots/01-hero-workspace.png" alt="SPHEREx x Planet X 4-Zone WebGL2 Discovery Workspace" width="100%" />
 <p><em>Figure 1: Live 4-Zone SPHEREx × Planet X Discovery Workspace tracking the 250 K Y4 brown dwarf WISE 0855-0714 (126.4″ proper-motion dipole) across synchronized Aladin Lite v3 wide-field sky maps, 60-FPS WebGL2 Lupton Dipole RGB cutouts, 102-band spectrophotometry, and in-browser ONNX WebAssembly anomaly ranking.</em></p>
+
+
+<br />
 
 </div>
 
