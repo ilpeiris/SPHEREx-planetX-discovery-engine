@@ -1425,7 +1425,14 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
               GitHub: ilpeiris/SPHEREx-planetX-discovery-engine
             </a>
             <span>•</span>
-            <span className="text-neutral-400">MIT License</span>
+            <a
+              href="https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine?tab=License-1-ov-file"
+              target="_blank"
+              rel="noreferrer"
+              className="text-neutral-300 hover:text-white hover:underline font-semibold"
+            >
+              MIT License
+            </a>
             <span>•</span>
             <a
               href="https://www.spaceappschallenge.org/2026/challenges/planet-x-and-spherex/"

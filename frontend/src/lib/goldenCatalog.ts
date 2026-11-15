@@ -482,7 +482,7 @@ export const GOLDEN_CATALOG: GoldenTarget[] = [
     spectralTypeOrClass: "≥Y4 Ultra-Cold Brown Dwarf (~250 K)",
     distanceLabel: "2.278 pc (7.43 ly)",
     demoHook:
-      "Coldest known brown dwarf (250 K, 3–10 M_Jup — closest empirical analog to Planet X); shifted 126.4'' (20.6 pixels) due west since its 2010 WISE discovery coordinate!",
+      "Coldest known brown dwarf (250 K, 3-10 M_Jup, closest empirical analog to Planet X); shifted 126.4'' (20.6 pixels) due west since its 2010 WISE discovery coordinate!",
     scientificHighlights: [
       "Mandatory NASA Challenge Test Target #2 (exact prompt coordinate 08h55m10.831s, -7d14m42.53s is its 2010.34 WISE epoch).",
       "Completely invisible in Pan-STARRS optical cutouts while glowing brightly in SPHEREx Bands D5–D6 (3.8–5.0 µm).",
