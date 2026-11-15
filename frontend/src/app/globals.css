@@ -4,7 +4,7 @@
  * project:     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * repository:  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * linkedin:    https://www.linkedin.com/in/ilpeiris
- * Github:     https://github.com/ilpeiris/
+ * Github:      https://github.com/ilpeiris/
  * license:     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -14,31 +14,363 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ============================================================================
+ * 1. CSS VARIABLES FOR BOTH WHITE (DEFAULT) & DARK THEMES
+ * ============================================================================ */
+:root,
+html:not(.dark) {
+  color-scheme: light;
+  --cosmos-950: 244 246 250; /* #f4f6fa */
+  --cosmos-900: 255 255 255; /* #ffffff */
+  --cosmos-850: 241 245 249; /* #f1f5f9 */
+  --cosmos-800: 226 232 240; /* #e2e8f0 */
+  --cosmos-700: 203 213 225; /* #cbd5e1 */
+
+  --spherex-cyan: 37 99 235;     /* #2563eb - Aerospace Blue */
+  --spherex-magenta: 79 70 229;  /* #4f46e5 - Executive Indigo */
+  --spherex-amber: 180 83 9;     /* #b45309 - Muted Ochre Gold */
+  --spherex-emerald: 5 150 105;  /* #059669 - Clinical Emerald */
+}
+
+html.dark {
   color-scheme: dark;
+  --cosmos-950: 10 12 16;    /* #0a0c10 - Deep Carbon Background */
+  --cosmos-900: 17 20 28;    /* #11141c - Elevated Obsidian Card */
+  --cosmos-850: 23 27 38;    /* #171b26 - Subtle Hover Surface */
+  --cosmos-800: 30 35 48;    /* #1e2330 - Muted Pill & Divider */
+  --cosmos-700: 42 49 66;    /* #2a3142 - Hairline Slate Border */
+
+  --spherex-cyan: 96 165 250;    /* #60a5fa - Soft Ice/Steel Blue */
+  --spherex-magenta: 129 140 248;/* #818cf8 - Soft Periwinkle Indigo */
+  --spherex-amber: 217 119 6;    /* #d97706 - Warm Muted Amber */
+  --spherex-emerald: 52 211 153; /* #34d399 - Soft Mint */
 }
 
-body {
-  background-color: #05060a;
-  color: #f3f4f6;
+/* ============================================================================
+ * 2. WHITE MODE (DEFAULT) SURFACES, ACCENTS & TYPOGRAPHY
+ * ============================================================================ */
+html:not(.dark) body {
+  background-color: #f4f6fa !important;
+  color: #0f172a !important;
   overflow-x: hidden;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Custom sleek scrollbars for dark astrophysics drawers */
+html:not(.dark) .bg-cosmos-950,
+html:not(.dark) .bg-cosmos-950\/90,
+html:not(.dark) .bg-cosmos-950\/85,
+html:not(.dark) .bg-cosmos-950\/75 {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) .bg-cosmos-900,
+html:not(.dark) .bg-cosmos-900\/95,
+html:not(.dark) .bg-cosmos-900\/90 {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) .bg-cosmos-850,
+html:not(.dark) .bg-cosmos-800 {
+  background-color: #f1f5f9 !important;
+}
+
+html:not(.dark) .border-cosmos-700,
+html:not(.dark) .border-cosmos-700\/90,
+html:not(.dark) .border-cosmos-800 {
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .text-white:not(.bg-spherex-magenta):not(.bg-spherex-cyan) {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-neutral-100,
+html:not(.dark) .text-neutral-200 {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .text-neutral-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-neutral-400,
+html:not(.dark) .text-neutral-500 {
+  color: #64748b !important;
+}
+
+/* Override cached neon accent classes in White Mode */
+html:not(.dark) .text-spherex-cyan {
+  color: #2563eb !important;
+}
+html:not(.dark) .text-spherex-magenta {
+  color: #4f46e5 !important;
+}
+html:not(.dark) .text-spherex-amber {
+  color: #b45309 !important;
+}
+html:not(.dark) .border-spherex-cyan,
+html:not(.dark) .border-spherex-cyan\/40,
+html:not(.dark) .border-spherex-cyan\/50 {
+  border-color: rgba(37, 99, 235, 0.35) !important;
+}
+html:not(.dark) .border-spherex-magenta,
+html:not(.dark) .border-spherex-magenta\/60 {
+  border-color: rgba(79, 70, 229, 0.35) !important;
+}
+html:not(.dark) .border-spherex-amber,
+html:not(.dark) .border-spherex-amber\/60,
+html:not(.dark) .border-spherex-amber\/70 {
+  border-color: rgba(180, 83, 9, 0.35) !important;
+}
+html:not(.dark) .bg-spherex-cyan\/20 {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+html:not(.dark) .bg-spherex-magenta\/20 {
+  background-color: rgba(79, 70, 229, 0.08) !important;
+}
+html:not(.dark) .bg-spherex-amber\/20 {
+  background-color: rgba(180, 83, 9, 0.08) !important;
+}
+html:not(.dark) .bg-spherex-cyan {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+html:not(.dark) .bg-spherex-magenta {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+html:not(.dark) .bg-spherex-amber {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+/* Soft pastel status badges in White Mode */
+html:not(.dark) [class*="bg-emerald-950"] {
+  background-color: #f0fdf4 !important;
+  color: #15803d !important;
+  border-color: #bbf7d0 !important;
+}
+html:not(.dark) [class*="text-emerald-300"],
+html:not(.dark) [class*="text-emerald-200"],
+html:not(.dark) [class*="text-emerald-400"] {
+  color: #15803d !important;
+}
+html:not(.dark) [class*="bg-amber-950"] {
+  background-color: #fffbeb !important;
+  color: #b45309 !important;
+  border-color: #fde68a !important;
+}
+html:not(.dark) [class*="text-amber-300"] {
+  color: #b45309 !important;
+}
+html:not(.dark) [class*="bg-fuchsia-950"] {
+  background-color: #eef2ff !important;
+  color: #4338ca !important;
+  border-color: #c7d2fe !important;
+}
+html:not(.dark) [class*="bg-rose-950"] {
+  background-color: #fff1f2 !important;
+  color: #be123c !important;
+  border-color: #fecdd3 !important;
+}
+html:not(.dark) [class*="text-rose-200"],
+html:not(.dark) [class*="text-rose-400"] {
+  color: #be123c !important;
+}
+html:not(.dark) [class*="bg-cyan-950"] {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
+}
+
+/* ============================================================================
+ * 3. DARK MODE (html.dark) EXECUTIVE CARBON & AEROSPACE BLUE OVERRIDES
+ *    (Eliminates all cached neon pink, bright orange, and harsh borders!)
+ * ============================================================================ */
+html.dark body {
+  background-color: #0a0c10 !important;
+  color: #e2e8f0 !important;
+  overflow-x: hidden;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+html.dark .bg-cosmos-950,
+html.dark .bg-cosmos-950\/90,
+html.dark .bg-cosmos-950\/85,
+html.dark .bg-cosmos-950\/75 {
+  background-color: #0d1017 !important;
+}
+
+html.dark .bg-cosmos-900,
+html.dark .bg-cosmos-900\/95,
+html.dark .bg-cosmos-900\/90 {
+  background-color: #131722 !important;
+}
+
+html.dark .bg-cosmos-850 {
+  background-color: #191e2b !important;
+}
+
+html.dark .bg-cosmos-800 {
+  background-color: #1e2433 !important;
+}
+
+html.dark .border-cosmos-700,
+html.dark .border-cosmos-700\/90,
+html.dark .border-cosmos-800 {
+  border-color: #262d3d !important;
+}
+
+/* Replace harsh neon text colors with calm, professional aerospace tones in Dark Mode */
+html.dark .text-spherex-cyan {
+  color: #60a5fa !important; /* Soft Steel/Sky Blue */
+}
+html.dark .text-spherex-magenta {
+  color: #a5b4fc !important; /* Soft Periwinkle Indigo (No hot pink!) */
+}
+html.dark .text-spherex-amber {
+  color: #fbbf24 !important; /* Muted Champagne Gold (No neon orange!) */
+}
+
+/* Soften accent borders in Dark Mode */
+html.dark .border-spherex-cyan,
+html.dark .border-spherex-cyan\/40,
+html.dark .border-spherex-cyan\/50 {
+  border-color: rgba(96, 165, 250, 0.32) !important;
+}
+html.dark .border-spherex-magenta,
+html.dark .border-spherex-magenta\/60 {
+  border-color: rgba(165, 180, 252, 0.32) !important;
+}
+html.dark .border-spherex-amber,
+html.dark .border-spherex-amber\/50,
+html.dark .border-spherex-amber\/60,
+html.dark .border-spherex-amber\/70 {
+  border-color: rgba(251, 191, 36, 0.28) !important;
+}
+
+/* Soften translucent pill backgrounds in Dark Mode */
+html.dark .bg-spherex-cyan\/20 {
+  background-color: rgba(59, 130, 246, 0.14) !important;
+}
+html.dark .bg-spherex-magenta\/20 {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+}
+html.dark .bg-spherex-amber\/20 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+}
+
+/* Replace blinding solid cyan/orange/pink active buttons with refined executive fills in Dark Mode */
+html.dark .bg-spherex-cyan {
+  background-color: #2563eb !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+html.dark .bg-spherex-magenta {
+  background-color: #4f46e5 !important;
+  border-color: #6366f1 !important;
+  color: #ffffff !important;
+}
+html.dark .bg-spherex-amber {
+  background-color: #b45309 !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+/* Restrain dark-mode status badges (ZODI, FLAGS, CSA NEOSSat, QC Filter, Leaderboard) */
+html.dark [class*="bg-emerald-950"] {
+  background-color: rgba(16, 185, 129, 0.10) !important;
+  border-color: rgba(52, 211, 153, 0.28) !important;
+  color: #6ee7b7 !important;
+}
+html.dark [class*="bg-amber-950"] {
+  background-color: rgba(245, 158, 11, 0.10) !important;
+  border-color: rgba(251, 191, 36, 0.28) !important;
+  color: #fcd34d !important;
+}
+html.dark [class*="bg-fuchsia-950"] {
+  background-color: rgba(99, 102, 241, 0.12) !important;
+  border-color: rgba(129, 140, 248, 0.30) !important;
+  color: #c7d2fe !important;
+}
+html.dark [class*="bg-rose-950"] {
+  background-color: rgba(244, 63, 94, 0.10) !important;
+  border-color: rgba(251, 113, 133, 0.28) !important;
+  color: #fda4af !important;
+}
+html.dark [class*="bg-cyan-950"] {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(96, 165, 250, 0.30) !important;
+  color: #93c5fd !important;
+}
+
+/* ============================================================================
+ * 4. KEEP FLOATING HUDs INSIDE THE BLACK SKY CANVAS DARK-GLASS IN BOTH MODES
+ * ============================================================================ */
+html:not(.dark) .cursor-crosshair .bg-cosmos-950\/90,
+html:not(.dark) .cursor-crosshair .bg-cosmos-950\/85,
+html.dark .cursor-crosshair .bg-cosmos-950\/90,
+html.dark .cursor-crosshair .bg-cosmos-950\/85 {
+  background-color: rgba(13, 16, 23, 0.84) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+}
+
+html:not(.dark) .cursor-crosshair .text-neutral-200,
+html:not(.dark) .cursor-crosshair .text-neutral-300 {
+  color: #e2e8f0 !important;
+}
+
+html:not(.dark) .cursor-crosshair .text-spherex-cyan {
+  color: #60a5fa !important;
+}
+
+html:not(.dark) .cursor-crosshair .text-spherex-amber {
+  color: #fbbf24 !important;
+}
+
+html:not(.dark) .cursor-crosshair .text-spherex-magenta {
+  color: #a5b4fc !important;
+}
+
+html:not(.dark) .cursor-crosshair .bg-cosmos-800 {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  color: #6ee7b7 !important;
+}
+
+/* Subtle executive card shadows */
+html:not(.dark) header {
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+}
+html:not(.dark) section,
+html:not(.dark) aside {
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+}
+
+/* Range sliders */
+input[type="range"] {
+  accent-color: #2563eb;
+}
+html.dark input[type="range"] {
+  accent-color: #3b82f6;
+}
+
+/* Custom sleek scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0c14;
+  background: rgb(var(--cosmos-900));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #242c44;
+  background: rgb(var(--cosmos-700));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #12b5cb;
+  background: #3b82f6;
 }

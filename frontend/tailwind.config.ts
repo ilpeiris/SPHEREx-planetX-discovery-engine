@@ -4,7 +4,7 @@
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github     https://github.com/ilpeiris/
+ * @Github      https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -13,6 +13,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -22,17 +23,17 @@ const config: Config = {
     extend: {
       colors: {
         cosmos: {
-          950: "#05060a",
-          900: "#0a0c14",
-          850: "#101420",
-          800: "#171c2d",
-          700: "#242c44",
+          950: "rgb(var(--cosmos-950) / <alpha-value>)",
+          900: "rgb(var(--cosmos-900) / <alpha-value>)",
+          850: "rgb(var(--cosmos-850) / <alpha-value>)",
+          800: "rgb(var(--cosmos-800) / <alpha-value>)",
+          700: "rgb(var(--cosmos-700) / <alpha-value>)",
         },
         spherex: {
-          cyan: "#12B5CB",
-          magenta: "#F538A0",
-          amber: "#FA903E",
-          emerald: "#10B981",
+          cyan: "rgb(var(--spherex-cyan) / <alpha-value>)",
+          magenta: "rgb(var(--spherex-magenta) / <alpha-value>)",
+          amber: "rgb(var(--spherex-amber) / <alpha-value>)",
+          emerald: "rgb(var(--spherex-emerald) / <alpha-value>)",
         },
       },
       fontFamily: {

@@ -6,11 +6,11 @@
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github     https://github.com/ilpeiris/
+ * @Github      https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import {
   Activity,
@@ -77,6 +77,37 @@ export interface SpectralCurveInspectorProps {
   isLoading?: boolean;
 }
 
+// Restrained, publication-grade molecular overlay colors for Light & Dark modes
+const REFINED_MOLECULE_STYLES: Record<
+  "H2O" | "CH4" | "CO2" | "CO",
+  { lightFill: string; darkFill: string; lightText: string; darkText: string }
+> = {
+  H2O: {
+    lightFill: "rgba(37, 99, 235, 0.07)",
+    darkFill: "rgba(56, 189, 248, 0.10)",
+    lightText: "#1d4ed8",
+    darkText: "#38bdf8",
+  },
+  CH4: {
+    lightFill: "rgba(79, 70, 229, 0.07)",
+    darkFill: "rgba(129, 140, 248, 0.10)",
+    lightText: "#4338ca",
+    darkText: "#818cf8",
+  },
+  CO2: {
+    lightFill: "rgba(5, 150, 105, 0.07)",
+    darkFill: "rgba(52, 211, 153, 0.10)",
+    lightText: "#047857",
+    darkText: "#34d399",
+  },
+  CO: {
+    lightFill: "rgba(217, 119, 6, 0.08)",
+    darkFill: "rgba(245, 158, 11, 0.10)",
+    lightText: "#b45309",
+    darkText: "#fbbf24",
+  },
+};
+
 export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
   sourceLabel,
   raDeg,
@@ -96,6 +127,18 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     Array<"H2O" | "CH4" | "CO2" | "CO">
   >(["H2O", "CH4", "CO2", "CO"]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("none");
+  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setIsDarkTheme(document.documentElement.classList.contains("dark"));
+    const onThemeChange = (e: Event) => {
+      const custom = e as CustomEvent<"light" | "dark">;
+      setIsDarkTheme(custom.detail === "dark");
+    };
+    window.addEventListener("spherex-theme-change", onThemeChange);
+    return () => window.removeEventListener("spherex-theme-change", onThemeChange);
+  }, []);
 
   const toggleMolecule = (molId: "H2O" | "CH4" | "CO2" | "CO") => {
     setActiveMolecules((prev) =>
@@ -146,7 +189,6 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       .filter((pt) => (pt.epoch_id ?? 1) >= 2)
       .sort((a, b) => a.wavelength_um - b.wavelength_um);
 
-    // If only one epoch is present, mirror into ep1
     const finalEp1 = ep1.length > 0 ? ep1 : filtered;
     const finalEp2 = ep2;
 
@@ -157,7 +199,6 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       }
     }
 
-    // Build synchronized multi-epoch MJD light curve near the currently selected channel (or Band D4/D5)
     const chWindow = filtered.filter(
       (pt) => Math.abs(pt.global_channel - activeChannel) <= 4
     );
@@ -189,8 +230,6 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         });
       });
 
-    
-
     return {
       epoch1Points: finalEp1,
       epoch2Points: finalEp2,
@@ -209,19 +248,24 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
 
   // Build Apache ECharts configuration for linked 102-Band SED (Top) + Multi-Epoch Light Curve (Bottom)
   const chartOptions = useMemo(() => {
+    const ep1Color = isDarkTheme ? "#f59e0b" : "#d97706"; // Refined Scientific Amber
+    const ep2Color = isDarkTheme ? "#38bdf8" : "#2563eb"; // NASA Aerospace Blue
+    const lcColor = isDarkTheme ? "#818cf8" : "#4f46e5";  // Executive Indigo
+
     const markAreas: any[] = [];
     MOLECULAR_BAND_OVERLAYS.forEach((mol) => {
       if (activeMolecules.includes(mol.id)) {
+        const style = REFINED_MOLECULE_STYLES[mol.id];
         mol.rangesUm.forEach(([x0, x1]) => {
           markAreas.push([
             {
               name: mol.formula,
               xAxis: x0,
-              itemStyle: { color: mol.colorRgba },
+              itemStyle: { color: isDarkTheme ? style.darkFill : style.lightFill },
               label: {
                 show: true,
                 position: "insideTop",
-                color: mol.borderHex,
+                color: isDarkTheme ? style.darkText : style.lightText,
                 fontSize: 10,
                 fontFamily: "monospace",
               },
@@ -238,9 +282,9 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         type: "line",
         xAxisIndex: 0,
         yAxisIndex: 0,
-        symbolSize: 6,
-        itemStyle: { color: "#FA903E" },
-        lineStyle: { width: 1.75, color: "#FA903E" },
+        symbolSize: 5,
+        itemStyle: { color: ep1Color },
+        lineStyle: { width: 1.75, color: ep1Color },
         data: epoch1Points.map((pt) => [
           pt.wavelength_um,
           pt.flux_ujy,
@@ -260,9 +304,9 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         type: "line",
         xAxisIndex: 0,
         yAxisIndex: 0,
-        symbolSize: 6,
-        itemStyle: { color: "#12B5CB" },
-        lineStyle: { width: 1.75, color: "#12B5CB" },
+        symbolSize: 5,
+        itemStyle: { color: ep2Color },
+        lineStyle: { width: 1.75, color: ep2Color },
         data: epoch2Points.map((pt) => [
           pt.wavelength_um,
           pt.flux_ujy,
@@ -282,8 +326,12 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         xAxisIndex: 0,
         yAxisIndex: 0,
         symbol: "diamond",
-        symbolSize: 11,
-        itemStyle: { color: "#EF4444", borderColor: "#FFFFFF", borderWidth: 1 },
+        symbolSize: 10,
+        itemStyle: {
+          color: "#e11d48",
+          borderColor: isDarkTheme ? "#ffffff" : "#0f172a",
+          borderWidth: 1,
+        },
         data: outlierPoints.map((pt) => [
           pt.wavelength_um,
           pt.flux_ujy,
@@ -312,25 +360,24 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         xAxisIndex: 0,
         yAxisIndex: 0,
         showSymbol: false,
-        itemStyle: { color: selectedTemplate.colorHex },
+        itemStyle: { color: lcColor },
         lineStyle: {
           width: 2.0,
           type: "dashed",
-          color: selectedTemplate.colorHex,
+          color: lcColor,
         },
         data: templateCurveData,
       });
     }
 
-    // Multi-Epoch MJD Light Curve on Bottom Grid
     seriesList.push({
-      name: "Multi-Epoch Light Curve (unWISE + SPHEREx)",
+      name: "Multi-Epoch Light Curve (SPHEREx Survey Passes)",
       type: "line",
       xAxisIndex: 1,
       yAxisIndex: 1,
-      symbolSize: 8,
-      itemStyle: { color: "#F538A0" },
-      lineStyle: { width: 1.5, color: "#F538A0" },
+      symbolSize: 7,
+      itemStyle: { color: lcColor },
+      lineStyle: { width: 1.5, color: lcColor },
       data: lightCurvePoints.map((lc) => [
         lc.mjd,
         lc.fluxUjy,
@@ -339,15 +386,22 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       ]),
     });
 
+    const chartBg = isDarkTheme ? "#090b10" : "#ffffff";
+    const textPrimary = isDarkTheme ? "#e2e8f0" : "#0f172a";
+    const textMuted = isDarkTheme ? "#94a3b8" : "#64748b";
+    const gridSplit = isDarkTheme ? "#1e2432" : "#f1f5f9";
+    const tooltipBg = isDarkTheme ? "rgba(15, 18, 26, 0.96)" : "rgba(255, 255, 255, 0.98)";
+    const tooltipBorder = isDarkTheme ? "#2b3448" : "#cbd5e1";
+
     return {
-      backgroundColor: "#05060a",
+      backgroundColor: chartBg,
       animationDuration: 250,
-      textStyle: { color: "#e5e7eb", fontFamily: "monospace" },
+      textStyle: { color: textPrimary, fontFamily: "monospace" },
       tooltip: {
         trigger: "axis",
-        backgroundColor: "rgba(10, 12, 20, 0.95)",
-        borderColor: "#242c44",
-        textStyle: { color: "#f3f4f6", fontSize: 11, fontFamily: "monospace" },
+        backgroundColor: tooltipBg,
+        borderColor: tooltipBorder,
+        textStyle: { color: textPrimary, fontSize: 11, fontFamily: "monospace" },
         formatter: (params: any) => {
           if (!Array.isArray(params) || params.length === 0) return "";
           const first = params[0];
@@ -382,11 +436,11 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
       legend: {
         top: 6,
         right: 12,
-        textStyle: { color: "#d1d5db", fontSize: 10 },
+        textStyle: { color: textPrimary, fontSize: 10 },
       },
       grid: [
-        { left: 62, right: 22, top: 38, height: "50%" }, // Top: 102-Band SED
-        { left: 62, right: 22, top: "68%", height: "22%" }, // Bottom: MJD Light Curve
+        { left: 62, right: 22, top: 38, height: "50%" },
+        { left: 62, right: 22, top: "68%", height: "22%" },
       ],
       xAxis: [
         {
@@ -397,9 +451,9 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           name: "Wavelength λ (µm) [Bands D1–D4: R=35–41 | Bands D5–D6: R=112–128 High-Res Ice/Gas]",
           nameLocation: "middle",
           nameGap: 22,
-          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
-          axisLabel: { color: "#9ca3af", fontSize: 10 },
-          splitLine: { lineStyle: { color: "#171c2d" } },
+          nameTextStyle: { color: textMuted, fontSize: 10 },
+          axisLabel: { color: textMuted, fontSize: 10 },
+          splitLine: { lineStyle: { color: gridSplit } },
         },
         {
           gridIndex: 1,
@@ -408,9 +462,9 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           name: "Observation Epoch (Modified Julian Date — SPHEREx Multi-Epoch Survey)",
           nameLocation: "middle",
           nameGap: 22,
-          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
-          axisLabel: { color: "#9ca3af", fontSize: 10 },
-          splitLine: { lineStyle: { color: "#171c2d" } },
+          nameTextStyle: { color: textMuted, fontSize: 10 },
+          axisLabel: { color: textMuted, fontSize: 10 },
+          splitLine: { lineStyle: { color: gridSplit } },
         },
       ],
       yAxis: [
@@ -418,17 +472,17 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
           gridIndex: 0,
           type: "value",
           name: "Flux (µJy)",
-          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
-          axisLabel: { color: "#9ca3af", fontSize: 10 },
-          splitLine: { lineStyle: { color: "#171c2d" } },
+          nameTextStyle: { color: textMuted, fontSize: 10 },
+          axisLabel: { color: textMuted, fontSize: 10 },
+          splitLine: { lineStyle: { color: gridSplit } },
         },
         {
           gridIndex: 1,
           type: "value",
           name: "Flux (µJy)",
-          nameTextStyle: { color: "#9ca3af", fontSize: 10 },
-          axisLabel: { color: "#9ca3af", fontSize: 10 },
-          splitLine: { lineStyle: { color: "#171c2d" } },
+          nameTextStyle: { color: textMuted, fontSize: 10 },
+          axisLabel: { color: textMuted, fontSize: 10 },
+          splitLine: { lineStyle: { color: gridSplit } },
         },
       ],
       series: seriesList,
@@ -442,6 +496,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
     maxFluxUjy,
     lightCurvePoints,
     applyQualityFilter,
+    isDarkTheme,
   ]);
 
   const onEvents = useMemo(
@@ -490,6 +545,7 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
         <div className="flex flex-wrap items-center gap-1.5">
           {MOLECULAR_BAND_OVERLAYS.map((mol) => {
             const isOn = activeMolecules.includes(mol.id);
+            const style = REFINED_MOLECULE_STYLES[mol.id];
             return (
               <button
                 key={mol.id}
@@ -497,10 +553,29 @@ export const SpectralCurveInspector: React.FC<SpectralCurveInspectorProps> = ({
                 onClick={() => toggleMolecule(mol.id)}
                 title={mol.label}
                 style={{
-                  borderColor: isOn ? mol.borderHex : "#242c44",
-                  backgroundColor: isOn ? mol.colorRgba : "#05060a",
+                  borderColor: isOn
+                    ? isDarkTheme
+                      ? style.darkText
+                      : style.lightText
+                    : isDarkTheme
+                    ? "#2b3448"
+                    : "#cbd5e1",
+                  backgroundColor: isOn
+                    ? isDarkTheme
+                      ? style.darkFill
+                      : style.lightFill
+                    : isDarkTheme
+                    ? "#090b10"
+                    : "#f8fafc",
+                  color: isOn
+                    ? isDarkTheme
+                      ? style.darkText
+                      : style.lightText
+                    : isDarkTheme
+                    ? "#94a3b8"
+                    : "#475569",
                 }}
-                className="px-2 py-1 rounded text-[10px] font-mono font-semibold border transition text-white"
+                className="px-2 py-1 rounded text-[10px] font-mono font-semibold border transition"
               >
                 {mol.formula}
               </button>

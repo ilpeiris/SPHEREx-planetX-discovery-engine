@@ -68,19 +68,6 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:7860";
 
 /**
- * Map any survey URL or option ID from TopMissionToolbar to an official
- * CDS Strasbourg HiPS identifier that Aladin Lite v3 loads natively.
- */
-function resolveAladinSurveyId(surveyOption: string): string {
-  const s = String(surveyOption || "");
-  if (s.includes("PanSTARRS")) return "P/PanSTARRS/DR1/color-z-zg-g";
-  if (s.includes("DSS2")) return "P/DSS2/color";
-  if (s.includes("2MASS")) return "P/2MASS/color";
-  if (s.includes("SPHEREx")) return "P/2MASS/color";
-  return "P/allWISE/color";
-}
-
-/**
  * Deterministic client-side 6-slice Float32 + Uint16 cutout cube synthesizer.
  */
 function synthesizeClientFallbackCube(
@@ -608,12 +595,10 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           ? input.toString()
           : input?.url || "";
 
-      // 1. Short-circuit dead CDS logger domain (fixes net::ERR_NAME_NOT_RESOLVED)
       if (urlStr.includes("alasky.unistra.fr/cgi/AladinLiteLogger")) {
         return new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
       }
 
-      // 2. Rewrite dead backup mirror alaskybis.cds.unistra.fr -> live primary alasky.cds.unistra.fr
       if (urlStr.includes("alaskybis.cds.unistra.fr")) {
         urlStr = urlStr.replace("alaskybis.cds.unistra.fr", "alasky.cds.unistra.fr");
         input = urlStr;
@@ -622,7 +607,6 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       try {
         return await origFetch(input, init);
       } catch (err) {
-        // 3. Failover to NASA/IPAC Caltech IRSA HiPS mirror if CDS Strasbourg drops a tile
         if (urlStr.includes("alasky.cds.unistra.fr/AllWISE/")) {
           const irsaMirror = urlStr.replace(
             "https://alasky.cds.unistra.fr/AllWISE/",
@@ -708,7 +692,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update Aladin Lite v3 pointing, survey layer (using NASA IRSA & CDS HiPS URLs), and footprint box
+  // Update Aladin Lite v3 pointing, survey layer, and footprint box
   useEffect(() => {
     const aladin = aladinInstanceRef.current;
     const fp = footprintOverlayRef.current;
@@ -791,6 +775,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
       // Ignore overlay drawing errors
     }
   }, [raDeg, decDeg, fovArcmin, aladinSurvey, showGaiaVectors, activeTarget, aladinReady]);
+
   // Fetch 6-Slice Binary Cutout Cube from FastAPI Backend
   useEffect(() => {
     let cancelled = false;
@@ -1137,7 +1122,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         />
       )}
 
-      <main className="flex-1 p-3 space-y-3 max-w-[1920px] w-full mx-auto">
+      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 space-y-3.5 max-w-[1860px] w-full mx-auto">
         {activeTarget && !isEmbedMode && (
           <div className="bg-cosmos-900/90 border border-cosmos-700 rounded-lg px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex flex-wrap items-center gap-2">
@@ -1167,7 +1152,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-[58vh] min-h-[430px] max-h-[680px]">
           {!isMaximizedCutout && (
             <div className="lg:col-span-5 relative rounded-lg overflow-hidden border border-cosmos-700 bg-black flex flex-col">
-              {/* 1. Docked Aladin Header Bar: Co-locates Survey Switcher, Gaia DR3 PM & FoV Selector! */}
+              {/* 1. Docked Aladin Header Bar: Co-locates Survey Switcher, Gaia DR3 PM & FoV Selector */}
               <div className="bg-cosmos-950 border-b border-cosmos-800 px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1.5 z-10">
                 <div className="text-[11px] font-mono text-neutral-200 flex items-center gap-1.5">
                   <Crosshair className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />

@@ -33,8 +33,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* Default to Dark theme unless user explicitly selected 'light' */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('spherex_theme_mode');
+                  if (saved === 'light') {
+                    document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* Aladin Lite v3 official stylesheet & WASM loader from CDS Strasbourg CDN */}
         <link
           rel="stylesheet"
@@ -45,7 +62,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <body className="bg-cosmos-950 text-neutral-100 antialiased selection:bg-spherex-cyan selection:text-cosmos-950">
+      <body className="bg-cosmos-950 text-neutral-100 antialiased selection:bg-spherex-cyan selection:text-white">
         {children}
       </body>
     </html>

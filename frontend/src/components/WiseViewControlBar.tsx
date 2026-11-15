@@ -168,7 +168,7 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
               >
                 <span
                   className={`text-[10px] px-1 rounded ${
-                    active ? "bg-cosmos-950/20 text-cosmos-950" : "bg-cosmos-800 text-spherex-cyan"
+                    active ? "bg-black/20 text-white" : "bg-cosmos-800 text-spherex-cyan"
                   }`}
                 >
                   {tab.badge}
@@ -525,7 +525,7 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
                 onClick={onToggleInvertColormap}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono border transition flex items-center gap-1 ${
                   invertColormap
-                    ? "bg-white text-cosmos-950 border-white font-bold"
+                    ? "bg-spherex-cyan text-cosmos-950 border-spherex-cyan font-bold"
                     : "bg-cosmos-900 text-neutral-300 border-cosmos-700"
                 }`}
                 title="Invert colormap (white-sky negative plate mode)"
