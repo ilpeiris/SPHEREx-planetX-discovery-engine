@@ -1,4 +1,3 @@
-@"
 # Python & Environments
 __pycache__/
 *.py[cod]
@@ -7,30 +6,33 @@ __pycache__/
 venv/
 ENV/
 .env
+.env.local
 
 # Node / Next.js
 node_modules/
+frontend/node_modules/
 .next/
+frontend/.next/
 out/
+frontend/out/
 npm-debug.log*
 
-# Ignore heavy raw SAPM matrices (79 MB) & duplicate Zarr chunks (288 files) in Git
-# (They stay on your local disk for scripts, but don't bloat GitHub)
+# Ignore temporary markdown exports & helper scripts
+backend/cache/extract_structure.py
+
+# Ignore heavy raw SAPM FITS (79 MB), duplicate Zarr chunks (288 files) & unused exposure_index (102 folders)
 backend/cache/sapm/
 backend/cache/r2_staging/zarr/
+backend/cache/r2_staging/exposure_index/
 
-
-frontend/src//ts-to-md-for-gemini
-
-# Explicitly KEEP the real NASA .bin cubes and GeoParquet SED tables!
+# Explicitly KEEP the 22 real NASA .bin cubes, 20 GeoParquet SED tables & ONNX models!
 !backend/cache/r2_staging/cubes/
 !backend/cache/r2_staging/cubes/*.bin
 !backend/cache/r2_staging/forced_photometry/
-!backend/cache/r2_staging/exposure_index/
+!backend/cache/r2_staging/forced_photometry/**/*.parquet
 !frontend/public/models/*.onnx
 
 # OS / Editor
 .DS_Store
 Thumbs.db
 .vscode/
-"@ | Set-Content -Path ".gitignore" -Encoding UTF8
