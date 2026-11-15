@@ -25,6 +25,7 @@ import {
   WEBGL_FLAG_SOURCE,
 } from "../lib/colormapLut";
 import {
+  FOV_OPTIONS,
   GOLDEN_CATALOG,
   GoldenTarget,
   SPHEREX_DETECTOR_BANDS,
@@ -51,7 +52,11 @@ import {
   SedMeasurementPoint,
   SpectralCurveInspector,
 } from "./SpectralCurveInspector";
-import { AladinSurveyOptionId, TopMissionToolbar } from "./TopMissionToolbar";
+import {
+  AladinSurveyOptionId,
+  MULTI_MISSION_SURVEYS,
+  TopMissionToolbar,
+} from "./TopMissionToolbar";
 import {
   ParsedCutoutCube,
   WebGL2BlinkMachine,
@@ -1162,17 +1167,56 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-[58vh] min-h-[430px] max-h-[680px]">
           {!isMaximizedCutout && (
             <div className="lg:col-span-5 relative rounded-lg overflow-hidden border border-cosmos-700 bg-black flex flex-col">
-              {/* 1. Docked Top Header Bar (Zero overlap with Aladin native controls) */}
-              <div className="bg-cosmos-950 border-b border-cosmos-800 px-3 py-1.5 flex items-center justify-between z-10">
+              {/* 1. Docked Aladin Header Bar: Co-locates Survey Switcher, Gaia DR3 PM & FoV Selector! */}
+              <div className="bg-cosmos-950 border-b border-cosmos-800 px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1.5 z-10">
                 <div className="text-[11px] font-mono text-neutral-200 flex items-center gap-1.5">
                   <Crosshair className="w-3.5 h-3.5 text-spherex-cyan shrink-0" />
-                  <span>
+                  <span className="truncate">
                     Aladin Lite v3 HiPS • {centerSexagesimal.raHms} {centerSexagesimal.decDms}
                   </span>
                 </div>
-                <span className="bg-cosmos-900 border border-spherex-cyan/40 text-spherex-cyan px-2 py-0.5 rounded text-[10px] font-mono shrink-0">
-                  FoV Box: {fovArcmin}&apos;×{fovArcmin}&apos;
-                </span>
+
+                {/* Co-located Aladin Multi-Mission Controls */}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <select
+                    value={aladinSurvey}
+                    onChange={(e) => setAladinSurvey(e.target.value as AladinSurveyOptionId)}
+                    className="bg-cosmos-900 border border-cosmos-700 rounded px-1.5 py-0.5 text-[10px] font-mono text-neutral-200 focus:outline-none cursor-pointer max-w-[165px] truncate"
+                    title="Overlay astronomical data from WISE, SPHEREx HiPS, Pan-STARRS Optical, or 2MASS"
+                  >
+                    {MULTI_MISSION_SURVEYS.map((srv) => (
+                      <option key={srv.id} value={srv.id} className="bg-cosmos-900 text-white">
+                        [{srv.missionBadge}] {srv.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowGaiaVectors((v) => !v)}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-mono border transition ${
+                      showGaiaVectors
+                        ? "bg-spherex-amber/20 border-spherex-amber text-spherex-amber font-semibold"
+                        : "bg-cosmos-900 border-cosmos-700 text-neutral-400 hover:text-neutral-200"
+                    }`}
+                    title="Overlay Gaia DR3 proper-motion vectors (STScI MAST + ESA Failover)"
+                  >
+                    Gaia DR3 PM
+                  </button>
+
+                  <select
+                    value={fovArcmin}
+                    onChange={(e) => setFovArcmin(Number(e.target.value) as 2 | 6 | 15 | 30)}
+                    className="bg-cosmos-900 border border-spherex-cyan/50 rounded px-1.5 py-0.5 text-[10px] font-mono text-spherex-cyan focus:outline-none cursor-pointer"
+                    title="Larger fields of view track faster-moving sources at the cost of longer transfer times"
+                  >
+                    {FOV_OPTIONS.map((opt) => (
+                      <option key={opt.fovArcmin} value={opt.fovArcmin} className="bg-cosmos-900 text-white">
+                        FoV: {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* 2. Aladin Lite v3 Interactive Canvas */}
@@ -1182,7 +1226,7 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
               <div className="bg-cosmos-950 border-t border-cosmos-800 px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-neutral-400">
                 <span>
                   <span className="text-spherex-cyan font-bold">□ Cyan Box:</span> SPHEREx WebGL2
-                  Cutout Footprint
+                  Cutout Footprint ({fovArcmin}&apos;×{fovArcmin}&apos;)
                 </span>
                 {activeTarget?.raRefDeg !== undefined && (
                   <span>
@@ -1268,6 +1312,8 @@ export const SpherexSkyWorkspace: React.FC<SpherexSkyWorkspaceProps> = ({
           onToggleIncludeUnwiseInBlink={() => setIncludeUnwiseInBlink((v) => !v)}
           channel={channel}
           onChangeChannel={setChannel}
+          coaddDetector={coaddDetector}
+          onChangeCoaddDetector={setCoaddDetector}
           alignmentMode={alignmentMode}
           onChangeAlignmentMode={setAlignmentMode}
           stretchMode={stretchMode}

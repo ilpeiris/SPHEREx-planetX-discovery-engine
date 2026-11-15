@@ -6,7 +6,7 @@
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github     https://github.com/ilpeiris/
+ * @Github      https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -43,6 +43,8 @@ export interface WiseViewControlBarProps {
   onToggleIncludeUnwiseInBlink: () => void;
   channel: number;
   onChangeChannel: (ch: number) => void;
+  coaddDetector?: boolean;
+  onChangeCoaddDetector?: (coadd: boolean) => void;
   alignmentMode: "narrowband" | "detector_coadd" | "d4_minus_d2";
   onChangeAlignmentMode: (mode: "narrowband" | "detector_coadd" | "d4_minus_d2") => void;
   stretchMode: 0 | 1 | 2;
@@ -97,6 +99,8 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
   onToggleIncludeUnwiseInBlink,
   channel,
   onChangeChannel,
+  coaddDetector = false,
+  onChangeCoaddDetector,
   alignmentMode,
   onChangeAlignmentMode,
   stretchMode,
@@ -146,7 +150,7 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
 
   return (
     <div className="w-full bg-cosmos-900/95 border border-cosmos-700 rounded-lg p-3 space-y-3 text-neutral-100 select-none">
-      {/* Top Bar: The 4 Interactive Inspection Mode Tabs + Live Calibration Hardware Toggles */}
+      {/* Top Bar: The 4 Interactive Inspection Mode Tabs + Co-Located SPHEREx Cutout Toggles */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-cosmos-800">
         <div className="flex flex-wrap items-center gap-1.5">
           {MODE_TABS.map((tab) => {
@@ -175,8 +179,46 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
           })}
         </div>
 
-        {/* Right: Micro-Safeguard #1 60-FPS Slice 5 ZODI Toggle, FLAGS Bitmask & D4-D2 Filter */}
+        {/* Right: Co-located SPHEREx Stacking Mode (6-Det Co-Add vs D4-D2) + Live ZODI & FLAGS Toggles */}
         <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => {
+              const nextCoadd = !coaddDetector;
+              if (onChangeCoaddDetector) onChangeCoaddDetector(nextCoadd);
+              onChangeAlignmentMode(nextCoadd ? "detector_coadd" : "narrowband");
+            }}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-mono border transition ${
+              coaddDetector
+                ? "bg-emerald-950/90 border-emerald-500 text-emerald-300 font-bold"
+                : "bg-cosmos-950 border-cosmos-700 text-neutral-300 hover:border-neutral-500"
+            }`}
+            title="Co-add all 17 spectral channels per SPHEREx detector array (D1-D6) for a 4.1x SNR boost"
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>{coaddDetector ? "6-Det Co-Add: ON (4.1× SNR)" : "6-Det SNR Co-Add"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const nextMode = alignmentMode === "d4_minus_d2" ? "narrowband" : "d4_minus_d2";
+              if (nextMode === "d4_minus_d2" && onChangeCoaddDetector) {
+                onChangeCoaddDetector(false);
+              }
+              onChangeAlignmentMode(nextMode);
+            }}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-mono border transition ${
+              alignmentMode === "d4_minus_d2" && !coaddDetector
+                ? "bg-spherex-amber text-cosmos-950 border-spherex-amber font-bold"
+                : "bg-cosmos-950 border-cosmos-700 text-neutral-300 hover:border-neutral-500"
+            }`}
+            title="Caltech/IPAC Source Discovery Tool D4 (2.42–3.82 µm) minus D2 (1.10–1.62 µm) color subtraction"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>D4–D2 Cold Object Filter</span>
+          </button>
+
           <button
             type="button"
             onClick={onToggleSubtractZodi}
@@ -203,22 +245,6 @@ export const WiseViewControlBar: React.FC<WiseViewControlBarProps> = ({
           >
             <ShieldAlert className="w-3.5 h-3.5" />
             <span>FLAGS Bitmask: {showFlagMask ? "ON" : "OFF"}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              onChangeAlignmentMode(alignmentMode === "d4_minus_d2" ? "narrowband" : "d4_minus_d2")
-            }
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-mono border transition ${
-              alignmentMode === "d4_minus_d2"
-                ? "bg-spherex-amber text-cosmos-950 border-spherex-amber font-bold"
-                : "bg-cosmos-950 border-cosmos-700 text-neutral-300 hover:border-neutral-500"
-            }`}
-            title="Caltech/IPAC Source Discovery Tool D4 (2.42–3.82 µm) minus D2 (1.10–1.62 µm) color subtraction"
-          >
-            <Zap className="w-3.5 h-3.5" />
-            <span>D4–D2 Cold Object Filter</span>
           </button>
         </div>
       </div>

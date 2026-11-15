@@ -6,7 +6,7 @@
  * @project     SPHEREx x Planet X — 102-Band WebGL2 & WASM Discovery Engine
  * @repository  https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine
  * @linkedin    https://www.linkedin.com/in/ilpeiris
- * @Github     https://github.com/ilpeiris/
+ * @Github      https://github.com/ilpeiris/
  * @license     MIT License | Copyright (c) 2026 M.D.Isuru Lakmal Peiris
  * ============================================================================
  */
@@ -16,7 +16,6 @@ import {
   Code2,
   Compass,
   Copy,
-  Layers,
   Orbit,
   Radar,
   Search,
@@ -24,7 +23,6 @@ import {
   Telescope,
 } from "lucide-react";
 import {
-  FOV_OPTIONS,
   GOLDEN_CATALOG,
   GoldenTarget,
   NASA_MANDATORY_TEST_TARGETS,
@@ -94,17 +92,9 @@ export interface TopMissionToolbarProps {
 export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
   raDeg,
   decDeg,
-  fovArcmin,
   activeTarget,
-  coaddDetector,
-  aladinSurvey,
-  showGaiaVectors,
   onSelectTarget,
   onSubmitCoordinates,
-  onChangeFov,
-  onToggleCoaddDetector,
-  onChangeAladinSurvey,
-  onToggleGaiaVectors,
   onOpenGuidedTour,
   onOpenNeossatModal,
   onOpenVerifyModal,
@@ -149,7 +139,7 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
 
   return (
     <header className="w-full bg-cosmos-900/95 border-b border-cosmos-700 px-3 py-2 text-neutral-100 select-none">
-      {/* Row 1: Brand Title, Coordinate Search Bar, Multi-Mission Controls & Share/Embed */}
+      {/* Row 1: Brand + Guided Tour (Left) | @ilpeiris | GitHub Repo + [Search Box] + Global Actions (Right) */}
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         {/* Left: Mission Title & Guided Tour Button */}
         <div className="flex items-center gap-2.5">
@@ -167,11 +157,6 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
               <p className="text-[10px] text-neutral-400 font-mono">
                 NASA/IPAC IRSA QR2/QR3 • unWISE 16-Yr • CSA NEOSSat
               </p>
-
-
-
-
-
             </div>
           </div>
 
@@ -183,18 +168,17 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
             <Compass className="w-3.5 h-3.5" />
             <span>18 Golden Targets Tour</span>
           </button>
+        </div>
 
-
-
-        {/* Author & GitHub Repository Attribution Pill */}
-          <div className="flex items-center gap-1.5 bg-cosmos-950 border border-cosmos-700 px-2.5 py-1.5 rounded-md text-[11px] font-mono">
-            <span className="text-neutral-400">Made by</span>
+        {/* Right: @ilpeiris | GitHub Repo + [Search Box] + Global Verification & Share Tools */}
+        <div className="flex flex-wrap items-center gap-2 ml-auto">
+          <div className="flex items-center gap-1.5 bg-cosmos-950 border border-cosmos-700 px-2.5 py-1.5 rounded-md text-[11px] font-mono shrink-0">
             <a
-              href="https://www.linkedin.com/in/ilpeiris"
+              href="https://github.com/ilpeiris"
               target="_blank"
               rel="noreferrer"
               className="text-spherex-cyan hover:underline font-bold"
-              title="M.D.Isuru Lakmal Peiris (@ilpeiris) on LinkedIn"
+              title="M.D.Isuru Lakmal Peiris (@ilpeiris) on GitHub"
             >
               @ilpeiris
             </a>
@@ -210,108 +194,33 @@ export const TopMissionToolbar: React.FC<TopMissionToolbarProps> = ({
             </a>
           </div>
 
-
-
-
-
-
-
-
-
-
-        </div>
-
-        {/* Center: Universal RA/Dec Sexagesimal, Decimal & Target Search */}
-        <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[260px] max-w-md relative">
-          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 focus-within:border-spherex-cyan rounded-md overflow-hidden">
-            <Search className="w-3.5 h-3.5 text-neutral-400 ml-2.5 shrink-0" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => {
-                setSearchInput(e.target.value);
-                if (searchError) setSearchError(null);
-              }}
-              placeholder="RA, Dec (08h55m10.831s, -7d14m42.53s) or Target..."
-              className="w-full bg-transparent px-2 py-1.5 text-xs font-mono text-neutral-100 placeholder-neutral-500 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-spherex-cyan/20 hover:bg-spherex-cyan/30 text-spherex-cyan border-l border-cosmos-700 px-2.5 py-1.5 text-[11px] font-mono font-semibold transition"
-            >
-              Slew
-            </button>
-          </div>
-          {searchError && (
-            <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] font-mono px-2 py-1 rounded shadow-lg z-40">
-              {searchError}
+          {/* Coordinate & Target Search Box */}
+          <form onSubmit={handleSearchSubmit} className="w-[290px] sm:w-[350px] relative">
+            <div className="flex items-center bg-cosmos-950 border border-cosmos-700 focus-within:border-spherex-cyan rounded-md overflow-hidden">
+              <Search className="w-3.5 h-3.5 text-neutral-400 ml-2.5 shrink-0" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                  if (searchError) setSearchError(null);
+                }}
+                placeholder="RA, Dec (08h55m10.831s, -7d14m42.53s) or Target..."
+                className="w-full bg-transparent px-2 py-1.5 text-xs font-mono text-neutral-100 placeholder-neutral-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-spherex-cyan/20 hover:bg-spherex-cyan/30 text-spherex-cyan border-l border-cosmos-700 px-2.5 py-1.5 text-[11px] font-mono font-semibold transition"
+              >
+                Slew
+              </button>
             </div>
-          )}
-        </form>
-
-        {/* Right: FoV Selector, 6-Detector Co-Add, Multi-Mission Survey, NEOSSat & URL/Embed */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          {/* User-Selectable Field of View (FoV) Dropdown */}
-          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 rounded-md px-2 py-1">
-            <span className="text-[10px] font-mono text-neutral-400 mr-1.5">FoV:</span>
-            <select
-              value={fovArcmin}
-              onChange={(e) => onChangeFov(Number(e.target.value) as 2 | 6 | 15 | 30)}
-              className="bg-transparent text-xs font-mono text-spherex-cyan focus:outline-none cursor-pointer"
-              title="Larger fields of view track faster-moving sources at the cost of longer transfer times"
-            >
-              {FOV_OPTIONS.map((opt) => (
-                <option key={opt.fovArcmin} value={opt.fovArcmin} className="bg-cosmos-900 text-white">
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* 6-Detector Broadband SNR Boost Toggle (D1-D6 17-Channel Co-Add) */}
-          <button
-            type="button"
-            onClick={onToggleCoaddDetector}
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-mono border transition ${
-              coaddDetector
-                ? "bg-emerald-950/90 border-emerald-500 text-emerald-300 font-semibold"
-                : "bg-cosmos-950 border-cosmos-700 text-neutral-300 hover:border-neutral-500"
-            }`}
-            title="Co-add all 17 spectral channels per SPHEREx detector array (D1-D6) for a 4.1x SNR boost"
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>{coaddDetector ? "6-Det Co-Add: ON (4.1× SNR)" : "6-Det SNR Co-Add"}</span>
-          </button>
-
-          {/* Multi-Mission Survey & Optical Disambiguation Switcher */}
-          <div className="flex items-center bg-cosmos-950 border border-cosmos-700 rounded-md px-2 py-1">
-            <select
-              value={aladinSurvey}
-              onChange={(e) => onChangeAladinSurvey(e.target.value as AladinSurveyOptionId)}
-              className="bg-transparent text-xs font-mono text-neutral-200 focus:outline-none cursor-pointer max-w-[185px] truncate"
-              title="Overlay astronomical data from WISE, SPHEREx HiPS, Pan-STARRS Optical, or 2MASS"
-            >
-              {MULTI_MISSION_SURVEYS.map((srv) => (
-                <option key={srv.id} value={srv.id} className="bg-cosmos-900 text-white">
-                  [{srv.missionBadge}] {srv.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Gaia DR3 Proper Motion Overlay Toggle */}
-          <button
-            type="button"
-            onClick={onToggleGaiaVectors}
-            className={`px-2 py-1.5 rounded-md text-[11px] font-mono border transition ${
-              showGaiaVectors
-                ? "bg-spherex-cyan/20 border-spherex-cyan text-spherex-cyan font-semibold"
-                : "bg-cosmos-950 border-cosmos-700 text-neutral-400 hover:text-neutral-200"
-            }`}
-            title="Overlay Gaia DR3 proper-motion vectors (STScI MAST + ESA Failover)"
-          >
-            Gaia DR3 PM
-          </button>
+            {searchError && (
+              <div className="absolute left-0 top-full mt-1 bg-rose-950 border border-rose-600 text-rose-200 text-[10px] font-mono px-2 py-1 rounded shadow-lg z-40">
+                {searchError}
+              </div>
+            )}
+          </form>
 
           {/* CSA Partner NEOSSat + SPHEREx NEATM Solver Button */}
           <button
