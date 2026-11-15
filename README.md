@@ -1,17 +1,18 @@
 <div align="center">
 
 # 🔭 SPHEREx × Planet X Discovery Engine
+<img src="./docs/screenshots/cover.jpg" alt="SPHEREx x Planet X Cover Banner" width="100%" />
 ### 102-Band Multi-Epoch Infrared Time-Domain & Spectrophotometric Hypercube Platform
 
 
-<img src="./docs/screenshots/cover.jpg" alt="SPHEREx x Planet X Cover Banner" width="100%" />
+
 
 [![NASA Space Apps 2026](https://img.shields.io/badge/2026_NASA_Space_Apps-Planet_X_%26_SPHEREx-0B3D91?style=for-the-badge&logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/2026/challenges/planet-x-and-spherex/)
 [![Live WebGL2 App](https://img.shields.io/badge/Live_App-Vercel_Production-00C7B7?style=for-the-badge&logo=vercel&logoColor=white)](https://spherex-planetx-discovery-engine.vercel.app)
 [![Live FastAPI + DuckDB](https://img.shields.io/badge/Live_API-Hugging_Face_Spaces-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://ilpeiris-spherex-planetx-api.hf.space/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-38bdf8?style=for-the-badge)](https://github.com/ilpeiris/SPHEREx-planetX-discovery-engine?tab=License-1-ov-file)
 
-**Engineered by M.D.Isuru Lakmal Peiris ([@ilpeiris](https://github.com/ilpeiris)) — Founder •  Sri Lanka**
+
 <br>
 [🌐 **Launch Live Web App**](https://spherex-planetx-discovery-engine.vercel.app) • [⚡ **Live API Swagger Docs (`/docs`)**](https://ilpeiris-spherex-planetx-api.hf.space/docs) • [🩺 **API Health Check (`/health`)**](https://ilpeiris-spherex-planetx-api.hf.space/health) • [💼 **LinkedIn**](https://www.linkedin.com/in/ilpeiris) • [𝕏 **@Ilpeiris**](https://x.com/Ilpeiris)
 
