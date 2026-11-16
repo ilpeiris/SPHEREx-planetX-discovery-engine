@@ -37,6 +37,15 @@
 
 <br />
 
+> **⚡ How It Works**
+>
+> 🔄 **Blink & Color-Code the Sky Across 16 Years:** Enter any sky coordinate (or click a preset target) to flash images from different months like a video or color Epoch 1 **Red** and Epoch 2 **Blue** so stationary stars turn white while moving worlds glow as bright Red-to-Blue pairs.
+>
+> 🧹 **Strip Away Space Dust in One Click:** Toggle off glowing solar system dust (*zodiacal light*) and bad camera pixels instantly so faint, freezing objects pop out against a clean black sky.
+>
+> 🌈 **Read 102-Color Chemical Fingerprints & Verify Discoveries:** Click any dot on screen to see its 102-band infrared rainbow-revealing water ice, methane, and carbon dioxide and cross-check it live against 5 global space databases (including NASA JPL and Canada's NEOSSat telescope) to confirm if you found something brand new!
+
+<br />
 
 
 <img src="./docs/screenshots/01-hero-workspace.png" alt="SPHEREx x Planet X 4-Zone WebGL2 Discovery Workspace" width="100%" />
@@ -44,6 +53,9 @@
 
 
 <br />
+
+
+
 
 </div>
 
