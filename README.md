@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  <strong>Our Solution:</strong> <strong>SPHEREx × Planet X</strong> is a free, browser-based <strong>"Sky Time Machine"</strong> that anyone can use no astronomy degree or software installation required. Pick any spot in the sky, and our tool rapidly flashes ("blinks") before-and-after telescope photos like a flipbook (combining new SPHEREx images with 16 years of older space archive photos). Stationary stars stay still, while moving planets, asteroids, and brown dwarfs jump right out on your screen! With one click, you can also inspect an object's <strong>102-color chemical fingerprint</strong> (to see if it contains water, carbon dioxide, or methane) and check live space databases to confirm if you have discovered a brand-new world.
+  <strong>The Solution:</strong> <strong>SPHEREx × Planet X</strong> is a free, browser-based <strong>"Sky Time Machine"</strong> that anyone can use no astronomy degree or software installation required. Pick any spot in the sky, and our tool rapidly flashes ("blinks") before-and-after telescope photos like a flipbook (combining new SPHEREx images with 16 years of older space archive photos). Stationary stars stay still, while moving planets, asteroids, and brown dwarfs jump right out on your screen! With one click, you can also inspect an object's <strong>102-color chemical fingerprint</strong> (to see if it contains water, carbon dioxide, or methane) and check live space databases to confirm if you have discovered a brand-new world.
 </p>
 
 <br />
@@ -109,7 +109,7 @@ Both the frontend workspace and the scientific compute backend are deployed live
 
 ## 🧭 3. Plain-English Citizen Science Walkthrough (How to Use in 30 Seconds)
 
-We designed the interface so **first-time citizen scientists, students, and astrophysicists** can make discoveries side-by-side. Clicking the **`[Guide]`** button in the top-left toolbar opens an interactive tutorial modal at any time:
+I engineered the interface so **first-time citizen scientists, students, and astrophysicists** can make discoveries side-by-side. Clicking the **`[Guide]`** button in the top-left toolbar opens an interactive tutorial modal at any time:
 
 
 <div align="center">
